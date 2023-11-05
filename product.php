@@ -1,81 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-
-  }
-
-  .navbar {
-    background-color: black;
-    color: red;
-    display: flex;
-    flex-direction: column;
-   
-  }
-
-  .top-navbar {
-    padding: 10px;
-    text-align: center;
-    background-color: black;
-  }
-
-  .search-bar {
-    display: inline-block;
-    background-color: #444;
-    padding: 10px;
-    border-radius: 5px;
-  }
-
-  .search-bar input {
-    padding: 5px;
-    margin-right: 5px;
-    border: none;
-    border-radius: 5px;
-  }
-
-  
-
-  .bottom-navbar {
-    padding: 10px 0;
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" type="text/css" href="auto.css">
+    <title>Product Page with Sidebar</title>
     
-    border-top: 1px solid white;
-    background-color: black;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-  }
-
-  li {
-    margin: 5px;
-  }
-
-  a {
-    text-decoration: none;
-    color: #fff;
-    transition: background-color 0.2s;
-    margin: 25px;
-  }
-  a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 15px;
-    
-    
-  }
-  
-</style>
 </head>
 <body>
-  <div class="navbar">
+     <div class="navbar">
     <div class="top-navbar">
       <div class="search-bar">
         <input type="text" placeholder="Search">
@@ -87,10 +19,203 @@
         <li><a href="index.php">Home</a></li>
         <li><a href="product.php">Product</a></li>
         <li><a href="contact.php">Contact</a></li>
-        <li><a href="loguit.php"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><style>svg{fill:white;}</style><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg></a><li>
+        <li><a href="loguit.php"><i class='bx bx-log-out' ></i></a><li>
             
       </ul>
     </div>
   </div>
+    <div class="sidebar">
+      <form class="filter" action="" method="get">
+    <h3>Fuel</h3>
+    <?php 
+    include "connect.php";
+    $sql = "SELECT * FROM tblfuel";
+    $sql2 = "SELECT * FROM tblmodels";
+
+    $result = $mysqli->query($sql);
+    while ($row = $result->fetch_assoc()) {
+        echo '
+        <input type="checkbox" name="fuel" value="'.$row['fuel'].'">
+        <label>'.$row['fuel'].'</label><br>';
+    }
+
+    $result2 = $mysqli->query($sql2);
+    echo "<h3>Car type</h3>";
+    while ($row2 = $result2->fetch_assoc()) {
+        echo '
+        <input type="checkbox" name="models[]" value="'.$row2['model'].'">
+        <label>'.$row2['model'].'</label><br>';
+    }
+    ?>
+       
+    <input type="submit" value="Filter">
+</form>
+
+    </div>
+    <div class="content">
+        <h1>Product Page</h1>
+        <div class="products">
+          <?php 
+         include "connect.php"; 
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (isset($_GET['models']) && !isset($_GET['fuel'])) {
+        $selectedModels = $_GET['models'];
+
+        $placeholders = str_repeat('?,', count($selectedModels) - 1) . '?';
+
+        $sql = "SELECT * 
+                FROM tblproducts 
+                JOIN tblmodels ON (tblproducts.modeltype = tblmodels.model)
+                JOIN tblspecs ON (tblproducts.id = tblspecs.specID)
+                WHERE tblmodels.model IN ($placeholders)";
+        
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param(str_repeat('s', count($selectedModels)), ...$selectedModels);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+      
+
+        while ($row = $result->fetch_assoc()) {
+          echo '<div class="product-card">
+    <h1 class="title">'.$row['name'].'</h1>
+    <h3 class="subtitle">'.$row['model'].'</h3>
+        <h3 class="year">'.$row['year'].'</h3>
+
+    <img  class="image" src="images/'.$row['photo'].'" width="160px">
+    <div class="datagroup">
+   <div class="data"> 
+        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
+      </div>
+      <div class="data">
+        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
+      </div>
+      <div class="data">
+        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
+      </div>
+      </div>
+    <h3 class="price">$'.$row['price'].'.00</h3>
+    <button><i class="bx bxs-shopping-bag-alt"></i></button>
+</div>
+';
+        }
+    } elseif (!isset($_GET['models']) && isset($_GET['fuel'])) {
+        $selectedFuel = $_GET['fuel'];
+
+        $sql = "SELECT * 
+                FROM tblproducts 
+                JOIN tblfuel ON (tblproducts.fueltype = tblfuel.fuel)
+                JOIN tblspecs ON (tblproducts.id = tblspecs.specID)
+                WHERE tblfuel.fuel = ?";
+        
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("s", $selectedFuel);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+       
+
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="product-card">
+    <h1 class="title">'.$row['name'].'</h1>
+    <h3 class="subtitle">'.$row['model'].'</h3>
+        <h3 class="year">'.$row['year'].'</h3>
+
+    <img  class="image" src="images/'.$row['photo'].'" width="160px">
+    <div class="datagroup">
+   <div class="data"> 
+        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
+      </div>
+      <div class="data">
+        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
+      </div>
+      <div class="data">
+        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
+      </div>
+      </div>
+    <h3 class="price">$'.$row['price'].'.00</h3>
+    <button><i class="bx bxs-shopping-bag-alt"></i></button>
+</div>
+';
+        }
+    } elseif (isset($_GET['models']) && isset($_GET['fuel'])) {
+          $selectedFuel = $_GET['fuel'];
+        $selectedModels = $_GET['models'];
+
+        $placeholders = str_repeat('?,', count($selectedModels) - 1) . '?';
+
+        $sql = "SELECT * 
+                FROM tblproducts 
+                JOIN tblfuel ON (tblproducts.fueltype = tblfuel.fuel)
+                JOIN tblmodels ON (tblproducts.modeltype = tblmodels.model)
+                JOIN tblspecs ON (tblproducts.id = tblspecs.specID)
+                WHERE tblfuel.fuel = ? AND tblmodels.model IN ($placeholders)";
+
+        $stmt = $mysqli->prepare($sql);
+
+      
+        $bindParams = array_merge([$selectedFuel], $selectedModels);
+
+        $stmt->bind_param(str_repeat('s', count($selectedModels) + 1), ...$bindParams);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+      
+
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="product-card">
+    <h1 class="title">'.$row['name'].'</h1>
+    <h3 class="subtitle">'.$row['model'].'</h3>
+        <h3 class="year">'.$row['year'].'</h3>
+
+    <img  class="image" src="images/'.$row['photo'].'" width="160px">
+    <div class="datagroup">
+   <div class="data"> 
+        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
+      </div>
+      <div class="data">
+        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
+      </div>
+      <div class="data">
+        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
+      </div>
+      </div>
+    <h3 class="price">$'.$row['price'].'.00</h3>
+    <button><i class="bx bxs-shopping-bag-alt"></i></button>
+</div>
+';}
+    } else {
+           $sql = "SELECT * FROM tblproducts,tblspecs WHERE id = specID ";
+          $result = $mysqli -> query($sql);
+          while ($row = $result -> fetch_assoc()) {
+            echo '<div class="product-card">
+    <h1 class="title">'.$row['name'].'</h1>
+    <h3 class="subtitle">'.$row['model'].'</h3>
+        <h3 class="year">'.$row['year'].'</h3>
+
+    <img  class="image" src="images/'.$row['photo'].'" width="160px">
+    <div class="datagroup">
+   <div class="data"> 
+        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
+      </div>
+      <div class="data">
+        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
+      </div>
+      <div class="data">
+        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
+      </div>
+      </div>
+    <h3 class="price">$'.$row['price'].'.00</h3>
+    <button><i class="bx bxs-shopping-bag-alt"></i></button>
+</div>
+';
+          }
+    }
+}
+
+           ?>
+            
+        </div>
+    </div>
 </body>
 </html>

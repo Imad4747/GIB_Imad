@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins&display=swap');
+  body{
+    font-family: 'Exo 2', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: ;
+  }
+  
+
+.navbar {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+   
+  }
+
+  .top-navbar {
+    padding: 10px;
+    text-align: center;
+    background-color: black;
+  }
+
+  .search-bar {
+    display: inline-block;
+    background-color: #444;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .search-bar input {
+    padding: 5px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  
+
+  .bottom-navbar {
+    padding: 10px 0;
+    
+    border-top: 1px solid white;
+    background-color: black;
+  }
+
+ .bottom-navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+.bottom-navbar li {
+    margin: 5px;
+  }
+
+ .bottom-navbar a {
+    text-decoration: none;
+    color: #fff;
+    transition: background-color 0.2s;
+    margin: 25px;
+  }
+
+.sidebar {
+     width: 200px;
+    height: 100vh; 
+    background-color: #f2f2f2;
+    float: left;
+    position: sticky;
+    top: 0; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.sidebar .filter{
+  text-align: center;
+}
+.sidebar .filter h3{
+  font-size: 20px;
+  margin: 5px;
+}
+.sidebar .filter a{
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  margin: 5px;
+}
+.sidebar .filter a:hover{
+  color: blue;
+}
+.sidebar .filter a:active{
+  color: red;
+  font-size: 23px;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.product-card {
+    
+    background-color: hsl(219, 4%, 7%);
+    border-radius: 1rem;
+    width: 200px;
+    height: auto;
+    margin-bottom: 3.5rem;
+    padding: 2rem 1.5rem 1.5rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    position: relative;
+    overflow: hidden; 
+}
+
+.product-card .title {
+    margin-bottom: .25rem;
+    position: relative;
+    color: hsl(219, 8%, 95%);
+}
+
+.product-card.subtitle {
+  color: hsl(219, 8%, 75%);
+  font-weight: 400px;
+}
+
+.product-card img {
+  position: relative;
+    
+    margin: .75rem 0 1.25rem 1.5rem;
+    transition: .3s;
+}
+
+
+.product-card .data {
+   display: inline-flex;
+    column-gap: .5rem;
+    align-items: center;
+color: white;
+}
+
+.product-card .datagroup {
+      color:  hsl(219, 8%, 95%);
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: .5rem 1.25rem;
+    margin-bottom: 2rem;
+}
+.product-card i{
+  font-size: 16px;
+
+}
+
+.product-card .price{
+ color: hsl(219, 8%, 95%);
+}
+
+.product-card button {
+    background-color: hsl(219, 69%, 56%);
+    padding: .75rem 1rem;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-radius: 1rem 0 1rem 0;
+    cursor: pointer;
+}
+.product-card:hover .image{
+  transform: translateY(-.25rem);
+}
+.product-card .year{
+  color: hsl(219, 8%, 75%);
+  font-weight: 400px;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+

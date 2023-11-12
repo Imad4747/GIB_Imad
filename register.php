@@ -25,8 +25,10 @@ if (isset($_POST['control'])) {
     }
     $resultaat->bind_param("ssss", $firstname, $lastname, $email, $password);
     if ($resultaat->execute()) {
-    
-    header("Location: login.php");
+    	session_start();
+    	$_SESSION['register-succes'] = true;
+        header("Location: login.php");
+        exit();
 } else {
     echo "Error: " . $resultaat->error;
 }

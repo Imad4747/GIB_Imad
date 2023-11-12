@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<link rel="stylesheet" type="text/css" href="auto.css">
+<link rel="stylesheet" type="text/css" href="product.css">
     <title>Product Page </title>
     
 </head>
@@ -217,5 +217,56 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             
         </div>
     </div>
+
+<!-- -----footer-------------------------------------------------------------- -->
+<footer class="footer-section">
+    <div>
+      <h3>Our information</h3>
+      <ul>
+        <li>4747 - Bergenland</li>
+        <li>Bergstad 5867</li>
+        <li>123-456-789</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>About Us</h3>
+      <ul>
+        <li><a href="#">Support Center</a></li>
+        <li><a href="#">Customer Support</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Copy Right</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Product</h3>
+      <ul>
+        <li><a href="#">Suv cars</a></li>
+        <li><a href="#">Coupés </a></li>
+        <li><a href="#">Electric</a></li>
+        <li><a href="#">Newest</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3>Social</h3>
+      <ul>
+        <a href="https://www.facebook.com/" target="_blank" class="footer__social-link">
+          <i class='bx bxl-facebook'></i>
+        </a>
+
+        <a href="https://twitter.com/" target="_blank" class="footer__social-link">
+          <i class='bx bxl-twitter'></i>
+        </a>
+
+        <a href="https://www.instagram.com/" target="_blank" class="footer__social-link">
+          <i class='bx bxl-instagram'></i>
+        </a>
+      </ul>
+    </div>
+
+  </footer>
+
 </body>
 </html>

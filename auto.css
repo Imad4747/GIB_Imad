@@ -5,11 +5,11 @@
     padding: 0;
     height: 100vh;
     background-color: ;
+    overflow: hidden;
   }
   
 /*----------------------------navbar-------------------------------------*/
 .navbar {
-    background-color: black;
     display: flex;
     flex-direction: column;
    
@@ -19,6 +19,8 @@
     padding: 10px;
     text-align: center;
     background-color: black;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
   }
 
   .search-bar {
@@ -39,9 +41,9 @@
 
   .bottom-navbar {
     padding: 10px 0;
-    
     border-top: 1px solid white;
     background-color: black;
+
   }
 
  .bottom-navbar ul {
@@ -53,6 +55,8 @@
   }
 
 .bottom-navbar li {
+      margin-left: 500px;
+
     margin: 5px;
   }
 
@@ -231,53 +235,4 @@
         }
 
 /*       ---------------------------------------------------- */
-  .newest-car-section {
-            position: relative;
-            background-color: #f4f4f4;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .newest-car {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-
-        .newest-car::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Adjust the overlay color and opacity */
-            border-radius: 10px;
-        }
-
-        .newest-car img {
-            z-index: 1;
-            position: relative;
-            max-width: 100%;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        h3,
-        p {
-            z-index: 2;
-            position: relative;
-            color: #fff; /* Text color on the overlay */
-        }
-
-        h3 {
-            margin: 0;
-            font-size: 1.5em;
-        }
-
-        p {
-            font-size: 1.2em;
-        }
+ 

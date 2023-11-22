@@ -139,3 +139,14 @@
       text-decoration: none;
       color: blue; 
     }
+    .alert {
+    padding: 20px;
+    background-color: green;
+    color: white;
+    text-align: center;
+    position: relative;
+    bottom: 115px; /* Adjust this value based on your navbar's height */
+    width: 100%;
+    z-index: 1;
+    }
+

@@ -21,7 +21,6 @@
         <li><a href="product.php">Product</a></li>
         <li><a href="contact.php">Contact</a></li>
         <li><a href="loguit.php"><i class='bx bx-log-out' ></i></a><li>
-          <li><a href=".php"><i class='bx bxs-user'></i></a><li>
           
             
       </ul>

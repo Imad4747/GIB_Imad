@@ -32,7 +32,36 @@
     <div class="contact-section">
         <div class="contact-form">
             <h2>Contact Us</h2>
-            <form  method="post">
+          <?php
+include 'connect.php';
+
+if (isset($_POST['control'])) {
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+    $file = $_POST['file'];
+    $date = date("Y-m-d H:i:s");
+    $sql = "INSERT INTO tblcontact (firstname, lastname, email, message, file, date) VALUES (?,?,?,?,?,?)";
+    $resultaat = $mysqli->prepare($sql);
+
+    if (!$resultaat) {
+        die("Error in query preparation: " . $mysqli->error);
+    }
+
+    $resultaat->bind_param("ssssss", $firstname, $lastname, $email, $message, $file, $date);
+
+    if ($resultaat->execute()) {
+        header("Location: contact.php?success=1");
+        exit();
+    } else {
+        echo "Error: " . $resultaat->error;
+    }
+
+    $resultaat->close();
+    $mysqli->close();
+} else {
+       echo ' <form action="contact.php" method="post">
                 <label>First Name:</label>
                 <input type="text" id="firstname" name="firstname" required>
 
@@ -48,8 +77,18 @@
                 <label>Upload File:</label>
                 <input type="file" id="file" name="file">
 
-                <button type="submit">Submit</button>
-            </form>
+                <button type="submit" name="control">Submit</button>
+            </form>';
+}
+
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    echo '<div class="alert">
+   
+  <strong>Succes!</strong> You have been succesfully registered.
+</div>';
+}
+?>
+
         </div>
     </div>
 

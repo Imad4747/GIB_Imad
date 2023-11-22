@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Gegenereerd op: 05 nov 2023 om 21:47
+-- Gegenereerd op: 22 nov 2023 om 22:03
 -- Serverversie: 8.0.31
 -- PHP-versie: 8.0.26
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `gib_auto`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `tblcontact`
+--
+
+DROP TABLE IF EXISTS `tblcontact`;
+CREATE TABLE IF NOT EXISTS `tblcontact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `file` blob NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -144,15 +162,14 @@ CREATE TABLE IF NOT EXISTS `tblusers` (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `tblusers`
 --
 
 INSERT INTO `tblusers` (`id`, `firstname`, `lastname`, `email`, `password`, `createdAt`) VALUES
-(1, 'ss', 'ss', 'ss@ss.com', '$2y$10$lclLbO8Lktzx.yYe2UxNl.a9zslT7seNMNme6JHEzG0dhyNm2pf52', '2023-10-13 21:52:40'),
-(2, 'qq', 'qq', 'qq@qq.com', '$2y$10$v/hQbDgvY6PjT/THanK5IO9XxctdlBWjKNiKDPFAIPEc7vWmq7wwS', '2023-10-15 14:59:48');
+(1, 'ss', 'ss', 'ss@ss.com', '$2y$10$lclLbO8Lktzx.yYe2UxNl.a9zslT7seNMNme6JHEzG0dhyNm2pf52', '2023-10-13 21:52:40');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

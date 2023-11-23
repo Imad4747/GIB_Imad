@@ -26,7 +26,7 @@ include 'connect.php';
 if (isset($_POST['control'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $sql = "SELECT id, email, password FROM tblusers WHERE email= ?";
+    $sql = "SELECT id, email, password, role FROM tblusers WHERE email= ?";
     $resultaat = $mysqli->prepare($sql);
     
     if (!$resultaat) {
@@ -35,23 +35,26 @@ if (isset($_POST['control'])) {
 
     $resultaat->bind_param("s", $email);
     $resultaat->execute();
-    $resultaat->bind_result($user_id, $db_email, $db_password);
+    $resultaat->bind_result($user_id, $db_email, $db_password, $db_role);
     $resultaat->fetch();
+if ($db_role == "admin") {
+    header("Location: admin.php");
+}else{
+
 
     if (password_verify($password, $db_password)) {
         session_start();
         $_SESSION['user_id'] = $user_id;
         header('Location: index.php');
         exit;
-    } elseif ($password == "admin" && $email == "admin@admin.com") {
-        header("Location: admin.php");
-    } else{
+    }  else{
         
         $error_message = '<span style="color: red;font-size: 13px;">Invalid username or password.</span>';
         $error_style = 'style="border: 1px solid red;"';
     }
 
     $resultaat->close();
+}
 } else {
     $error_message = '';
     $error_style = '';   

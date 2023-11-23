@@ -16,14 +16,15 @@ if (isset($_POST['control'])) {
 	$lastname = $_POST['lastname'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
+	$role = "guest";
 	$password =  password_hash($password, PASSWORD_DEFAULT);
-	$sql = "INSERT INTO tblUsers(firstname, lastname, email, password) VALUES (?, ?, ?, ?)";
+	$sql = "INSERT INTO tblUsers(firstname, lastname, email, password, role) VALUES (?, ?, ?, ?, ?)";
 	
 	$resultaat = $mysqli->prepare($sql);
 		 if (!$resultaat) {
         die("Error in query preparation: " . $mysqli->error);
     }
-    $resultaat->bind_param("ssss", $firstname, $lastname, $email, $password);
+    $resultaat->bind_param("sssss", $firstname, $lastname, $email, $password, $role);
     if ($resultaat->execute()) {
     	session_start();
     	$_SESSION['register-succes'] = true;

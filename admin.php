@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
+  
+</head>
+<body>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -52,8 +55,6 @@
             color: #fff;
         }
     </style>
-</head>
-<body>
 	
     <ul class="tabs">
         <li onclick="showTab('products')">Products</li>
@@ -64,7 +65,13 @@
 
     <section id="products">
         <h2>Product Information</h2>
-        <table>
+      
+                <?php  
+                include 'connect.php';
+$sql = "SELECT * FROM tblproducts";
+$resultaat = $mysqli->query($sql);
+while ($row = $resultaat->fetch_assoc()) {
+    echo        '  <table>
              <tr>
                 <th>Name</th>
                 <th>Model</th>
@@ -72,33 +79,75 @@
                 <th>Photo</th>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+    <td>'.$row['name'].'</td>
+                <td>'.$row['model'].'</td>
+                <td>'.$row['price'].'</td>
+                <td> <img  class="image" src="images/'.$row['photo'].'" width="160px"></td>
+                </tr>
+        </table>';
+}
+    ?>
+                
+            
     </section>
 
     <section id="clients" style="display: none;">
         <h2>Client Information</h2>
-        <table>
-              <tr>
-                <th>Fisrtname</th>
+       <?php  
+                include 'connect.php';
+$sql = "SELECT * FROM tblusers";
+$resultaat = $mysqli->query($sql);
+while ($row = $resultaat->fetch_assoc()) {
+    echo        '  <table>
+             <tr>
+                <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Email</th>
+                <th>ID</th>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+            <td>'.$row['id'].'</td>
+    <td>'.$row['firstname'].'</td>
+                <td>'.$row['lastname'].'</td>
+                <td>'.$row['email'].'</td>
+                </tr>
+        </table>';
+}
+    ?>
     </section>
 
     <section id="contact" style="display: none;">
         <h2>Contact</h2>
+          <?php  
+                include 'connect.php';
+$sql = "SELECT * FROM tblcontact";
+$resultaat = $mysqli->query($sql);
+while ($row = $resultaat->fetch_assoc()) {
+    echo        '  <table>
+             <tr>
+                <th>ID</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>File</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+            <td>'.$row['id'].'</td>
+            <td>'.$row['firstname'].'</td>
+            <td>'.$row['lastname'].'</td>
+            <td>'.$row['email'].'</td>
+            <td>'.$row['message'].'</td>
+            <td>'.$row['file'].'</td>
+            <td>'.$row['date'].'</td>
+                </tr>
+        </table>';
+}
+    ?>
       
     </section>
+      
 
     <script>
         function showTab(tabId) {

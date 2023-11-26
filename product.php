@@ -1,189 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<link rel="stylesheet" type="text/css" href="product.css">
+  <link rel="stylesheet" type="text/css" href="product.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <title>Product Page </title>
-    
 </head>
 <body>
-     <div class="navbar">
-    <div class="top-navbar">
-      <div class="search-bar">
-        <input type="text" placeholder="Search">
-       
-      </div>
-    </div>
-    <div class="bottom-navbar">
-      <ul>
+
+<header>
+   <ul>
         <li><a href="index.php">Home</a></li>
         <li><a href="product.php">Product</a></li>
         <li><a href="contact.php">Contact</a></li>
-        <li><a href="loguit.php"><i class='bx bx-log-out' ></i></a><li>
-            
+        <li><a href="loguit.php"><i class='bx bx-log-out' ></i></a><li>   
       </ul>
-    </div>
+</header>
+
+
+<main>
+  <div class="sidebar">
+   <button class="collapsible">
+    <span>Basic Specs</span>
+    <i class="fas fa-chevron-down"></i>
+</button>
+<div class="content">
+  <label class="custom-label">Select Brand:</label>
+<select class="custom-select" id="brand">
+    <option value="Toyota">Toyota</option>
+    <option value="Honda">Honda</option>
+    <option value="Ford">Ford</option>
+</select>
+
+<label class="custom-label">Select Model:</label>
+<select class="custom-select" id="model">
+    <option value="Camry">Camry</option>
+    <option value="Civic">Civic</option>
+    <option value="Fusion">Fusion</option>
+</select>
+<label>Car Type: </label>
+        <div class="car-types">
+            <a href="#">Sedan</a>
+            <a href="#">SUV</a>
+            <a href="#">Wagon</a>
+            <a href="#">Cabrio</a>
+            <a href="#">Coupe</a>
+         
+        </div>
+</div>
+
+<button class="collapsible">
+    <span>Price</span>
+    <i class="fas fa-chevron-down"></i>
+</button>
+<div class="content">
+     <label for="price-range">Price Range:</label>
+        <input type="range" id="price-range" min="0" max="50000" step="1000" value="25000">
+        <div class="price-range-label">
+            <span>Min Price: $0</span>
+            <span style="float: right;">Max Price: $50,000</span>
+        </div>
+</div>
+
+<button class="collapsible">
+    <span>Motor</span>
+    <i class="fas fa-chevron-down"></i>
+</button>
+<div class="content">
+     <div class="fuel-type-checkboxes">
+            <label>Fuel Type:</label>
+            <label><input type="checkbox" name="fuelType" value="Diesel"> Diesel</label>
+            <label><input type="checkbox" name="fuelType" value="Benzine"> Benzine</label>
+            <label><input type="checkbox" name="fuelType" value="Electric"> Electric</label>
+        </div>
+          <div class="transmission-type-radio">
+            <label>Transmission Type:</label>
+            <label><input type="radio" name="transmissionType" value="Automatic"> Automatic</label>
+            <label><input type="radio" name="transmissionType" value="Manual"> Manual</label>
+        </div>
+
+</div>
+
+<button class="collapsible">
+    <span>Color</span>
+    <i class="fas fa-chevron-down"></i>
+</button>
+<div class="content">
+     
+
+</div>
   </div>
-  
-<div class="sidebar">
-      <form class="filter" action="" method="get">
-    <?php 
-    include "connect.php";
-    $sql = "SELECT * FROM tblfuel";
-    $sql2 = "SELECT * FROM tblmodels";
 
-    $result = $mysqli->query($sql);
-    echo '<button type="button" class="collapsible">Fuel</button>
-<div class="content-fuel">';
-    while ($row = $result->fetch_assoc()) {
-        echo '
-  <input type="checkbox" name="fuel" value="'.$row['fuel'].'">
-     <label>'.$row['fuel'].'</label><br>';
-    }
-    echo "</div>";
-
-    $result2 = $mysqli->query($sql2);
-     echo '<button type="button" class="collapsible">Model</button>
-<div class="content-fuel">';
-    while ($row2 = $result2->fetch_assoc()) {
-        echo '
-        <input type="checkbox" name="models[]" value="'.$row2['model'].'">
-        <label>'.$row2['model'].'</label><br>';
-    }
-    echo "</div><br>";
-    ?>
-
-    <input type="submit" value="Filter">
-</form>
-
-    </div>
-    <div class="products">
-          <?php 
-         include "connect.php"; 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (isset($_GET['models']) && !isset($_GET['fuel'])) {
-        $selectedModels = $_GET['models'];
-
-        $placeholders = str_repeat('?,', count($selectedModels) - 1) . '?';
-
-        $sql = "SELECT * 
-                FROM tblproducts 
-                JOIN tblmodels ON (tblproducts.modeltype = tblmodels.model)
-                JOIN tblspecs ON (tblproducts.id = tblspecs.specID)
-                WHERE tblmodels.model IN ($placeholders)";
-
-        $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param(str_repeat('s', count($selectedModels)), ...$selectedModels);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-
-
-        while ($row = $result->fetch_assoc()) {
-          echo '<div class="product-card">
-    <h1 class="title">'.$row['name'].'</h1>
-    <h3 class="subtitle">'.$row['model'].'</h3>
-        <h3 class="year">'.$row['year'].'</h3>
-    <img  class="image" src="images/'.$row['photo'].'" width="160px">
-    <div class="datagroup">
-   <div class="data"> 
-        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
-      </div>
-      <div class="data">
-        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
-      </div>
-      <div class="data">
-        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
-      </div>
-      </div>
-    <h3 class="price">$'.$row['price'].'.00</h3>
-    <button><i class="bx bxs-shopping-bag-alt"></i></button>
+  <section>
+    <div class="search-bar">
+  <input type="text" class="search-input" placeholder="Search...">
 </div>
-';
-        }
-    } elseif (!isset($_GET['models']) && isset($_GET['fuel'])) {
-        $selectedFuel = $_GET['fuel'];
 
-        $sql = "SELECT * 
-                FROM tblproducts 
-                JOIN tblfuel ON (tblproducts.fueltype = tblfuel.fuel)
-                JOIN tblspecs ON (tblproducts.id = tblspecs.specID)
-                WHERE tblfuel.fuel = ?";
+     
 
-        $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("s", $selectedFuel);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-
-
-        while ($row = $result->fetch_assoc()) {
-            echo '<div class="product-card">
-    <h1 class="title">'.$row['name'].'</h1>
-    <h3 class="subtitle">'.$row['model'].'</h3>
-        <h3 class="year">'.$row['year'].'</h3>
-    <img  class="image" src="images/'.$row['photo'].'" width="160px">
-    <div class="datagroup">
-   <div class="data"> 
-        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
-      </div>
-      <div class="data">
-        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
-      </div>
-      <div class="data">
-        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
-      </div>
-      </div>
-    <h3 class="price">$'.$row['price'].'.00</h3>
-    <button><i class="bx bxs-shopping-bag-alt"></i></button>
-</div>
-';
-        }
-    } elseif (isset($_GET['models']) && isset($_GET['fuel'])) {
-          $selectedFuel = $_GET['fuel'];
-        $selectedModels = $_GET['models'];
-
-        $placeholders = str_repeat('?,', count($selectedModels) - 1) . '?';
-
-        $sql = "SELECT * 
-                FROM tblproducts 
-                JOIN tblfuel ON (tblproducts.fueltype = tblfuel.fuel)
-                JOIN tblmodels ON (tblproducts.modeltype = tblmodels.model)
-                JOIN tblspecs ON (tblproducts.id = tblspecs.specID)
-                WHERE tblfuel.fuel = ? AND tblmodels.model IN ($placeholders)";
-
-        $stmt = $mysqli->prepare($sql);
-
-
-        $bindParams = array_merge([$selectedFuel], $selectedModels);
-
-        $stmt->bind_param(str_repeat('s', count($selectedModels) + 1), ...$bindParams);
-        $stmt->execute();
-        $result = $stmt->get_result();
- while ($row = $result->fetch_assoc()) {
-            echo '<div class="product-card">
-    <h1 class="title">'.$row['name'].'</h1>
-    <h3 class="subtitle">'.$row['model'].'</h3>
-        <h3 class="year">'.$row['year'].'</h3>
-   <img  class="image" src="images/'.$row['photo'].'" width="160px">
-    <div class="datagroup">
-   <div class="data"> 
-        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
-      </div>
-      <div class="data">
-        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
-      </div>
-      <div class="data">
-        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
-      </div>
-      </div>
-    <h3 class="price">$'.$row['price'].'.00</h3>
-    <button><i class="bx bxs-shopping-bag-alt"></i></button>
-</div>
-';}
-    } else {
-           $sql = "SELECT * FROM tblproducts,tblspecs WHERE id = specID ";
+    <div class="product-table">
+      <?php
+      include 'connect.php'; 
+      $sql = "SELECT * FROM tblproducts,tblspecs WHERE id = specID ";
           $result = $mysqli -> query($sql);
           while ($row = $result -> fetch_assoc()) {
             echo '<div class="product-card">
@@ -203,22 +123,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
       </div>
       </div>
     <h3 class="price">$'.$row['price'].'.00</h3>
-    <button><i class="bx bxs-shopping-bag-alt"></i></button>
-    </div>';
-          }
-    }
-}
- ?>
- </div>
-</div>
-   
- 
-        
     
+    </div>';
+          } ?>
+      
 
-<!-- -----footer-------------------------------------------------------------- -->
-<footer class="footer-section">
-    <div>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+      <div>
       <h3>Our information</h3>
       <ul>
         <li>4747 - Bergenland</li>
@@ -263,23 +179,22 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         </a>
       </ul>
     </div>
+</footer>
+<script type="text/javascript">
+   var coll = document.getElementsByClassName("collapsible");
+    var i;
 
-  </footer>
-  <script type="text/javascript">
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
     }
-  });
-}
 </script>
 </body>
 </html>

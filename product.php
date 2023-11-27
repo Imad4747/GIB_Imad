@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css" href="product.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
 
 </head>
 <body>
@@ -23,8 +24,9 @@
 <main>
   <div class="sidebar">
    <button class="collapsible">
+    <i class='bx bxs-car'></i>
     <span>Basic Specs</span>
-    <i class="fas fa-chevron-down"></i>
+    <i id="up-down" class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
   <label class="custom-label">Select Brand:</label>
@@ -42,7 +44,7 @@
 </select>
 <label>Car Type: </label>
         <div class="car-types">
-            <a href="#">Sedan</a>
+            <a href="#sedan">Sedan</a>
             <a href="#">SUV</a>
             <a href="#">Wagon</a>
             <a href="#">Cabrio</a>
@@ -52,50 +54,63 @@
 </div>
 
 <button class="collapsible">
+  <i class='bx bxs-calculator'></i>
     <span>Price</span>
-    <i class="fas fa-chevron-down"></i>
+    <i id="up-down" class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
      <label for="price-range">Price Range:</label>
         <input type="range" id="price-range" min="0" max="50000" step="1000" value="25000">
         <div class="price-range-label">
             <span>Min Price: $0</span>
-            <span style="float: right;">Max Price: $50,000</span>
+            <spand>Max Price: $50,000</span>
         </div>
 </div>
 
 <button class="collapsible">
+  <i  class='bx bxs-wrench'></i>
     <span>Motor</span>
-    <i class="fas fa-chevron-down"></i>
+    <i id="up-down" class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
      <div class="fuel-type-checkboxes">
             <label>Fuel Type:</label>
+            <br>
             <label><input type="checkbox" name="fuelType" value="Diesel"> Diesel</label>
+             <br>
             <label><input type="checkbox" name="fuelType" value="Benzine"> Benzine</label>
+             <br>
             <label><input type="checkbox" name="fuelType" value="Electric"> Electric</label>
         </div>
           <div class="transmission-type-radio">
             <label>Transmission Type:</label>
+             <br>
             <label><input type="radio" name="transmissionType" value="Automatic"> Automatic</label>
+             <br>
             <label><input type="radio" name="transmissionType" value="Manual"> Manual</label>
         </div>
 
 </div>
 
 <button class="collapsible">
+  <i class='bx bxs-palette'></i>
     <span>Color</span>
-    <i class="fas fa-chevron-down"></i>
+    <i id="up-down" class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
-     
+      <label class="custom-label">Select Color:</label>
+<select class="custom-select" id="color">
+    <option value="Toyota">Red</option>
+    <option value="Honda">Blue</option>
+    <option value="Ford">Green</option>
+</select>
 
 </div>
   </div>
 
   <section>
     <div class="search-bar">
-  <input type="text" class="search-input" placeholder="Search...">
+  <input type="text" placeholder="Search" class="search-input" />
 </div>
 
      

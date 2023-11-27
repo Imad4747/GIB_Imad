@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins&display=swap');
+
+  @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
   body {
+    font-family: 'Lato', sans-serif;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -42,8 +44,8 @@ main {
   width: 250px; 
 }
   .collapsible {
-            background-color: #777;
-            color: white;
+            background-color: white;
+            color: black;
             cursor: pointer;
             padding: 18px;
             width: 100%;
@@ -54,10 +56,12 @@ main {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 10px;
         }
 
-        .collapsible i {
+        .up-down {
             margin-right: 10px;
+
         }
 
         .content {
@@ -67,7 +71,7 @@ main {
             background-color: #f1f1f1;
         }
 
-        .collapsible.active i {
+        .up-down.active  {
             transform: rotate(180deg);
         }
           .custom-label {
@@ -98,17 +102,14 @@ main {
             background-color: #333;
             color: #fff;
             border-radius: 5px;
+            text-align: center;
         }
+
         .price-range-label {
             margin-top: 16px;
         }
            
-.fuel-type-checkboxes input,
-.transmission-type-radio input {
-     position: relative;
-    top: 30px;
-    
-}
+
 
 
 section {
@@ -117,7 +118,7 @@ section {
 }
  
 
-
+/*page -----------------------------------------------------------------*/
 .search-bar {
  
   color: white;
@@ -126,9 +127,16 @@ section {
 }
 
 .search-input {
-  width: 80%;
-  padding: 8px;
+  width: 100%;
+  max-width: 384px;
+  padding: 15px;
   margin: 10px;
+  border-radius: 5px;
+
+}
+.search-input input{
+  border: 2px solid;
+
 }
 
  .product-table {
@@ -146,8 +154,9 @@ section {
       padding: 20px;
       margin: 10px;
       text-align: center;
-      max-width: 400px;
+      max-width: 600px;
     }
+    
 
     .product-image {
       width: 100%;

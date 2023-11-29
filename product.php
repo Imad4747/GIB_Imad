@@ -110,7 +110,11 @@
 
   <section>
     <div class="search-bar">
-  <input type="text" placeholder="Search" class="search-input" />
+      <form action="searh.php" method="get">
+        <input type="text" placeholder="Search" class="search-input"> 
+        
+      </form>
+  
 </div>
 
      
@@ -120,27 +124,34 @@
       include 'connect.php'; 
       $sql = "SELECT * FROM tblproducts,tblspecs WHERE id = specID ";
           $result = $mysqli -> query($sql);
-          while ($row = $result -> fetch_assoc()) {
-            echo '<div class="product-card">
-    <h1 class="title">'.$row['name'].'</h1>
-    <h3 class="subtitle">'.$row['model'].'</h3>
-        <h3 class="year">'.$row['year'].'</h3>
-        <img  class="image" src="images/'.$row['photo'].'" width="160px">
-    <div class="datagroup">
-   <div class="data"> 
-        <i class="bx bx-timer"></i>'.$row['accelaration'].' s
-      </div>
-      <div class="data">
-        <i class="bx bx-line-chart"></i>'.$row['topspeed'].' km/h
-      </div>
-      <div class="data">
-        <i class="bx bxs-gas-pump"></i>'.$row['fuel'].'
-      </div>
-      </div>
-    <h3 class="price">$'.$row['price'].'.00</h3>
-    
+          
+while ($row = $result->fetch_assoc()) {
+    echo '<div class="product-card">
+        <span class="favorite">&#9733;</span>
+        <h1 class="title">' . $row['name'] . '</h1>
+        <h3 class="subtitle">' . $row['model'] . '</h3>
+        <h3 class="year">' . $row['year'] . '</h3>
+        <img class="image" src="images/' . $row['photo'] . '" width="160px">
+        <div class="datagroup">
+            <div class="data">
+                <i class="bx bx-timer"></i>
+                <h3 class="spec">' . $row['accelaration'] . ' s</h3>
+            </div>
+            <div class="data">
+                <i class="bx bx-line-chart"></i>
+                <h3 class="spec"> ' . $row['topspeed'] . ' km/h</h3>
+            </div>
+            <div class="data">
+                <i class="bx bxs-gas-pump"></i>
+                <h3 class="spec">' . $row['fuel'] . '</h3>
+            </div>
+        </div>
+        <h3 class="price">$' . $row['price'] . '.00</h3>
+        <button class="view-button">View Details</button>
     </div>';
-          } ?>
+}
+?>
+
       
 
     </div>

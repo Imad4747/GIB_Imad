@@ -6,13 +6,24 @@
 	<title></title>
 </head>
 <body>
-	<?php 
-	include 'connect.php';
-	$input = $_GET['search'];
-	$sql = "SELECT * FROM tblproducts, tblspecs WHERE id = specID AND name AND model LIKE '$input%'";
-	$result = $mysqli->query($sql);
-	while ($row = $result->fetch_assoc()) {
-		echo '<div class="product-card">
+	<?php
+include 'connect.php';
+
+if (isset($_GET['search'])) {
+    include 'connect.php';
+    $input = $_GET['search'];
+
+    // Construct the SQL query with user input
+    $sql = "SELECT * FROM tblproducts, tblspecs 
+            WHERE tblproducts.id = tblspecs.specID 
+            AND (tblproducts.name LIKE '%$input%' OR tblproducts.model LIKE '%$input%')";
+    
+    // Execute the query
+    $result = $mysqli->query($sql);
+
+    // Display search results
+    while ($row = $result->fetch_assoc()) {
+        echo '<div class="product-card">
         <span class="favorite">&#9733;</span>
         <h1 class="title">' . $row['name'] . '</h1>
         <h3 class="subtitle">' . $row['model'] . '</h3>
@@ -35,11 +46,13 @@
         <h3 class="price">$' . $row['price'] . '.00</h3>
         <button class="view-button">View Details</button>
     </div>';
-	}
+    }
+} else {
+    echo "Please enter a search term.";
+}
+?>
 
-
-
-	 ?>
+	
 
 </body>
 </html>

@@ -6,7 +6,8 @@
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" type="text/css" href="product.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+ 
+
 
 </head>
 <body>
@@ -149,7 +150,7 @@ while ($row1 = $result1->fetch_assoc()) {
 
   <section>
     <div class="search-bar">
-      <form action="search.php" method="get">
+      <form action="" method="get">
         <input type="text" placeholder="Search" class="search-input" name="search"> 
       </form>
   
@@ -157,43 +158,53 @@ while ($row1 = $result1->fetch_assoc()) {
 
      
 
-    <div class="product-table">
-      <?php
-      include 'connect.php'; 
-      $sql = "SELECT * FROM tblproducts,tblspecs WHERE id = specID ";
-          $result = $mysqli -> query($sql);
-          
+  <div class="product-table">
+    <?php
+include 'connect.php';
+
+$sql = "SELECT * FROM tblproducts, tblspecs WHERE id = specID";
+
+$searchInput = isset($_GET['search']) ? $_GET['search'] : '';
+
+if (!empty($searchInput)) {
+    $sql .= " AND (name LIKE '%$searchInput%' OR model LIKE '%$searchInput%')";
+}
+
+
+
+$result = $mysqli->query($sql);
+
+
 while ($row = $result->fetch_assoc()) {
     echo '<div class="product-card">
-        <span class="favorite">&#9733;</span>
-        <h1 class="title">' . $row['name'] . '</h1>
-        <h3 class="subtitle">' . $row['model'] . '</h3>
-        <h3 class="year">' . $row['year'] . '</h3>
-        <img class="image" src="images/' . $row['photo'] . '" width="160px">
-        <div class="datagroup">
-            <div class="data">
-                <i class="bx bxs-timer" style="color:#0043ff"></i>
-                <h3 class="spec">' . $row['accelaration'] . ' s</h3>
+            <span class="favorite">&#9733;</span>
+            <h1 class="title">' . $row['name'] . '</h1>
+            <h3 class="subtitle">' . $row['model'] . '</h3>
+            <h3 class="year">' . $row['year'] . '</h3>
+            <img class="image" src="images/' . $row['photo'] . '" width="160px">
+            <div class="datagroup">
+                <div class="data">
+                    <i class="bx bxs-timer" style="color:#0043ff"></i>
+                    <h3 class="spec">' . $row['accelaration'] . ' s</h3>
+                </div>
+                <div class="data">
+                    <i class="bx bx-line-chart" style="color:#39ad5e"></i>
+                    <h3 class="spec"> ' . $row['topspeed'] . ' km/h</h3>
+                </div>
+                <div class="data">
+                    <i class="bx bxs-gas-pump" style="color:#dc1e4d"></i>
+                    <h3 class="spec">' . $row['fuel'] . '</h3>
+                </div>
             </div>
-            <div class="data">
-                <i class="bx bx-line-chart" style="color:#39ad5e"></i>
-                <h3 class="spec"> ' . $row['topspeed'] . ' km/h</h3>
-            </div>
-            <div class="data">
-                <i class="bx bxs-gas-pump" style="color:#dc1e4d"></i>
-                <h3 class="spec">' . $row['fuel'] . '</h3>
-            </div>
-        </div>
-        <h3 class="price">$' . $row['price'] . '.00</h3>
-        <button class="view-button">View Details</button>
-    </div>';
+            <h3 class="price">$' . $row['price'] . '.00</h3>
+            <button class="view-button">View Details</button>
+        </div>';
 }
+
 ?>
 
-      
-
-    </div>
-
+   
+</div>
   </section>
 </main>
 
@@ -244,21 +255,8 @@ while ($row = $result->fetch_assoc()) {
       </ul>
     </div>
 </footer>
-<script type="text/javascript">
-   var coll = document.getElementsByClassName("collapsible");
-    var i;
+    
+    <script src="script.js"></script> 
 
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "block") {
-                content.style.display = "none";
-            } else {
-                content.style.display = "block";
-            }
-        });
-    }
-</script>
 </body>
 </html>

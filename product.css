@@ -60,7 +60,7 @@ main {
             margin-top: 10px;
         }
 
-        .up-down {
+        .collapsible i {
             margin-right: 10px;
 
         }
@@ -70,11 +70,10 @@ main {
             display: none;
             overflow: hidden;
             background-color: #f1f1f1;
+            margin-top:10px;
         }
 
-        .up-down.active  {
-            transform: rotate(180deg);
-        }
+        
           .custom-label {
             font-weight: bold;
             display: block;

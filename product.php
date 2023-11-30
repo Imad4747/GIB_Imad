@@ -26,7 +26,7 @@
    <button class="collapsible">
     <i class='bx bxs-car'></i>
     <span>Basic Specs</span>
-    <i id="up-down" class="fas fa-chevron-down"></i>
+    <i class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
   <label class="custom-label">Select Brand:</label>
@@ -149,9 +149,8 @@ while ($row1 = $result1->fetch_assoc()) {
 
   <section>
     <div class="search-bar">
-      <form action="searh.php" method="get">
-        <input type="text" placeholder="Search" class="search-input"> 
-        
+      <form action="search.php" method="get">
+        <input type="text" placeholder="Search" class="search-input" name="search"> 
       </form>
   
 </div>

@@ -31,25 +31,44 @@
 <div class="content">
   <label class="custom-label">Select Brand:</label>
 <select class="custom-select" id="brand">
-    <option value="Toyota">Toyota</option>
-    <option value="Honda">Honda</option>
-    <option value="Ford">Ford</option>
+  <?php  
+
+include 'connect.php';
+$sql6 = "SELECT DISTINCT name FROM tblproducts";
+$result6 = $mysqli->query($sql6);
+while ($row6 = $result6->fetch_assoc()) {
+  echo '<option>'.$row6['name'].'</option>
+';
+}
+?>
 </select>
 
 <label class="custom-label">Select Model:</label>
 <select class="custom-select" id="model">
-    <option value="Camry">Camry</option>
-    <option value="Civic">Civic</option>
-    <option value="Fusion">Fusion</option>
+  <?php  
+
+include 'connect.php';
+$sql5 = "SELECT model FROM tblproducts";
+$result5 = $mysqli->query($sql5);
+while ($row5 = $result5->fetch_assoc()) {
+  echo '<option>'.$row5['model'].'</option>
+';
+}
+?>
 </select>
 <label>Car Type: </label>
-        <div class="car-types">
-            <a href="#sedan">Sedan</a>
-            <a href="#">SUV</a>
-            <a href="#">Wagon</a>
-            <a href="#">Cabrio</a>
-            <a href="#">Coupe</a>
-         
+<div class="car-types">
+<?php  
+
+include 'connect.php';
+$sql4 = "SELECT * FROM tblcartype";
+$result4 = $mysqli->query($sql4);
+while ($row4 = $result4->fetch_assoc()) {
+  echo '<a href="#">'.$row4['model'].'</a>';
+}
+
+
+?>
         </div>
 </div>
 
@@ -73,23 +92,35 @@
     <i id="up-down" class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
-     <div class="fuel-type-checkboxes">
+  <div class="fuel-type-checkboxes">
             <label>Fuel Type:</label>
             <br>
-            <label><input type="checkbox" name="fuelType" value="Diesel"> Diesel</label>
-             <br>
-            <label><input type="checkbox" name="fuelType" value="Benzine"> Benzine</label>
-             <br>
-            <label><input type="checkbox" name="fuelType" value="Electric"> Electric</label>
+     
+  <?php  
+  include 'connect.php';
+$sql2 = "SELECT * FROM tblfuel";
+$result2 = $mysqli->query($sql2);
+while ($row2 = $result2->fetch_assoc()) {
+  echo ' <label><input type="checkbox" name="fuelType"> '.$row2['fuel'].'</label>
+             <br>';
+}
+
+  ?>
         </div>
-          <div class="transmission-type-radio">
+        <div class="transmission-type-radio">
             <label>Transmission Type:</label>
              <br>
-            <label><input type="radio" name="transmissionType" value="Automatic"> Automatic</label>
-             <br>
-            <label><input type="radio" name="transmissionType" value="Manual"> Manual</label>
-        </div>
+        <?php 
 
+include 'connect.php';
+$sql3 = "SELECT * FROM tbltransmission";
+$result3 = $mysqli->query($sql3);
+while ($row3 = $result3->fetch_assoc()) {
+  echo '  <label><input type="radio" name="transmissionType">'.$row3['transmission'].'</label>
+             <br>';
+}
+         ?>
+        </div>
 </div>
 
 <button class="collapsible">
@@ -98,11 +129,19 @@
     <i id="up-down" class="fas fa-chevron-down"></i>
 </button>
 <div class="content">
+  <select class="custom-select" id="color">
       <label class="custom-label">Select Color:</label>
-<select class="custom-select" id="color">
-    <option value="Toyota">Red</option>
-    <option value="Honda">Blue</option>
-    <option value="Ford">Green</option>
+
+  <?php  
+  include 'connect.php';
+$sql1 = "SELECT * FROM tblcolor";
+$result1 = $mysqli->query($sql1);
+while ($row1 = $result1->fetch_assoc()) {
+  echo '<option>'.$row1['color'].'</option>';
+}
+
+  ?>
+    
 </select>
 
 </div>
@@ -134,15 +173,15 @@ while ($row = $result->fetch_assoc()) {
         <img class="image" src="images/' . $row['photo'] . '" width="160px">
         <div class="datagroup">
             <div class="data">
-                <i class="bx bx-timer"></i>
+                <i class="bx bxs-timer" style="color:#0043ff"></i>
                 <h3 class="spec">' . $row['accelaration'] . ' s</h3>
             </div>
             <div class="data">
-                <i class="bx bx-line-chart"></i>
+                <i class="bx bx-line-chart" style="color:#39ad5e"></i>
                 <h3 class="spec"> ' . $row['topspeed'] . ' km/h</h3>
             </div>
             <div class="data">
-                <i class="bx bxs-gas-pump"></i>
+                <i class="bx bxs-gas-pump" style="color:#dc1e4d"></i>
                 <h3 class="spec">' . $row['fuel'] . '</h3>
             </div>
         </div>

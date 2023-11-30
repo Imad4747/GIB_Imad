@@ -176,6 +176,11 @@ section {
 
 .data i {
   margin-right: 5px;
+  font-size: 20px;
+  
+}
+.bxbxs-gas-pump{
+color: red;
 }
 
 .price {

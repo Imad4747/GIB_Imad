@@ -13,13 +13,39 @@
 <body>
 
 <header>
-   <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="product.php">Product</a></li>
-        <li><a href="contact.php">Contact</a></li>
-        <li><a href="loguit.php"><i class='bx bx-log-out' ></i></a><li>   
-      </ul>
+  <div id="searchBar" align="center">
+    
+    <input type="text" placeholder="Search">
+  </div>
+  <div id="profileIcon" class="profile">
+    <i id="profileButton" class='bx bx-user' ></i>
+    <div class="profile-popup">
+    
+      
+      <?php session_start(); 
+      if (isset($_SESSION['user_id'])) {
+        echo '<img src="images/avatar.jpg" alt="User Avatar" class="avatar">';
+         echo "<p>Hello, " . $_SESSION['user_id'] . "</p>";
+         echo '<a href="#">Edit Profile</a>
+      <a href="loguit.php">Log Out</a>';
+      }else{
+        echo "<button class='btn'><a href='login.php'>Login</a></button></a>";
+        echo "<br><br>";
+        echo "<button class='btn'>Sign Up</button>";
+      }
+     
+
+      ?>
+     
+    </div>
+  </div>
 </header>
+
+<nav>
+  <a href="index.php">Home</a>
+  <a href="product.php">Product</a>
+  <a href="contact.php">Contact</a>
+</nav>
 
 
 <main>

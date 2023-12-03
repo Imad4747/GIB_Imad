@@ -17,6 +17,7 @@
         <input type="text" placeholder="Search">
 
       </div>
+
        
     </div>
     <div class="bottom-navbar">

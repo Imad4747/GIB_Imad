@@ -14,3 +14,25 @@ console.log("dfgdfg");
         });
     }
 
+// /------------------------------------------/ 
+
+  var profileButton = document.getElementById('profileButton');
+  var profilePopup = document.querySelector('.profile-popup');
+
+  profilePopup.style.display = 'none';
+
+  profileButton.addEventListener('click', function (event) {
+    event.stopPropagation(); 
+    profilePopup.style.display = profilePopup.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', function (event) {
+    if (!event.target.matches('.profile-popup') && !event.target.matches('#profileButton')) {
+      profilePopup.style.display = 'none';
+    }
+  });
+
+  profilePopup.addEventListener('click', function (event) {
+    event.stopPropagation();
+  });
+;

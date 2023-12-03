@@ -1,37 +1,91 @@
 
   @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-  body {
-    font-family: 'Lato', sans-serif;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0;
-}
+body {
+      font-family: 'Lato', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
 
-header {
-  background-color: black;
+   header {
+      background-color: black;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #searchBar {
+      flex: 1; 
+      margin: 0 10px;
+    }
+
+    #profileIcon {
+      cursor: pointer;
+    }
+    .profile i{
+      font-size: 18px;
+
+    }
+
+    nav {
+      background-color: black;
+      color: white;
+      border-top: 1px solid white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      margin: 0 15px;
+    }
+
+    .profile-popup {
+      display: none;
+      position: absolute;
+      background-color: white;
+      color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      padding: 50px;
+      right: 0;
+    }
+    .profile-popup .btn{
+      background-color: blue; 
+  border: none;
   color: white;
+  padding: 15px 32px;
   text-align: center;
-  padding: 20px;
-}
-
-header ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
-
-header li {
-  margin: 0 15px; 
-}
-
-header a {
   text-decoration: none;
-  color: white;
-  transition: background-color 0.2s;
-}
+  display: inline-block;
+  font-size: 16px;
+    }
+
+    .profile-popup img.avatar {
+      width: 50px;
+      border-radius: 50%;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .profile-popup a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .profile-popup a:hover {
+      background-color: #ddd;
+    }
+
+    .profile:hover .profile-popup {
+      display: block;
+    }
 
 main {
   display: flex;
@@ -67,7 +121,7 @@ main {
 
         .content {
             padding: 0 18px;
-            display: none;
+            display: block;
             overflow: hidden;
             background-color: #f1f1f1;
             margin-top:10px;

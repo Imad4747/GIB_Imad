@@ -22,7 +22,6 @@
 
   .search-bar {
     display: inline-block;
-    background-color: #444;
     padding: 10px;
     border-radius: 5px;
   }
@@ -33,7 +32,12 @@
     border: none;
     border-radius: 5px;
   }
-
+.avatar {
+  width: 50px; /* Adjust the width of the avatar as needed */
+  border-radius: 50%; /* Creates a circular avatar */
+  margin-bottom: 10px;
+  border: 2px solid red;
+}
   
 
   .bottom-navbar {
@@ -99,7 +103,6 @@
             cursor: pointer;
         }
 
-        /* Style for file input */
         form input[type="file"] {
             margin-top: 10px;
         }

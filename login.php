@@ -45,7 +45,7 @@ if ($db_role == "admin") {
     if (password_verify($password, $db_password)) {
         session_start();
         $_SESSION['user_id'] = $user_id;
-        header('Location: index.php');
+        header('Location: product.php');
         exit;
     }  else{
         

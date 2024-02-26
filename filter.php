@@ -4,6 +4,7 @@ $selectedBrand = trim($_POST['selectedBrand'] ?? '');
 $selectedType = trim($_POST['selectedType'] ?? '');
 $minPrice = trim($_POST['minPrice'] ?? '');
 $maxPrice = trim($_POST['maxPrice'] ?? '');
+$search = trim($_POST['searchBar'] ?? '');
 $transmission = trim($_POST['transmission'] ?? '');
 $selectedFuelTypes = array_map('trim', $_POST['selectedFuelTypes'] ?? []);
 
@@ -23,6 +24,9 @@ if ($selectedType) {
 
 if ($minPrice !== '' && $maxPrice !== '') {
     $conditions[] = "tblproducts.price >= $minPrice AND tblproducts.price <= $maxPrice";
+}
+if ($search !== '') {
+    $conditions[] = "tblproducts.name LIKE '%$search%' OR tblproducts.model LIKE '%$search%'";
 }
 
 if ($transmission) {

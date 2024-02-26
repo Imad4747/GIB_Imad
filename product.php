@@ -53,7 +53,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              <a class="nav-link active" aria-current="page" href="index.php">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="product.php">Products</a>
@@ -74,7 +74,7 @@
       if (isset($_SESSION['user_id'])) {
         echo '<li><a class="dropdown-item" href="#">New project...</a></li>
     <li><a class="dropdown-item" href="#">Settings</a></li>
-    <li><a class="dropdown-item" href="#">Profile</a></li>
+    <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="loguit.php">Sign out</a></li>';
       }else{
@@ -189,9 +189,8 @@ while ($row = $result->fetch_assoc()) {
 
         <!-- Centered Search Bar ---------------------------------->
      <div class="d-flex justify-content-center mb-4">
-    <form action="" method="get" class="form-inline">
-        <input type="text" class="form-control mr-2" style="width: 930px;" placeholder="Search..." name="search">
-    </form>
+        <input type="text" class="form-control mr-2" style="width: 930px;" placeholder="Search..." name="search" id="searchinput">
+    
 </div>
 
 
@@ -202,7 +201,7 @@ while ($row = $result->fetch_assoc()) {
         <div class="container">
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="filteredResultsContainer">
     
-    <?php
+    <!-- ?php
 include 'connect.php';
 
 $sql = "SELECT * FROM tblproducts, tblspecs WHERE id = specID";
@@ -220,7 +219,12 @@ $result = $mysqli->query($sql);
 
 
 while ($row = $result->fetch_assoc()) { 
-  echo '<div class="col">
+  if (isset($_POST['control'])) {
+    $_SESSION['car'] = $_POST['name'];
+    header("Location: cars.php");
+
+  }else{
+    echo '<div class="col">
       <div class="card position-relative">
     <span class="favorite position-absolute top-0 end-0" style="margin-right: 5px; margin-end: 5px;">&#9733;</span>
         
@@ -228,7 +232,7 @@ while ($row = $result->fetch_assoc()) {
 
 
         <div class="card-body">
-          <h3 class="card-title text-center">'.$row["name"].'</h3>
+          <h3 class="card-title text-center" name="name">'.$row["name"].'</h3>
           
           <h5 class="card-subtitle text-center mb-2 text-muted">'.$row["model"].'</h5>
           <div class="card-body text-center">
@@ -253,18 +257,18 @@ while ($row = $result->fetch_assoc()) {
     </div>
 </div>
 
-          <!-- Price underneath the text -->
           <h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>
 
-          <!-- Button centered underneath the price -->
           <div class="text-center">
             <button class="btn btn-primary">View Details</button>
           </div>
         </div>
       </div>
     </div>';
+  }
+  
 }
-  ?>
+  ? -->
     
 
 
@@ -340,6 +344,7 @@ while ($row = $result->fetch_assoc()) {
   <script>
  $(document).ready(function() {
     function applyFilters() {
+        var searchBar = $("#searchinput").val();
         var selectedBrand = $("#selectedBrand option:selected").text();
         var selectedType = $(".btn-group-vertical .btn.active").text();
         var minPrice = $("#minPrice").val();
@@ -360,9 +365,11 @@ while ($row = $result->fetch_assoc()) {
                 maxPrice: maxPrice,
                 transmission: transmission,
                 selectedFuelTypes: selectedFuelTypes,
-                selectedBrand: selectedBrand 
+                selectedBrand: selectedBrand, 
+                searchBar: searchBar
             },
             success: function(response) {
+
                 console.log("AJAX response:", response);
                 $("#filteredResultsContainer").html(response); 
             },
@@ -380,6 +387,9 @@ while ($row = $result->fetch_assoc()) {
     });
 
     $("#minPrice, #maxPrice").on('input', function() {
+        applyFilters();
+    });
+    $("#searchinput").on('input', function() {
         applyFilters();
     });
 

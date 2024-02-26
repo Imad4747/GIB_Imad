@@ -126,11 +126,12 @@
     <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
   </a>
   <ul class="dropdown-menu dropdown-menu-end text-small">
-    <?php session_start(); 
+    <?php session_start();
+     
       if (isset($_SESSION['user_id'])) {
         echo '<li><a class="dropdown-item" href="#">New project...</a></li>
     <li><a class="dropdown-item" href="#">Settings</a></li>
-    <li><a class="dropdown-item" href="#">Profile</a></li>
+    <li><a class="dropdown-item" href="#">My Profile</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="loguit.php">Sign out</a></li>';
       }else{
@@ -155,7 +156,7 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="images/la.jpg" class="bd-placeholder-img" alt="Slide 1" width="100%" >
+      <img src="images/h.jpg" class="bd-placeholder-img" alt="Slide 1" width="100%" >
       <div class="container">
         <div class="carousel-caption text-start">
           <h1>Example headline.</h1>
@@ -165,7 +166,7 @@
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/la.jpg" class="bd-placeholder-img" alt="Slide 2"  width="100%">
+      <img src="images/n.jpg" class="bd-placeholder-img" alt="Slide 2"  width="100%">
       <div class="container">
         <div class="carousel-caption">
           <h1>Another example headline.</h1>
@@ -175,7 +176,7 @@
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/la.jpg" class="bd-placeholder-img" alt="Slide 3"  width="100%">
+      <img src="images/b.jpg" class="bd-placeholder-img" alt="Slide 3"  width="100%">
       <div class="container">
         <div class="carousel-caption text-end">
           <h1>One more for good measure.</h1>

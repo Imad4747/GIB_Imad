@@ -1,6 +1,7 @@
 <?php 
 include 'connect.php';
-echo $_SESSION['car'];
+$id = $_GET['id'];
+echo $id;
 
 
 

@@ -86,7 +86,7 @@ while ($row = $result->fetch_assoc()) {
 
           <!-- Button centered underneath the price -->
           <div class="text-center">
-            <button class="btn btn-primary">View Details</button>
+            <button class="btn btn-primary" data-car-id="'.$row["id"].'">View Details</button>
           </div>
         </div>
       </div>

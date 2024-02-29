@@ -397,6 +397,11 @@ while ($row = $result->fetch_assoc()) {
 
     $("input[name='radioTransmission']").change(applyFilters);
 
+    $("#filteredResultsContainer").on('click', '.btn-primary', function() {
+        var carId = $(this).data('car-id'); 
+        window.location.href = 'cars.php?id=' + carId;
+    });
+
     applyFilters();
   
 });

@@ -37,13 +37,15 @@
       margin-top: auto;
     }
   </style>
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <header data-bs-theme="dark">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom p-3">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24">
+          <img src="" alt="GIB" width="30" height="24">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -96,14 +98,54 @@ if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
-while ($row = $result->fetch_assoc()) {
+if (isset($_POST['submit'])) {
+    if (!isset($_SESSION['user_id'])) {
+         echo '<script>
+                $(document).ready(function(){
+                    $("#loginModal").modal("show");
+                });
+              </script>';
+    } else {
+        $selectedProductId = $_POST['id'];
+       
 
-	echo '<div align="center" style="position: relative; top: 200px;">
-  <form action="checkout.php?id='.$row["id"].'" method="get">
-  '.$row["name"].'<br>'.$row["model"].'<br>$'.$row["price"].'.00<br><input type="submit" name="id" value="'.$row["id"].'"></form>
-</div>';
+        header("Location: checkout.php?id=" . $selectedProductId);
+        exit();
+    }
+}
+
+
+while ($row = $result->fetch_assoc()) {
+    echo '<div align="center" style="position: relative; top: 200px;">
+        <form action="" method="post">
+            <strong>' . $row["name"] . '</strong><br>
+            ' . $row["model"] . '<br>
+            $' . $row["price"] . '.00<br>
+            <input type="hidden" name="id" value="' . $row["id"] . '">
+            <input type="submit" name="submit" value="Buy">
+        </form>
+    </div>';
 }
 ?>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You must log in to buy the product. Please log in to continue.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="login.php" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

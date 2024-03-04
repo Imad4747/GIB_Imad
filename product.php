@@ -45,7 +45,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom p-3">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24">
+          <img src="" alt="GIB" width="30" height="24">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>

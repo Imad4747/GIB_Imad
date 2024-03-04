@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            padding-top: 56px; 
+        }
+    </style>
 </head>
 <body>
 
-	<header data-bs-theme="dark">
+<header data-bs-theme="dark">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom p-3">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24">
+          <img src="" alt="GIB" width="30" height="24">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -56,6 +60,40 @@
       </div>
     </nav>
   </header>
-<?php  ?>
+
+<div class="container mt-4">
+    <h2>Welcome, [User Name]!</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Personal Information</h5>
+            <p class="card-text">Email: [User Email]<br>Address: [User Address]<br>Phone: [User Phone]</p>
+            <a href="#" class="btn btn-primary">Edit Profile</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Favorite Products</h5>
+            <ul>
+                <li>Product 1</li>
+                <li>Product 2</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Orders</h5>
+            <ul>
+                <li>Order #1 - Date: [Order Date], Total: [Order Total]</li>
+                <li>Order #2 - Date: [Order Date], Total: [Order Total]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

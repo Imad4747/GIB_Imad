@@ -15,7 +15,10 @@ $stripe_key = "sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2
 $checkout_session = \Stripe\Checkout\Session::create([
 
 "mode" => "payment",
-"success_url" => "https://localhost/succes.php",
+"success_url" => "http://gib/GIB_Imad/succes.php",
+"cancel_url" => "http://gib/GIB_Imad/product.php",
+"billing_address_collection" => "required",
+    "allow_promotion_codes" => true,
 "line_items" => [
 	[
 "quantity" => 1,
@@ -23,8 +26,9 @@ $checkout_session = \Stripe\Checkout\Session::create([
 "currency" => "usd",
 "unit_amount" => $row["price"],
 "product_data" => [
-"name" => $row["name"]
-
+"name" => $row["name"],
+"description" => $row["model"],
+"images" => ["http://gib/GIB_Imad/images/h.jpg"]
 ] 
 ]
 	]

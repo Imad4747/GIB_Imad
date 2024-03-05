@@ -62,11 +62,23 @@
   </header>
 
 <div class="container mt-4">
-    <h2>Welcome, [User Name]!</h2>
+    <h2>Welcome, <?php include 'connect.php'; 
+    $sql = "SELECT firstname FROM tblusers WHERE id=".$_SESSION['user_id']."";
+    $result = $mysqli->query($sql);
+    while ($row = $result->fetch_assoc()) {
+      echo $row["firstname"];
+    }
+
+     ?></h2>
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Personal Information</h5>
-            <p class="card-text">Email: [User Email]<br>Address: [User Address]<br>Phone: [User Phone]</p>
+            <p class="card-text">Email: <?php 
+            $sql = "SELECT email FROM tblusers WHERE id=".$_SESSION['user_id']."";  
+            $result = $mysqli->query($sql);
+    while ($row = $result->fetch_assoc()) {
+      echo $row["email"];
+    } ?><br>Address: [User Address]<br>Phone: [User Phone]</p>
             <a href="#" class="btn btn-primary">Edit Profile</a>
         </div>
     </div>

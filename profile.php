@@ -78,8 +78,18 @@
             $result = $mysqli->query($sql);
     while ($row = $result->fetch_assoc()) {
       echo $row["email"];
-    } ?><br>Address: [User Address]<br>Phone: [User Phone]</p>
-            <a href="#" class="btn btn-primary">Edit Profile</a>
+    } ?><br>Firstname: <?php 
+            $sql = "SELECT firstname FROM tblusers WHERE id=".$_SESSION['user_id']."";  
+            $result = $mysqli->query($sql);
+    while ($row = $result->fetch_assoc()) {
+      echo $row["firstname"];
+    } ?><br>Lastname: <?php 
+            $sql = "SELECT lastname FROM tblusers WHERE id=".$_SESSION['user_id']."";  
+            $result = $mysqli->query($sql);
+    while ($row = $result->fetch_assoc()) {
+      echo $row["lastname"];
+    } ?></p>
+            <a href="#" class="btn btn-primary" onclick="formModal()">Edit Profile</a>
         </div>
     </div>
 
@@ -104,8 +114,59 @@
     </div>
 </div>
 
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Edit Your Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="update_info.php" method="post">
+                    <?php 
+                        $sql = "SELECT email, firstname, lastname FROM tblusers WHERE id=".$_SESSION['user_id']."";  
+                        $result = $mysqli->query($sql);
+                        while ($row = $result->fetch_assoc()) {
+                            $email = $row["email"];
+                            $firstName = $row["firstname"];
+                            $lastName = $row["lastname"];
+                        } 
+                    ?>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" value="<?php echo $firstName; ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo $lastName; ?>" required>
+                    </div>
+                    
+                     <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="control">Update Info</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<script type="text/javascript">
+  function formModal() {
+    $(document).ready(function(){
+                    $("#loginModal").modal("show");
+                });
+  }
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Gegenereerd op: 30 nov 2023 om 12:31
+-- Gegenereerd op: 07 mrt 2024 om 08:48
 -- Serverversie: 8.0.31
 -- PHP-versie: 8.0.26
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `tblbrands` (
 INSERT INTO `tblbrands` (`id`, `brands`) VALUES
 (1, 'Mercedes'),
 (2, 'Audi'),
-(3, 'Prosche');
+(3, 'Porsche');
 
 -- --------------------------------------------------------
 
@@ -66,6 +66,28 @@ INSERT INTO `tblcartype` (`id`, `model`) VALUES
 (3, 'Coupé'),
 (4, 'Wagon'),
 (5, 'Cabrio');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `tblchatbot`
+--
+
+DROP TABLE IF EXISTS `tblchatbot`;
+CREATE TABLE IF NOT EXISTS `tblchatbot` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `message` text NOT NULL,
+  `response` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `tblchatbot`
+--
+
+INSERT INTO `tblchatbot` (`id`, `message`, `response`) VALUES
+(1, 'My account is down', 'wait we work'),
+(2, 'hello ', 'how cn i help');
 
 -- --------------------------------------------------------
 
@@ -105,17 +127,14 @@ CREATE TABLE IF NOT EXISTS `tblcontact` (
   `file` blob NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `tblcontact`
 --
 
 INSERT INTO `tblcontact` (`id`, `firstname`, `lastname`, `email`, `message`, `file`, `date`) VALUES
-(1, 'nvn', 'bvnvbn', 'email@email.emailvv', 'vbnvn', '', '2023-11-23 07:43:50'),
-(2, 'juj', 'juj', 'email@email.emailvvuj', 'jujujujujuj', 0x6176617461722e6a7067, '2023-11-23 08:08:29'),
-(3, 'bfgbgfb', 'fgbfgbfg', 'email@email.email', 'zferfref', 0x747572626f2e706e67, '2023-11-27 14:36:31'),
-(4, 'qq', 'qq', 'email@email.emailvvqq', 'qq', 0x72382e706e67, '2023-11-27 14:39:35');
+(1, 'jj', 'hh', 'hhhghhh@fgkjfdg.com', 'hhhh', 0x736c2e706e67, '2023-12-01 13:10:28');
 
 -- --------------------------------------------------------
 
@@ -142,6 +161,23 @@ INSERT INTO `tblfuel` (`id`, `fuel`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tabelstructuur voor tabel `tblorder`
+--
+
+DROP TABLE IF EXISTS `tblorder`;
+CREATE TABLE IF NOT EXISTS `tblorder` (
+  `order_id` int NOT NULL AUTO_INCREMENT,
+  `userid` int NOT NULL,
+  `product` text NOT NULL,
+  `model` text NOT NULL,
+  `totalPrice` int NOT NULL,
+  `date_order` date NOT NULL,
+  PRIMARY KEY (`order_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tabelstructuur voor tabel `tblproducts`
 --
 
@@ -161,14 +197,14 @@ CREATE TABLE IF NOT EXISTS `tblproducts` (
 --
 
 INSERT INTO `tblproducts` (`id`, `name`, `model`, `price`, `photo`, `year`) VALUES
-(1, 'Mercedes', 'AMG GT', 190000, 'gt.png', 2021),
-(2, 'Porsche ', '911 Turbo S', 320000, 'turbo.png', 2023),
-(3, 'Audi ', 'RS6', 130000, 'rs.png', 2021),
-(4, 'Mercedes', 'G63 AMG', 2000000, 'g.png', 2022),
-(5, 'Mercedes', 'AMG SL Roadster', 130800, 'sl.png', 2021),
-(6, 'Mercedes', 'EQS', 80245, 'eqs.png', 2023),
-(7, 'Mercedes', 'AMG S 63', 201025, 's.png', 2022),
-(8, 'Audi', 'R8', 423253, 'r8.png', 2021);
+(1, 'Mercedes', 'AMG GT', 19000000, 'gt.png', 2021),
+(2, 'Porsche', '911 Turbo S', 32000000, 'turbo.png', 2023),
+(3, 'Audi', 'RS6', 13000000, 'rs.png', 2021),
+(4, 'Mercedes', 'G63 AMG', 200000000, 'g.png', 2022),
+(5, 'Mercedes', 'AMG SL Roadster', 13080000, 'sl.png', 2021),
+(6, 'Mercedes', 'EQS', 8024500, 'eqs.png', 2023),
+(7, 'Mercedes', 'AMG S 63', 20102500, 's.png', 2022),
+(8, 'Audi', 'R8', 42325300, 'r8.png', 2021);
 
 -- --------------------------------------------------------
 
@@ -183,6 +219,8 @@ CREATE TABLE IF NOT EXISTS `tblspecs` (
   `horsepower` int NOT NULL,
   `accelaration` double NOT NULL,
   `fuel` varchar(255) NOT NULL,
+  `transmission` text NOT NULL,
+  `cartype` text NOT NULL,
   PRIMARY KEY (`specID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -190,15 +228,15 @@ CREATE TABLE IF NOT EXISTS `tblspecs` (
 -- Gegevens worden geëxporteerd voor tabel `tblspecs`
 --
 
-INSERT INTO `tblspecs` (`specID`, `topspeed`, `horsepower`, `accelaration`, `fuel`) VALUES
-(1, 315, 585, 3.2, 'Benzine'),
-(2, 330, 650, 3.6, 'Electric'),
-(3, 305, 630, 4.1, 'Benzine'),
-(4, 220, 585, 4.5, 'Electric'),
-(5, 320, 621, 2.3, 'Benzine'),
-(6, 210, 360, 4, 'Electric'),
-(7, 300, 523, 3.9, 'Electric'),
-(8, 330, 623, 2.4, 'Benzine');
+INSERT INTO `tblspecs` (`specID`, `topspeed`, `horsepower`, `accelaration`, `fuel`, `transmission`, `cartype`) VALUES
+(1, 315, 585, 3.2, 'Benzine', 'manual', 'sedan'),
+(2, 330, 650, 3.6, 'Electric', 'manual', 'SUV'),
+(3, 305, 630, 4.1, 'Benzine', 'manual', 'coupé'),
+(4, 220, 585, 4.5, 'Electric', 'automatic', 'cabrio'),
+(5, 320, 621, 2.3, 'Benzine', 'automatic', 'wagon'),
+(6, 210, 360, 4, 'Electric', 'automatic', 'sedan'),
+(7, 300, 523, 3.9, 'Electric', 'manual', 'SUV'),
+(8, 330, 623, 2.4, 'Benzine', 'automatic', 'cabrio');
 
 -- --------------------------------------------------------
 

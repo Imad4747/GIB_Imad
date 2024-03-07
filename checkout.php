@@ -1,7 +1,8 @@
 <?php
 include 'include.php';
 include 'connect.php'; 
-
+session_start();
+$userid = $_SESSION['user_id'];
 $id = $_GET['id'];
 
 $sql = "SELECT * FROM tblproducts WHERE id = $id";
@@ -42,10 +43,10 @@ $order_id = $checkout_session->id;
 $total = $checkout_session->amount_total;
 $current_date = date("Y-m-d H:i:s"); 
 
-$sql_order = "INSERT INTO tblorders (order_id, userid, product, model, totalPrice, date_) 
-                    VALUES ('$order_id', '$amount_paid', '$current_date', '{$row["name"]}', '{$row["model"]}')";
+$sql_order = "INSERT INTO tblorder (userid, product, model, totalPrice, date_order) 
+                    VALUES ('$userid', '{$row["name"]}', '{$row["model"]},'$total',  '$current_date')";
 
-if ($mysqli->query($sql_insert_order)) {
+if ($mysqli->query($sql_order)) {
     echo "order succes.";
 } else {
     echo "error: " . $mysqli->error;
@@ -53,11 +54,11 @@ if ($mysqli->query($sql_insert_order)) {
 
 
 
-header("Location: succes.php");
-exit();
+http_response_code(303);
+header("Location: " . $checkout_session->url);
 ?>
 
-<!-- <?php
+<!-- <
 include 'include.php';
 include 'connect.php'; 
  $id = $_GET['id'];

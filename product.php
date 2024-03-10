@@ -342,70 +342,86 @@ while ($row = $result->fetch_assoc()) {
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
   <script>
- $(document).ready(function() {
-    function applyFilters() {
-        var searchBar = $("#searchinput").val();
-        var selectedBrand = $("#selectedBrand option:selected").text();
-        var selectedType = $(".btn-group-vertical .btn.active").text();
-        var minPrice = $("#minPrice").val();
-        var maxPrice = $("#maxPrice").val();
-        var transmission = $("input[name='radioTransmission']:checked").next('label').text();
+    $(document).ready(function() {
+        function applyFilters() {
+            var searchBar = $("#searchinput").val();
+            var selectedBrand = $("#selectedBrand option:selected").text();
+            var selectedType = $(".btn-group-vertical .btn.active").text();
+            var minPrice = $("#minPrice").val();
+            var maxPrice = $("#maxPrice").val();
+            var transmission = $("input[name='radioTransmission']:checked").next('label').text();
 
-        var selectedFuelTypes = [];
-        $("input[name='fuelCheckbox']:checked").each(function() {
-            selectedFuelTypes.push($(this).next('label').text());
+            var selectedFuelTypes = [];
+            $("input[name='fuelCheckbox']:checked").each(function() {
+                selectedFuelTypes.push($(this).next('label').text());
+            });
+
+            $.ajax({
+                url: "filter.php",
+                type: "POST",
+                data: {
+                    selectedType: selectedType,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice,
+                    transmission: transmission,
+                    selectedFuelTypes: selectedFuelTypes,
+                    selectedBrand: selectedBrand,
+                    searchBar: searchBar
+                },
+                success: function(response) {
+                    console.log("AJAX response:", response);
+                    $("#filteredResultsContainer").html(response);
+                },
+                error: function(error) {
+                    console.error("AJAX request failed: " + error.statusText);
+                }
+            });
+        }
+
+      
+        $("#selectedBrand").change(applyFilters);
+        $(".btn-group-vertical .btn").click(function() {
+            $(".btn-group-vertical .btn").removeClass("active");
+            $(this).addClass("active");
+            applyFilters();
         });
 
-         $.ajax({
-            url: "filter.php",
-            type: "POST",
-            data: {
-                selectedType: selectedType,
-                minPrice: minPrice,
-                maxPrice: maxPrice,
-                transmission: transmission,
-                selectedFuelTypes: selectedFuelTypes,
-                selectedBrand: selectedBrand, 
-                searchBar: searchBar
-            },
-            success: function(response) {
-
-                console.log("AJAX response:", response);
-                $("#filteredResultsContainer").html(response); 
-            },
-            error: function(error) {
-                console.error("AJAX request failed: " + error.statusText);
-            }
+        $("#minPrice, #maxPrice").on('input', function() {
+            applyFilters();
         });
-    }
-    $("#selectedBrand").change(applyFilters);
 
-    $(".btn-group-vertical .btn").click(function() {
-        $(".btn-group-vertical .btn").removeClass("active");
-        $(this).addClass("active");
+        $("#searchinput").on('input', function() {
+            applyFilters();
+        });
+
+        $("input[name='fuelCheckbox']").change(applyFilters);
+        $("input[name='radioTransmission']").change(applyFilters);
+
+        $("#filteredResultsContainer").on('click', '.btn-primary', function() {
+            var carId = $(this).data('car-id');
+            window.location.href = 'cars.php?id=' + carId;
+        });
+          window.addFavorite = function(productId, userId) {
+            $.ajax({
+                url: "insert-fav.php",
+                type: "POST",
+                data: { productId: productId, userId: userId },
+                success: function(response) {
+                    // Handle success if needed
+                    console.log("Favorite added successfully");
+                    // Toggle the filled state using Bootstrap class
+                    $("#star-" + productId).toggleClass("text-warning");
+                },
+                error: function(error) {
+                    console.error("Failed to add favorite: " + error.statusText);
+                }
+            });
+        };
+
         applyFilters();
     });
-
-    $("#minPrice, #maxPrice").on('input', function() {
-        applyFilters();
-    });
-    $("#searchinput").on('input', function() {
-        applyFilters();
-    });
-
-    $("input[name='fuelCheckbox']").change(applyFilters);
-
-    $("input[name='radioTransmission']").change(applyFilters);
-
-    $("#filteredResultsContainer").on('click', '.btn-primary', function() {
-        var carId = $(this).data('car-id'); 
-        window.location.href = 'cars.php?id=' + carId;
-    });
-
-    applyFilters();
-  
-});
 </script>
+
 
 
 </body>

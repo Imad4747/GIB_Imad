@@ -1,5 +1,14 @@
+
+
 <?php
 include 'connect.php';
+session_start();
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+} else {
+
+    
+}
 $selectedBrand = trim($_POST['selectedBrand'] ?? '');
 $selectedType = trim($_POST['selectedType'] ?? '');
 $minPrice = trim($_POST['minPrice'] ?? '');
@@ -50,7 +59,9 @@ if ($result === false) {
 while ($row = $result->fetch_assoc()) {
     echo '<div class="col">
       <div class="card position-relative">
-    <span class="favorite position-absolute top-0 end-0" style="margin-right: 5px; margin-end: 5px;">&#9733;</span>
+<span  class="favorite position-absolute top-0 end-0" style="margin-right: 5px; margin-end: 5px; cursor: pointer;" onclick="addFavorite(' . $row["id"] . ', ' . $userId . ')"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+        <path d="M8 .753a1 1 0 0 1 1.818 0l1.55 4.744h4.982a1 1 0 0 1 .555 1.832l-4.046 2.937 1.55 4.744a1 1 0 0 1-1.532 1.054l-4.045-2.937-4.047 2.937a1 1 0 0 1-1.532-1.054l1.55-4.744L.655 6.329A1 1 0 0 1 1.21 5.495L5.257 8.43 3.71 3.686a1 1 0 0 1 .287-.918L8 0.753l1.003 2.015a1 1 0 0 1 .287.918l-1.548 4.744 4.047-2.937a1 1 0 0 1 1.532 1.054l-1.55 4.744 4.046-2.937a1 1 0 0 1 .555-1.832h4.982l1.55-4.744a1 1 0 0 1 1.818 0l1.55 4.744h4.982a1 1 0 0 1 .555 1.832l-4.046 2.937 1.55 4.744a1 1 0 0 1-1.532 1.054l-4.045-2.937-4.047 2.937a1 1 0 0 1-1.532-1.054l1.55-4.744L.655 6.329A1 1 0 0 1 1.21 5.495L5.257 8.43 3.71 3.686a1 1 0 0 1 .287-.918L8 0.753l1.003 2.015a1 1 0 0 1 .287.918l-1.548 4.744 4.047-2.937a1 1 0 0 1 1.532 1.054l-1.55 4.744 4.046-2.937a1 1 0 0 1 .555-1.832h4.982l1.55-4.744a1 1 0 0 1 1.818 0l1.55 4.744h4.982a1 1 0 0 1 .555 1.832l-4.046 2.937 1.55 4.744a1 1 0 0 1-1.532 1.054l-4.045-2.937-4.047 2.937a1 1 0 0 1-1.532-1.054l1.55-4.744L.655 6.329A1 1 0 0 1 1.21 5.495L5.257 8.43 3.71 3.686a1 1 0 0 1 .287-.918L8 0.753z"/>
+    </svg></span>
         
         <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">'.$row["year"].'</h3>
 

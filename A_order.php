@@ -10,7 +10,6 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.122.0">
     <title>Dashboard</title>
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -200,24 +199,22 @@
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="admin.php" style="font-weight: bold; color: black;">
+              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="admin.php" >
                 <svg class="bi"><use xlink:href="#house-fill"/></svg>
                 Dashboard
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="A_order.php">
+              <a class="nav-link d-flex align-items-center gap-2" href="A_order.php" style="font-weight: bold; color: black;">
                 <svg class="bi"><use xlink:href="#file-earmark"/></svg>
                 Orders
               </a>
             </li>
             <li class="nav-item">
-             <a class="nav-link d-flex align-items-center gap-2 " href="A_prod.php" >
-            <svg class="bi"><use xlink:href="#cart"/></svg>
-                          Products
-            </a>
-
-
+              <a class="nav-link d-flex align-items-center gap-2" href="A_prod.php">
+                <svg class="bi"><use xlink:href="#cart"/></svg>
+                Products
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="A_cust.php">
@@ -239,7 +236,7 @@
             </li>
           </ul>
 
-        
+         
 
           <hr class="my-3">
 
@@ -266,11 +263,41 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-<div class="d-flex justify-content-center mb-4">
-        <input type="text" class="form-control mr-2" style="width: 999px;" placeholder="Search..." name="search" id="searchinput">
-    
-</div>
+      <button type="button" class="btn btn-success btn-lg mb-3">Add New Order</button>
+      <?php  
+include 'connect.php';
+$sql = "SELECT * FROM tblorder";
+$result = $mysqli->query($sql);
 
+if ($result === false) {
+    die("Error executing query: " . $mysqli->error);
+}
+
+echo '<div class="container">'; // Start a container for the order list
+
+while ($row = $result->fetch_assoc()) {
+    echo '<div class="row mb-3">';
+    echo '<div class="col">';
+    echo '<div class="card">';
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title">Order ID: ' . $row["order_id"] . '</h5>';
+    echo '<p class="card-text"><strong>User ID:</strong> ' . $row["userid"] . '</p>';
+    echo '<p class="card-text"><strong>Product:</strong> ' . $row["product"] . '</p>';
+    echo '<p class="card-text"><strong>Model:</strong> ' . $row["model"] . '</p>';
+    echo '<p class="card-text"><strong>Total Price:</strong> ' . $row["totalPrice"] . '</p>';
+    echo '<p class="card-text"><strong>Date Ordered:</strong> ' . $row["date_order"] . '</p>';
+    echo '<div class="text-center">';
+    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder(' . $row["order_id"] . ')">Delete</button>'; // Add delete button
+    echo '</div>';
+    echo '</div>'; // Close card-body
+    echo '</div>'; // Close card
+    echo '</div>'; // Close column
+    echo '</div>'; // Close row
+}
+
+echo '</div>'; // Close container
+
+?>
 
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>

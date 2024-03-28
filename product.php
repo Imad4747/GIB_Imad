@@ -136,7 +136,7 @@
             </h6>
             <div class="input-group mb-2">
               <span class="input-group-text" id="minPriceLabel">Min</span>
-              <input type="number" id="minPrice" class="form-control" placeholder="Min Price" aria-label="Min Price" aria-describedby="minPriceLabel">
+              <input type="number" id="minPrice" class="form-control" placeholder="Min Price" aria-label="Min Price" aria-describedby="minPriceLabel" value="0">
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text" id="maxPriceLabel">Max</span>
@@ -407,9 +407,7 @@ while ($row = $result->fetch_assoc()) {
                 type: "POST",
                 data: { productId: productId, userId: userId },
                 success: function(response) {
-                    // Handle success if needed
                     console.log("Favorite added successfully");
-                    // Toggle the filled state using Bootstrap class
                     $("#star-" + productId).toggleClass("text-warning");
                 },
                 error: function(error) {

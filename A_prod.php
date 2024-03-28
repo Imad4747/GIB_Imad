@@ -200,7 +200,7 @@
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="admin.php" style="font-weight: bold; color: black;">
+              <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="admin.php">
                 <svg class="bi"><use xlink:href="#house-fill"/></svg>
                 Dashboard
               </a>
@@ -212,7 +212,7 @@
               </a>
             </li>
             <li class="nav-item">
-             <a class="nav-link d-flex align-items-center gap-2 " href="A_prod.php" >
+             <a class="nav-link d-flex align-items-center gap-2 active" href="A_prod.php" style="font-weight: bold; color: black;">
             <svg class="bi"><use xlink:href="#cart"/></svg>
                           Products
             </a>
@@ -266,13 +266,57 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-<div class="d-flex justify-content-center mb-4">
-        <input type="text" class="form-control mr-2" style="width: 999px;" placeholder="Search..." name="search" id="searchinput">
-    
-</div>
+      
+<button type="button" class="btn btn-success btn-lg mb-3">Add New Product</button>
 
+<?php 
+include 'connect.php';
+$sql = "SELECT * FROM tblproducts
+        INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
+        WHERE 1";
+$result = $mysqli->query($sql);
+if ($result === false) {
+    die("Error executing query: " . $mysqli->error);
+}
+echo '<div class="container-fluid d-flex flex-wrap justify-content-between">';
 
+while ($row = $result->fetch_assoc()) {
+ echo '<div class="card mb-3" style="width: 260px;">'; 
+    echo '<h5 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">'.$row["year_car"].'</h5>';
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title text-center">'.$row["name"].'</h5>';
+    echo '<h6 class="card-subtitle text-center mb-2 text-muted">'.$row["model"].'</h6>';
+    echo '<div class="card-body text-center">';
+    echo '<img src="images/'.$row["photo"].'" class="card-img-top img-fluid" style="width: 100px;" alt="Product Image">'; 
+    echo '</div>';
+    echo '<div class="datagroup d-flex justify-content-around align-items-center mt-2">';
+    echo '<div class="data text-center">';
+    echo '<i class="bx bx-stopwatch" style="font-size: 18px; color: #0043ff;"></i>';
+    echo '<br>';
+    echo '<span class="spec" style="font-weight: bold;">'.$row["accelaration"].'s</span>';
+    echo '</div>';
+    echo '<div class="data text-center">';
+    echo '<i class="bx bx-line-chart" style="font-size: 18px; color: #39ad5e;"></i>';
+    echo '<br>';
+    echo '<span class="spec" style="font-weight: bold;">'.$row["topspeed"].' km/h</span>';
+    echo '</div>';
+    echo '<div class="data text-center">';
+    echo '<i class="bx bxs-gas-pump" style="font-size: 18px; color: #dc1e4d;"></i>';
+    echo '<br>';
+    echo '<span class="spec" style="font-weight: bold;">'.$row["fuel"].'</span>';
+    echo '</div>';
+    echo '</div>';
+    echo '<h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>';
+    echo '<div class="text-center">';
+    echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'">Change</button>'; 
+    echo '<button class="btn btn-danger delete-btn btn-sm" data-car-id="'.$row["id"].'">Delete</button>'; 
+    echo '</div>';
+    echo '</div>'; 
+    echo '</div>';
+}
+echo '</div>'; 
 
+ ?>
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
       

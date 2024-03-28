@@ -102,9 +102,12 @@
     <?php
     $userid = $_SESSION['user_id']; 
 
-    $sql = "SELECT * FROM tblproducts
-        INNER JOIN tblspecs INNER JOIN tblfav ON tblproducts.id = tblspecs.specID 
-        WHERE tblfav.userid = $userid AND tblfav.product_id = tblproducts.id ";
+    $sql = "SELECT DISTINCT tblproducts.id, tblspecs.specID, tblfav.userid, name, model, price, photo, year_car, accelaration, topspeed, fuel
+FROM tblproducts
+INNER JOIN tblspecs 
+INNER JOIN tblfav 
+ON tblproducts.id = tblspecs.specID 
+WHERE tblfav.userid = $userid AND tblfav.product_id = tblproducts.id ";
 
 $result = $mysqli->query($sql);
 while($row = $result->fetch_assoc()){
@@ -115,7 +118,7 @@ while($row = $result->fetch_assoc()){
              <input type="hidden" name="product_id" value="'.$row["id"].'"/>
                 <button type="submit" name="control" class="btn btn-danger position-absolute top-0 end-0" style="margin-right: 5px; margin-top: 8px; cursor: pointer; font-size: 10px">Delete</button></form>
 
-                <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px; font-size: 16px;">'.$row["year"].'</h3>
+                <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px; font-size: 16px;">'.$row["year_car"].'</h3>
                 <div class="card-body">
                     <h3 class="card-title text-center">Product '.$row["name"].'</h3>
                     <h5 class="card-subtitle text-center mb-2 text-muted">' .$row["model"].'</h5>

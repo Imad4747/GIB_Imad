@@ -10,14 +10,13 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.122.0">
     <title>Dashboard</title>
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
     
 
     
-<link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
 
     <!-- Favicons -->
 <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -200,7 +199,7 @@
         <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="admin.php" style="font-weight: bold; color: black;">
+              <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="admin.php" >
                 <svg class="bi"><use xlink:href="#house-fill"/></svg>
                 Dashboard
               </a>
@@ -212,15 +211,13 @@
               </a>
             </li>
             <li class="nav-item">
-             <a class="nav-link d-flex align-items-center gap-2 " href="A_prod.php" >
-            <svg class="bi"><use xlink:href="#cart"/></svg>
-                          Products
-            </a>
-
-
+              <a class="nav-link d-flex align-items-center gap-2" href="A_prod.php">
+                <svg class="bi"><use xlink:href="#cart"/></svg>
+                Products
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="A_cust.php">
+              <a class="nav-link d-flex align-items-center gap-2 active" href="A_cust.php" style="font-weight: bold; color: black;">
                 <svg class="bi"><use xlink:href="#people"/></svg>
                 Customers
               </a>
@@ -239,7 +236,7 @@
             </li>
           </ul>
 
-        
+          
 
           <hr class="my-3">
 
@@ -266,12 +263,43 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-<div class="d-flex justify-content-center mb-4">
-        <input type="text" class="form-control mr-2" style="width: 999px;" placeholder="Search..." name="search" id="searchinput">
-    
-</div>
+      <button type="button" class="btn btn-success btn-lg mb-3">
+      Add New User</button>
+<?php  
+include 'connect.php';
+$sql = "SELECT * FROM tblusers WHERE role = 'guest'";
+$result = $mysqli->query($sql);
 
+if ($result === false) {
+    die("Error executing query: " . $mysqli->error);
+}
 
+echo '<div class="container-fluid d-flex flex-wrap justify-content-between">'; 
+
+while ($row = $result->fetch_assoc()) {
+  
+      echo '<div class="card mb-3" style="width: 250px;">'; 
+   
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title text-center">ID: ' . $row["id"] . '</h5>';
+    echo '<p class="card-text text-center"><strong>First Name:</strong> ' . $row["firstname"] . '</p>';
+    echo '<p class="card-text text-center"><strong>Last Name:</strong> ' . $row["lastname"] . '</p>';
+    echo '<p class="card-text text-center"><strong>Email:</strong> ' . $row["email"] . '</p>';
+    echo '<p class="card-text text-center"><strong>Password:</strong> ' . $row["password"] . '</p>';
+    echo '<p class="card-text text-center"><strong>Created At:</strong> ' . $row["createdAt"] . '</p>';
+    echo '<div class="text-center">';
+    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser()">Change</button>';
+    echo '<form action="delete-user.php" method="post">';
+    echo '<input type="hidden" value="'.$row["id"].'" name="id">' ;
+    echo '<button class="btn btn-danger">Delete</button>';
+    echo '</form>'; 
+    echo '</div>';
+    echo '</div>'; 
+    echo '</div>'; 
+}
+echo '</div>';
+
+?>
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
@@ -279,6 +307,51 @@
     </main>
   </div>
 </div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Edit the Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="update_user.php" method="post">
+                    
+                    <div class="form-group">
+                        <label for="firstName">First name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                     <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="control">Update Info</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+  function changeUser() {
+    document.getElementById('changeU').addEventListener("click", function() {
+      $("#loginModal").modal("show");
+    });  
+  }
+</script>
+
 </html>

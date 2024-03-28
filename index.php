@@ -156,30 +156,30 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="images/h.jpg" class="bd-placeholder-img" alt="Slide 1" width="100%" >
+      <img src="images/h.jpg" class="bd-placeholder-img" alt="Slide 1" width="100%" class="img-fluid">
       <div class="container">
         <div class="carousel-caption text-start">
-          <h1>Example headline.</h1>
+          <h1>Discover a new world</h1>
           <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
           <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
         </div>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/n.jpg" class="bd-placeholder-img" alt="Slide 2"  width="100%">
+      <img src="images/n.jpg" class="bd-placeholder-img" alt="Slide 2"  width="100%" height="100%">
       <div class="container">
         <div class="carousel-caption">
-          <h1>Another example headline.</h1>
+          <h1>Exclusive for you</h1>
           <p>Some representative placeholder content for the second slide of the carousel.</p>
           <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
         </div>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/b.jpg" class="bd-placeholder-img" alt="Slide 3"  width="100%">
+      <img src="images/b.jpg" class="bd-placeholder-img" alt="Slide 3"  width="100%" height="100%">
       <div class="container">
         <div class="carousel-caption text-end">
-          <h1>One more for good measure.</h1>
+          <h1>Customize for your own taste</h1>
           <p>Some representative placeholder content for the third slide of this carousel.</p>
           <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
         </div>
@@ -205,21 +205,21 @@
     
     <div class="row">
       <div class="col-lg-4">
-        <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+        <h3 class="fs-2 text-body-emphasis">Discover</h3>
           <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
           <a href="#" class="btn btn-primary">
             Primary button
           </a>
       </div>
       <div class="col-lg-4">
-        <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+        <h3 class="fs-2 text-body-emphasis">Customize</h3>
           <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
           <a href="#" class="btn btn-primary">
             Primary button
           </a>
       </div>
       <div class="col-lg-4">
-        <h3 class="fs-2 text-body-emphasis">Featured title</h3>
+        <h3 class="fs-2 text-body-emphasis">Exclusive</h3>
           <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
           <a href="#" class="btn btn-primary">
             Primary button

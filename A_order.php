@@ -263,7 +263,7 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      <button type="button" class="btn btn-success btn-lg mb-3">Add New Order</button>
+      <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">Add New Order</button>
       <?php  
 include 'connect.php';
 $sql = "SELECT * FROM tblorder";
@@ -273,7 +273,7 @@ if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
-echo '<div class="container">'; // Start a container for the order list
+echo '<div class="container">'; 
 
 while ($row = $result->fetch_assoc()) {
     echo '<div class="row mb-3">';
@@ -287,15 +287,15 @@ while ($row = $result->fetch_assoc()) {
     echo '<p class="card-text"><strong>Total Price:</strong> ' . $row["totalPrice"] . '</p>';
     echo '<p class="card-text"><strong>Date Ordered:</strong> ' . $row["date_order"] . '</p>';
     echo '<div class="text-center">';
-    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder(' . $row["order_id"] . ')">Delete</button>'; // Add delete button
+    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder(' . $row["order_id"] . ')">Delete</button>'; 
     echo '</div>';
-    echo '</div>'; // Close card-body
-    echo '</div>'; // Close card
-    echo '</div>'; // Close column
-    echo '</div>'; // Close row
+    echo '</div>'; 
+    echo '</div>'; 
+    echo '</div>'; 
+    echo '</div>'; 
 }
 
-echo '</div>'; // Close container
+echo '</div>'; 
 
 ?>
 
@@ -306,6 +306,73 @@ echo '</div>'; // Close container
     </main>
   </div>
 </div>
+
+
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Add Your Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="T_order.php" method="post">
+                   
+                    <div class="form-group">
+                        <label for="userid">Userid:</label>
+                        <input type="number" class="form-control" id="userid" name="userid" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product">Product:</label>
+                        <input type="text" class="form-control" id="product" name="product" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model:</label>
+                        <input type="text" class="form-control" id="model" name="model" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalprice">totalPrice:</label>
+                        <input type="number" class="form-control" id="totalprice" name="totalprice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_order">date_order:</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    
+                     <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="control">Add Info</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+      function formModal() {
+    $(document).ready(function(){
+                    $("#orderModal").modal("show");
+                });
+  }
+
+      function deleteOrder(id) {
+       
+        <?php 
+      $sql1 = "DELETE FROM tblorder WHERE order_id = id";
+      $result1 = $mysqli->query($sql1);
+
+
+
+         ?>
+       }
+      
+    </script>
 </html>

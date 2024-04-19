@@ -267,7 +267,7 @@
         
       </div>
       
-<button type="button" class="btn btn-success btn-lg mb-3">Add New Product</button>
+<button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">Add New Product</button>
 
 <?php 
 include 'connect.php';
@@ -323,6 +323,59 @@ echo '</div>';
     </main>
   </div>
 </div>
+
+<div class="modal fade" id="prodModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Add Your Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="T_prod.php" method="post">
+                   
+                    <div class="form-group">
+                        <label for="userid">Name:</label>
+                        <input type="text" class="form-control" id="userid" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product">Model:</label>
+                        <input type="text" class="form-control" id="product" name="model" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Price:</label>
+                        <input type="number" class="form-control" id="model" name="price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalprice">Photo:</label>
+                        <input type="file" class="form-control" id="totalprice" name="photo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_order">year_car:</label>
+                        <input type="number" class="form-control" id="date" name="year_car" required>
+                    </div>
+                    
+                     <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="control">Add</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <script type="text/javascript">
+      function formModal() {
+    $(document).ready(function(){
+                    $("#prodModal").modal("show");
+                });
+  }
+</script>
 </html>

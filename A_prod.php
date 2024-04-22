@@ -116,7 +116,27 @@
   </head>
   <body>
    
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <script type="text/javascript">
+      function formModal() {
+    $(document).ready(function(){
+                    $("#prodModal").modal("show");
+                });
+  }
+   function openModal(id) {
+    $(document).ready(function(){
+                    $("#changeModal").modal("show");
 
+                });
+    var idnummer = parseInt(id);
+    window.alert(idnummer);
+    var inputvanmodal = document.getElementById("idholder").textContent += idnummer;
+  }
+  function changeOpen() {
+     window.location.href = 'W_prod.php';
+  }
+</script>
     
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
   <symbol id="calendar3" viewBox="0 0 16 16">
@@ -308,7 +328,7 @@ while ($row = $result->fetch_assoc()) {
     echo '</div>';
     echo '<h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>';
     echo '<div class="text-center">';
-    echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'">Change</button>'; 
+    echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'" onclick="openModal('.$row["id"].')">Change</button>'; 
     echo '<button class="btn btn-danger delete-btn btn-sm" data-car-id="'.$row["id"].'">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
@@ -415,74 +435,39 @@ echo '</div>';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Add Your Product</h5>
+                <h5 class="modal-title" id="loginModalLabel">Change Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+               <?php 
+                  echo "<input id='idholder' type='hidden'></input>";
+
+                  $pagina = new DOMDocument();
+                  $pagina->loadHTML(file_get_contents('A_prod.php'));
+
+                  $id = $pagina->getElementById('idholder')->getAttribute('value'); 
+
+                  $sql = "SELECT * FROM tblproducts WHERE id = '".$id."'";
+               $result = $mysqli->query($sql);
+                while ($row = $result->fetch_assoc()) {
+                  echo $row["name"];
+                  echo $row["model"];
+                  echo $row["price"];
+                  echo $row["photo"];
+                  echo $row["year_car"];
+
+               }
+
+               echo '
                 <form action="T_prod.php" method="post">
                    
                     <div class="form-group">
                         <label for="userid">Name:</label>
-                        <input type="text" class="form-control" id="userid" name="name" required>
+                        <input type="text" class="form-control" id="userid" name="name" value="'.$row["name"].'"  required>
                     </div>
-                    <div class="form-group">
-                        <label for="product">Model:</label>
-                        <input type="text" class="form-control" id="product" name="model" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="model">Price:</label>
-                        <input type="number" class="form-control" id="model" name="price" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="totalprice">Photo:</label>
-                        <input type="file" class="form-control" id="totalprice" name="photo" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="date_order">year_car:</label>
-                        <input type="number" class="form-control" id="date" name="year_car" required>
-                    </div>
-                     <div class="form-group">
-                        <label for="date_order">Topspeed:</label>
-                        <input type="number" class="form-control" id="date" name="topspeed" required>
-                    </div>
-                     <div class="form-group">
-                        <label for="date_order">Horsepower:</label>
-                        <input type="number" class="form-control" id="date" name="horsepower" required>
-                    </div>
-                     <div class="form-group">
-                        <label for="acc">Acceleration:</label>
-                        <input type="number" class="form-control" id="date" name="accel" required>
-                    </div>
-                     <div class="form-group">
-                      <label>Fuel:</label>
-                      <select class="form-select" aria-label="Default select example" name="fuel">
-                      <option selected>Open this select menu</option>
-                      <option>Benzine</option>
-                      <option>Diesel</option>
-                      <option>Electric</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Transmission:</label>
-                      <select class="form-select" aria-label="Default select example" name="transmission">
-                      <option selected>Open this select menu</option>
-                      <option>Manual</option>
-                      <option>Automatic</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Cartype:</label>
-                      <select class="form-select" aria-label="Default select example" name="cartype">
-                      <option selected>Open this select menu</option>
-                      <option>SUV</option>
-                      <option>Sedan</option>
-                      <option>Coupé</option>
-                      <option>Cabrio</option>
-                      <option>Wagon</option>
-                      </select>
-                    </div>
+                   
                     
                     
                     
@@ -493,22 +478,11 @@ echo '</div>';
                 </form>
             </div>
 
+               '
+
+                ?>
+
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-     <script type="text/javascript">
-      function formModal() {
-    $(document).ready(function(){
-                    $("#prodModal").modal("show");
-                });
-  }
-   function openModal() {
-    $(document).ready(function(){
-                    $("#changeModal").modal("show");
-                });
-  }
-</script>
 </html>

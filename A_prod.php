@@ -136,6 +136,9 @@
   function changeOpen() {
      window.location.href = 'W_prod.php';
   }
+  function deleteP(id) {
+     window.location.href = "D_prod.php?id=" + id;
+  }
 </script>
     
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -329,7 +332,7 @@ while ($row = $result->fetch_assoc()) {
     echo '<h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>';
     echo '<div class="text-center">';
     echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'" onclick="openModal('.$row["id"].')">Change</button>'; 
-    echo '<button class="btn btn-danger delete-btn btn-sm" data-car-id="'.$row["id"].'">Delete</button>'; 
+    echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP('.$row["id"].')" data-car-id="'.$row["id"].'">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
     echo '</div>';

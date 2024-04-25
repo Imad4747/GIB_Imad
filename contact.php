@@ -38,9 +38,9 @@
             <ul class="dropdown-menu dropdown-menu-end text-small">
               <?php session_start(); 
       if (isset($_SESSION['user_id'])) {
-        echo '<li><a class="dropdown-item" href="#">New project...</a></li>
+         echo '<li><a class="dropdown-item" href="#">New project...</a></li>
     <li><a class="dropdown-item" href="#">Settings</a></li>
-    <li><a class="dropdown-item" href="#">Profile</a></li>
+    <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="loguit.php">Sign out</a></li>';
       }else{
@@ -68,7 +68,6 @@ if (isset($_POST['control'])) {
   $sql = "INSERT INTO tblcontact (firstname, lastname, email, message, file, date_current) VALUES ('$firstname', '$lastname', '$email', '$message', '$file', '$current_date')";
   if ($mysqli->query($sql)) {
     
-    $alert = $_SESSION['alert'];
    header("Location: contact.php");
   }else{
     echo $mysqli->error;
@@ -76,57 +75,7 @@ if (isset($_POST['control'])) {
   
   
 }else{
-  if ($_SESSION['alert']) {
-    echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>';
-    echo '<div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh;">
-    <div class="container" style="background-color: #343a40; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; padding: 20px; position: relative;">
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <h1 class="text-white">Contact Us</h1>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-8 offset-md-2">
-          <div class="contact-form">
-            <form action="contact.php" method="post" class="text-white">     <div class="form-group">
-                    <label for="firstname">First Name:</label>
-                    <input type="text" class="form-control" id="firstname" name="firstname" required>
-                </div>
-<br>
-                <div class="form-group">
-                    <label for="lastname">Last Name:</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname" required>
-                </div>
-<br>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-<br>
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-                </div>
-<br>
-                <div class="form-group">
-                    <label for="file">Upload File:</label>
-                    <input type="file" class="form-control-file" id="file" name="file">
-                </div>
-<br>
-                <input type="submit" name="control">
-            </form>
-          </div>
-        </div>
-      </div>
-      </div>
-  </div>
-    
-';
-  }
+  
   echo '<div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh;">
     <div class="container" style="background-color: #343a40; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; padding: 20px; position: relative;">
       <div class="row">

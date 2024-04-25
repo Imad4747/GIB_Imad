@@ -88,7 +88,7 @@ while ($row = $result->fetch_assoc()) {
     </div>
 </div>
 
-          <h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>
+          <h5 class="card-text text-center mt-3">$'.$row["price"].',00</h5>
 
           <div class="text-center">
             <button class="btn btn-primary" data-car-id="'.$row["id"].'">View Details</button>

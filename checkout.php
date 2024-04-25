@@ -20,7 +20,7 @@ $stripe_key = "sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2
 
 $checkout_session = \Stripe\Checkout\Session::create([
     "mode" => "payment",
-    "success_url" => "http://gib/GIB_Imad/success.php?session_id={CHECKOUT_SESSION_ID}",
+    "success_url" => "http://gib/GIB_Imad/succes.php?session_id={CHECKOUT_SESSION_ID}",
     "cancel_url" => "http://gib/GIB_Imad/product.php",
     "billing_address_collection" => "required",
     "allow_promotion_codes" => true,

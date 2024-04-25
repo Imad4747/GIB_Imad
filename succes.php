@@ -31,7 +31,8 @@ if ($checkout_session->payment_status === 'paid') {
                   VALUES ('$userid', '{$row["name"]}', '{$row["model"]}', '$total', '$current_date')";
 
     if ($mysqli->query($sql_order)) {
-        header("Location: product.php");
+        header("Location: W_prod.php");
+        exit();
     } else {
         echo "Error inserting order: " . $mysqli->error;
     }

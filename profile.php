@@ -7,11 +7,7 @@
       <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <title>User Dashboard</title>
-    <style>
-        body {
-            padding-top: 56px; 
-        }
-    </style>
+    
 </head>
 <body>
 
@@ -63,7 +59,7 @@
     </nav>
   </header>
 
-<div class="container mt-4">
+<div class="container" style="margin-top: 100px;">
     <h2>Welcome, <?php include 'connect.php'; 
     $sql = "SELECT firstname FROM tblusers WHERE id=".$_SESSION['user_id']."";
     $result = $mysqli->query($sql);
@@ -116,7 +112,7 @@ while($row = $result->fetch_assoc()){
             <div class="card position-relative">
             <form method="post" action="delete-fav.php">
              <input type="hidden" name="product_id" value="'.$row["id"].'"/>
-                <button type="submit" name="control" class="btn btn-danger position-absolute top-0 end-0" style="margin-right: 5px; margin-top: 8px; cursor: pointer; font-size: 10px">Delete</button></form>
+                <button type="submit" name="control" class="btn btn-danger position-absolute top-0 end-0" style="margin-right: 5px; margin-top: 1px; cursor: pointer; font-size: 8px">Delete</button></form>
 
                 <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px; font-size: 16px;">'.$row["year_car"].'</h3>
                 <div class="card-body">
@@ -185,7 +181,7 @@ while($row = $result->fetch_assoc()){
 
 
 
-<footer id="footer" class="text-center p-3 bg-dark text-light">
+<footer id="footer" class="text-center p-3 bg-dark text-light" style="width: 100%;">
      <div class="row">
       <div class="col-6 col-md-2 mb-3">
         <h5>Section</h5>
@@ -242,7 +238,6 @@ while($row = $result->fetch_assoc()){
       </ul>
     </div>
   </footer>
-
 
 
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">

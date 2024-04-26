@@ -263,7 +263,7 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      <button type="button" class="btn btn-success btn-lg mb-3">
+      <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">
       Add New User</button>
 <?php  
 include 'connect.php';
@@ -288,11 +288,11 @@ while ($row = $result->fetch_assoc()) {
     echo '<p class="card-text text-center"><strong>Password:</strong> ' . $row["password"] . '</p>';
     echo '<p class="card-text text-center"><strong>Created At:</strong> ' . $row["createdAt"] . '</p>';
     echo '<div class="text-center">';
-    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser()">Change</button>';
-    echo '<form action="delete-user.php" method="post">';
-    echo '<input type="hidden" value="'.$row["id"].'" name="id">' ;
-    echo '<button class="btn btn-danger">Delete</button>';
-    echo '</form>'; 
+    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser(' . $row["id"] . ')">Change</button>';
+    
+    
+    echo '<button class="btn btn-danger" onclick="deleteUser(' . $row["id"] . ')">Delete</button>';
+     
     echo '</div>';
     echo '</div>'; 
     echo '</div>'; 
@@ -308,7 +308,66 @@ echo '</div>';
   </div>
 </div>
 
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+
+
+<div class="modal fade" id="custModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Add A Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="T_cust.php" method="post">
+                   
+                    <div class="form-group">
+                        <label for="product">Firstname:</label>
+                        <input type="text" class="form-control" id="product" name="firstname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Lastname:</label>
+                        <input type="text" class="form-control" id="model" name="lastname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalprice">Email:</label>
+                        <input type="email" class="form-control" id="totalprice" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date_order">Password:</label>
+                        <input type="password" class="form-control" id="date" name="password" required>
+                    </div>
+                     <div class="form-group">
+                      <label>Role:</label>
+                      <select class="form-select" aria-label="Default select example" name="role">
+                      <option selected>Open this select menu</option>
+                      <option>Admin</option>
+                      <option>Guest</option>
+                      </select>
+                    </div>
+                    
+                     <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" name="control">Add Info</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+  function changeUser(id) {
+    
+                     <?php 
+
+
+echo '<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -319,10 +378,9 @@ echo '</div>';
             </div>
             <div class="modal-body">
                 <form action="update_user.php" method="post">
-                    
                     <div class="form-group">
                         <label for="firstName">First name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                        <input type="text" class="form-control" id="firstName" name="firstName" value="" required>
                     </div>
                     <div class="form-group">
                         <label for="">Last Name:</label>
@@ -332,7 +390,10 @@ echo '</div>';
                         <label for="email">Email:</label>
                         <input type="email" class="form-control" id="email" name="email" required>
                     </div>
-                    
+                     <div class="form-group">
+                        <label for="email">Password:</label>
+                        <input type="password" class="form-control" id="email" name="password" required>
+                    </div>
                      <div class="modal-footer">
               <button type="submit" class="btn btn-primary" name="control">Update Info</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -342,15 +403,19 @@ echo '</div>';
 
         </div>
     </div>
-</div>
+</div>';
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
-  function changeUser() {
-    document.getElementById('changeU').addEventListener("click", function() {
-      $("#loginModal").modal("show");
-    });  
+
+    ?>
+              
+  }
+  function deleteUser(id_user) {
+    window.location.href = "delete-user.php?iduser=" + id_user;
+  }
+   function formModal() {
+    $(document).ready(function(){
+                    $("#custModal").modal("show");
+                });
   }
 </script>
 

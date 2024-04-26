@@ -287,7 +287,7 @@ while ($row = $result->fetch_assoc()) {
     echo '<p class="card-text"><strong>Total Price:</strong> ' . $row["totalPrice"] . '</p>';
     echo '<p class="card-text"><strong>Date Ordered:</strong> ' . $row["date_order"] . '</p>';
     echo '<div class="text-center">';
-    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder(' . $row["order_id"] . ')">Delete</button>'; 
+    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder('.$row["order_id"].')">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
     echo '</div>'; 
@@ -363,16 +363,10 @@ echo '</div>';
                 });
   }
 
-      function deleteOrder(id) {
-       
-        <?php 
-      $sql1 = "DELETE FROM tblorder WHERE order_id = id";
-      $result1 = $mysqli->query($sql1);
+    function deleteOrder(id) {
 
-
-
-         ?>
-       }
+      window.location.href = "D_order.php?id=" + id;
+    }
       
     </script>
 </html>

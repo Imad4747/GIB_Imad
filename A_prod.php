@@ -125,14 +125,43 @@
                 });
   }
    function openModal(id) {
-    $(document).ready(function(){
-                    $("#changeModal").modal("show");
+    $(document).ready(function() {
+        // Retrieve the product ID from the data attribute
+        var productId = $(this).data('car-id');
 
-                });
-    var idnummer = parseInt(id);
-    window.alert(idnummer);
-    var inputvanmodal = document.getElementById("idholder").textContent += idnummer;
-  }
+        $.ajax({
+            type: "GET",
+            url: "fetch_prod.php",
+            data: { id: productId }, // Pass the product ID to the server-side script
+            dataType: "json",
+            success: function(response) {
+                if (!response.error) {
+                    // Populate modal fields with product details
+                    $("#inputName").val(response.name);
+                    $("#inputModel").val(response.model);
+                    $("#inputPrice").val(response.price);
+                    $("#inputYear").val(response.year_car);
+                    $("#inputTopspeed").val(response.topspeed);
+                    $("#inputHorsepower").val(response.horsepower);
+                    $("#inputAcceleration").val(response.acceleration);
+                    $("#inputFuel").val(response.fuel);
+                    $("#inputTransmission").val(response.transmission);
+                    $("#inputCartype").val(response.cartype);
+                    $("#currentPhoto").attr("src", "images/" + response.photo);
+                    // Show the modal
+                    $("#changeModal").modal("show");
+                } else {
+                    console.error(response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+}
+
+
   function changeOpen() {
      window.location.href = 'W_prod.php';
   }
@@ -301,9 +330,12 @@ $result = $mysqli->query($sql);
 if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
+$proid = '';
+
 echo '<div class="container-fluid d-flex flex-wrap justify-content-between">';
 
 while ($row = $result->fetch_assoc()) {
+  $proid = $row["id"];
  echo '<div class="card mb-3" style="width: 260px;">'; 
     echo '<h5 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">'.$row["year_car"].'</h5>';
     echo '<div class="card-body">';
@@ -331,7 +363,7 @@ while ($row = $result->fetch_assoc()) {
     echo '</div>';
     echo '<h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>';
     echo '<div class="text-center">';
-    echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'" onclick="openModal('.$row["id"].')">Change</button>'; 
+   echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'">Change</button>'; 
     echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP('.$row["id"].')" data-car-id="'.$row["id"].'">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
@@ -419,9 +451,6 @@ echo '</div>';
                       <option>Wagon</option>
                       </select>
                     </div>
-                    
-                    
-                    
                      <div class="modal-footer">
               <button type="submit" class="btn btn-primary" name="control">Add</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -434,58 +463,84 @@ echo '</div>';
 </div>
 
 
-<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Change Product</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="update_prod.php" method="post">
+        <input type="hidden" name="id" value="<?php echo $proid; ?>">
+
+            <div class="form-group">
+                <label for="inputName">Name:</label>
+                <input type="text" class="form-control" id="inputName" name="name" required>
             </div>
-            <div class="modal-body">
-               <?php 
-                  echo "<input id='idholder' type='hidden'></input>";
-
-                  $pagina = new DOMDocument();
-                  $pagina->loadHTML(file_get_contents('A_prod.php'));
-
-                  $id = $pagina->getElementById('idholder')->getAttribute('value'); 
-
-                  $sql = "SELECT * FROM tblproducts WHERE id = '".$id."'";
-               $result = $mysqli->query($sql);
-                while ($row = $result->fetch_assoc()) {
-                  echo $row["name"];
-                  echo $row["model"];
-                  echo $row["price"];
-                  echo $row["photo"];
-                  echo $row["year_car"];
-
-               }
-
-               echo '
-                <form action="T_prod.php" method="post">
-                   
-                    <div class="form-group">
-                        <label for="userid">Name:</label>
-                        <input type="text" class="form-control" id="userid" name="name" value="'.$row["name"].'"  required>
-                    </div>
-                   
-                    
-                    
-                    
-                     <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" name="control">Add</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <div class="form-group">
+                <label for="inputModel">Model:</label>
+                <input type="text" class="form-control" id="inputModel" name="model" required>
             </div>
-                </form>
+            <div class="form-group">
+                <label for="inputPrice">Price:</label>
+                <input type="text" class="form-control" id="inputPrice" name="price" required>
             </div>
-
-               '
-
-                ?>
-
-        </div>
+            <div class="form-group">
+                <label for="inputPhoto">Photo:</label>
+                <input type="file" class="form-control" id="inputPhoto" name="photo" >
+            </div>
+            <div class="form-group">
+                <label for="inputYear">Year Car:</label>
+                <input type="number" class="form-control" id="inputYear" name="year_car" required>
+            </div>
+            <div class="form-group">
+                <label for="inputTopspeed">Topspeed:</label>
+                <input type="number" class="form-control" id="inputTopspeed" name="topspeed" required>
+            </div>
+            <div class="form-group">
+                <label for="inputHorsepower">Horsepower:</label>
+                <input type="number" class="form-control" id="inputHorsepower" name="horsepower" required>
+            </div>
+            <div class="form-group">
+                <label for="inputAcceleration">Acceleration:</label>
+                <input type="text" class="form-control" id="inputAcceleration" name="acceleration" required>
+            </div>
+            <div class="form-group">
+                <label for="inputFuel">Fuel:</label>
+                <select class="form-select" aria-label="Default select example" id="inputFuel" name="fuel">
+                    <option selected>Open this select menu</option>
+                    <option>Benzine</option>
+                    <option>Diesel</option>
+                    <option>Electric</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="inputTransmission">Transmission:</label>
+                <select class="form-select" aria-label="Default select example" id="inputTransmission" name="transmission">
+                    <option selected>Open this select menu</option>
+                    <option>Manual</option>
+                    <option>Automatic</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="inputCartype">Cartype:</label>
+                <select class="form-select" aria-label="Default select example" id="inputCartype" name="cartype">
+                    <option selected>Open this select menu</option>
+                    <option>SUV</option>
+                    <option>Sedan</option>
+                    <option>Coupé</option>
+                    <option>Cabrio</option>
+                    <option>Wagon</option>
+                </select>
+            </div>
+            
+            
+            <button type="submit" class="btn btn-primary" name="control">Save changes</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
+
 </html>

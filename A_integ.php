@@ -112,6 +112,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
   </head>
   <body>
    
@@ -223,13 +225,13 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="A_rep.php" style="font-weight: bold; color: black;">
+              <a class="nav-link d-flex align-items-center gap-2" href="A_rep.php" >
                 <svg class="bi"><use xlink:href="#graph-up"/></svg>
                 Reports
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="A_integ.php">
+              <a class="nav-link d-flex align-items-center gap-2" href="A_integ.php" style="font-weight: bold; color: black;">
                 <svg class="bi"><use xlink:href="#puzzle"/></svg>
                 Integrations
               </a>
@@ -263,61 +265,33 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search contacts..." id="searchInput">
-       
-    </div>
-<?php  
-include 'connect.php';
+      
+<?php
+require_once('include.php'); // Include Stripe PHP Library
 
-$sql = "SELECT * FROM tblcontact WHERE 1";
-$result = $mysqli->query($sql);
+// Set your Stripe API key
+\Stripe\Stripe::setApiKey('sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI');
 
-if ($result === false) {
-    die("Error executing query: " . $mysqli->error);
+// Fetch payment data from Stripe
+$payments = \Stripe\PaymentIntent::all(['limit' => 100]); // Fetch last 100 payments as an example
+
+// Prepare data for chart
+$profitData = [];
+foreach ($payments->data as $payment) {
+    if ($payment->status === 'succeeded') {
+        $date = date('Y-m-d', $payment->created);
+        $profitData[$date] = isset($profitData[$date]) ? $profitData[$date] + $payment->amount / 100 : $payment->amount / 100;
+    }
 }
 
-echo '<div class="container-fluid">';
-echo '<table class="table table-striped">';
-echo '<thead>';
-echo '<tr>';
-echo '<th>ID</th>';
-echo '<th>First Name</th>';
-echo '<th>Last Name</th>';
-echo '<th>Email</th>';
-echo '<th>Message</th>';
-echo '<th>File</th>';
-echo '<th>Date</th>';
-echo '</tr>';
-echo '</thead>';
-echo '<tbody>';
-
-
-while ($row = $result->fetch_assoc()) {
-    $id = $row['id'];
-    $firstname = $row['firstname'];
-    $lastname = $row['lastname'];
-    $email = $row['email'];
-    $message = $row['message'];
-    $file = $row['file'];
-    $date = $row['date'];
-$fileLink = !empty($file) ? '<a href="uploads/' . $file . '" target="_blank">' . $file . '</a>' : '';
-    echo '<tr>';
-    echo "<td>$id</td>";
-    echo "<td>$firstname</td>";
-    echo "<td>$lastname</td>";
-    echo "<td>$email</td>";
-    echo "<td>$message</td>";
-    echo "<td>$fileLink</td>";
-    echo "<td>$date</td>";
-    echo '</tr>';
-}
-
-echo '</tbody>';
-echo '</table>';
-echo '</div>';
-
+// Convert data to JSON format for JavaScript
+$profitDataJSON = json_encode(array_values($profitData));
 ?>
+
+
+
+<!-- Canvas for displaying the chart -->
+<canvas id="profitChart" width="400" height="200"></canvas>
 
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
@@ -327,10 +301,42 @@ echo '</div>';
   </div>
 </div>
 
+<!-- Include Chart.js library -->
 
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+    // Parse profit data from PHP to JavaScript
+    var profitData = <?php echo $profitDataJSON; ?>;
+
+    // Create chart
+    var ctx = document.getElementById('profitChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Object.keys(profitData),
+            datasets: [{
+                label: 'Total Profits',
+                data: profitData,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 
 </html>

@@ -267,107 +267,59 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      <?php 
-include 'connect.php';
-$sql = "SELECT * FROM tblproducts
-        INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
-        WHERE 1";
-$result = $mysqli->query($sql);
-if ($result === false) {
-    die("Error executing query: " . $mysqli->error);
-}
-
-// Function to fetch product details based on ID
-function getProductDetails($id, $conn) {
-    $query = "SELECT * FROM tblproducts
-              INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
-              WHERE tblproducts.id = $id";
-    $result = mysqli_query($conn, $query);
-
-    if(mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        return $row;
-    } else {
-        return false;
-    }
-}
-
-// Check if ID is provided via GET parameter
-if(isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $product = getProductDetails($id, $mysqli);
-
-    // If product details are fetched successfully
-    if($product) {
-        $name = $product['name'];
-        $model = $product['model'];
-        $price = $product['price'];
-        $year_car = $product['year_car'];
-        $topspeed = $product['topspeed'];
-        $horsepower = $product['horsepower'];
-        $accel = $product['accelaration'];
-        $fuel = $product['fuel'];
-        $transmission = $product['transmission'];
-        $cartype = $product['cartype'];
-        $desc = $product['description'];
-    } else {
-        echo "Product not found!";
-    }
-}
-?>
 <div class="container">
-    <h3>Change Product</h3>
+    <h3>Add Product</h3>
     <form action="update_prod.php" method="post">
-        <input type="hidden" name="id" value="<?php echo $id ?>">
+        <input type="hidden" name="id" value="">
         <div class="mb-3">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>" required>
+            <label for="name" class="text-dark">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="mb-3">
-            <label for="model">Model:</label>
-            <input type="text" class="form-control" id="model" name="model" value="<?php echo $model; ?>" required>
+            <label for="model" class="text-dark">Model:</label>
+            <input type="text" class="form-control" id="model" name="model" required>
         </div>
         <div class="mb-3">
-            <label for="price">Price:</label>
-            <input type="number" class="form-control" id="price" name="price" value="<?php echo $price; ?>" required>
+            <label for="price" class="text-dark">Price:</label>
+            <input type="number" class="form-control" id="price" name="price" required>
         </div>
         <div class="mb-3">
-            <label for="year_car">Year Car:</label>
-            <input type="number" class="form-control" id="year_car" name="year_car" value="<?php echo $year_car; ?>" required>
+            <label for="year_car" class="text-dark">Year Car:</label>
+            <input type="number" class="form-control" id="year_car" name="year_car" required>
         </div>
         <div class="mb-3">
-            <label for="topspeed">Top Speed:</label>
-            <input type="number" class="form-control" id="topspeed" name="topspeed" value="<?php echo $topspeed; ?>" required>
+            <label for="topspeed" class="text-dark">Top Speed:</label>
+            <input type="number" class="form-control" id="topspeed" name="topspeed" required>
         </div>
         <div class="mb-3">
-            <label for="horsepower">Horsepower:</label>
-            <input type="number" class="form-control" id="horsepower" name="horsepower" value="<?php echo $horsepower; ?>" required>
+            <label for="horsepower" class="text-dark">Horsepower:</label>
+            <input type="number" class="form-control" id="horsepower" name="horsepower" required>
         </div>
         <div class="mb-3">
-            <label for="accel">Acceleration:</label>
-            <input type="number" class="form-control" id="accel" name="accel" value="<?php echo $accel; ?>" required>
+            <label for="accel" class="text-dark">Acceleration:</label>
+            <input type="number" class="form-control" id="accel" name="accel" required>
         </div>
         <div class="mb-3">
-            <label for="fuel">Fuel:</label>
+            <label for="fuel" class="text-dark">Fuel:</label>
             <select class="form-select" aria-label="Default select example" name="fuel">
-                <option value="<?php echo $fuel; ?>" selected><?php echo $fuel; ?></option>
+                <option selected>Open this select menu</option>
                 <option value="Benzine">Benzine</option>
                 <option value="Diesel">Diesel</option>
                 <option value="Electric">Electric</option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="transmission">Transmission:</label>
+            <label for="transmission" class="text-dark">Transmission:</label>
             <select class="form-select" aria-label="Default select example" name="transmission">
-                <option value="<?php echo $transmission; ?>" selected><?php echo $transmission; ?></option>
+                <option selected>Open this select menu</option>
                 <option value="Manual">Manual</option>
                 <option value="Automatic">Automatic</option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="cartype">Car Type:</label>
+            <label for="cartype" class="text-dark">Car Type:</label>
             <select class="form-select" aria-label="Default select example" name="cartype">
-                <option value="<?php echo $cartype; ?>" selected><?php echo $cartype; ?></option>
+                <option selected>Open this select menu</option>
                 <option value="SUV">SUV</option>
                 <option value="Sedan">Sedan</option>
                 <option value="Coupé">Coupé</option>
@@ -376,28 +328,30 @@ if(isset($_GET['id'])) {
             </select>
         </div>
         <div class="mb-3">
-            <label for="desc">Description:</label>
-            <textarea class="form-control" id="desc" name="desc" required><?php echo $desc; ?></textarea>
+            <label for="desc" class="text-dark">Description:</label>
+            <textarea class="form-control" id="desc" name="desc" required></textarea>
         </div>
         <div class="mb-3">
-            <label for="photo">Photo:</label>
-            <input type="file" class="form-control" id="photo" name="photo" >
+            <label for="photo" class="text-dark">Photo:</label>
+            <input type="file" class="form-control" id="photo" name="photo">
         </div>
         <div class="mb-3">
-            <label for="photo1">Product Photo1:</label>
-            <input type="file" class="form-control" id="photo1" name="photo1" >
+            <label for="photo1" class="text-dark">Product Photo1:</label>
+            <input type="file" class="form-control" id="photo1" name="photo1">
         </div>
         <div class="mb-3">
-            <label for="photo2">Product Photo2:</label>
-            <input type="file" class="form-control" id="photo2" name="photo2" >
+            <label for="photo2" class="text-dark">Product Photo2:</label>
+            <input type="file" class="form-control" id="photo2" name="photo2">
         </div>
         <div class="mb-3">
-            <label for="photo3">Product Photo3:</label>
-            <input type="file" class="form-control" id="photo3" name="photo3" >
+            <label for="photo3" class="text-dark">Product Photo3:</label>
+            <input type="file" class="form-control" id="photo3" name="photo3">
         </div>
-        <button type="submit" class="btn btn-primary" name="control">Update</button>
+        <button type="submit" class="btn btn-primary" name="control">Add</button>
     </form>
 </div>
+
+
 
 
 

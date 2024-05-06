@@ -2,43 +2,49 @@
 
 include 'connect.php';
 
-if (isset($_POST['control'])) {
-    $id = $_POST['id'];
+  $id = $_POST['id']; // Assuming you have an input field for ID in your form
     $name = $_POST['name'];
     $model = $_POST['model'];
     $price = $_POST['price'];
     $year_car = $_POST['year_car'];
     $topspeed = $_POST['topspeed'];
     $horsepower = $_POST['horsepower'];
-    $acceleration = $_POST['acceleration'];
+    $accel = $_POST['accel'];
     $fuel = $_POST['fuel'];
     $transmission = $_POST['transmission'];
     $cartype = $_POST['cartype'];
-    $photo = $_POST['photo'];
-    
-    $sql_prod = "UPDATE tblproducts SET 
-            name='$name', 
-            model='$model', 
-            price='$price', 
-            year_car='$year_car', 
-            photo='$photo' 
-            WHERE id=$id";
-            
-    $sql_specs = "UPDATE tblspecs SET 
-                    topspeed='$topspeed', 
-                    horsepower='$horsepower', 
-                    accelaration='$acceleration', 
-                    fuel='$fuel', 
-                    transmission='$transmission', 
-                    cartype='$cartype' 
-                    WHERE specID=$id";
-    echo $sql_prod;
-    echo $sql_specs;
-    if ($mysqli->query($sql_prod) && $mysqli->query($sql_specs)) {
-        // header("Location: A_prod.php");
-        
+    $desc = $_POST['desc'];
+
+
+    // SQL query to update product details
+    $query = "UPDATE tblproducts 
+              INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
+              SET 
+                tblproducts.name = '$name',
+                tblproducts.model = '$model',
+                tblproducts.price = '$price',
+                tblproducts.year_car = '$year_car',
+                tblspecs.topspeed = '$topspeed',
+                tblspecs.horsepower = '$horsepower',
+                tblspecs.accelaration = '$accel',
+                tblspecs.fuel = '$fuel',
+                tblspecs.transmission = '$transmission',
+                tblspecs.cartype = '$cartype',
+                tblspecs.description = '$desc'
+                 
+              WHERE tblproducts.id = $id"; // Modify this query according to your database schema
+
+    // Execute the query
+    if ($mysqli->query($query) === TRUE) {
+        echo "Product updated successfully";
     } else {
-        echo "Error updating record: " . $mysqli->error;
-    } 
-}
-?>
+        echo "Error updating product: " . $mysqli->error;
+    }
+
+    // Close database connection
+    $mysqli->close();
+
+
+
+
+  ?>

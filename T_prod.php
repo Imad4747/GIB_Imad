@@ -11,8 +11,12 @@ $accel = $_POST['accel'];
 $fuel = $_POST['fuel'];
 $trans = $_POST['transmission'];
 $cartype = $_POST['cartype'];
+$desc = $_POST['desc'];
+$pic = $_POST['photo1'];
+$pic2 = $_POST['photo2'];
+$pic3 = $_POST['photo3'];
 $sql = "INSERT INTO tblproducts(name, model, price, photo, year_car) VALUES ('$name', '$model', '$price', '$photo', '$year_car')";
-$sql2 = "INSERT INTO tblspecs(topspeed, horsepower, accelaration, fuel, transmission, cartype) VALUES ('$top', '$horse', '$accel', '$fuel', '$trans', '$cartype')";
+$sql2 = "INSERT INTO tblspecs(topspeed, horsepower, accelaration, fuel, transmission, cartype, description, pic, pic2, pic3) VALUES ('$top', '$horse', '$accel', '$fuel', '$trans', '$cartype', '$desc', '$pic', '$pic2', '$pic3')";
 $result = $mysqli->query($sql);
 $result2 = $mysqli->query($sql2);
 if ($result === false && $result2 === false) {

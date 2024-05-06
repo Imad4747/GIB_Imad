@@ -17,7 +17,6 @@
     
 
     
-<link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Favicons -->
 <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -119,52 +118,14 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
      <script type="text/javascript">
-      function formModal() {
-    $(document).ready(function(){
-                    $("#prodModal").modal("show");
-                });
+       function formModal() {
+    window.location.href = 'add_form.php';
   }
-   function openModal(id) {
-    $(document).ready(function() {
-        // Retrieve the product ID from the data attribute
-        var productId = $(this).data('car-id');
+     function openModal(id) {
+       window.location.href = 'fetch_prod.php?id=' + id;
+     }
 
-        $.ajax({
-            type: "GET",
-            url: "fetch_prod.php",
-            data: { id: productId }, // Pass the product ID to the server-side script
-            dataType: "json",
-            success: function(response) {
-                if (!response.error) {
-                    // Populate modal fields with product details
-                    $("#inputName").val(response.name);
-                    $("#inputModel").val(response.model);
-                    $("#inputPrice").val(response.price);
-                    $("#inputYear").val(response.year_car);
-                    $("#inputTopspeed").val(response.topspeed);
-                    $("#inputHorsepower").val(response.horsepower);
-                    $("#inputAcceleration").val(response.acceleration);
-                    $("#inputFuel").val(response.fuel);
-                    $("#inputTransmission").val(response.transmission);
-                    $("#inputCartype").val(response.cartype);
-                    $("#currentPhoto").attr("src", "images/" + response.photo);
-                    // Show the modal
-                    $("#changeModal").modal("show");
-                } else {
-                    console.error(response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-}
-
-
-  function changeOpen() {
-     window.location.href = 'W_prod.php';
-  }
+  f
   function deleteP(id) {
      window.location.href = "D_prod.php?id=" + id;
   }
@@ -363,7 +324,8 @@ while ($row = $result->fetch_assoc()) {
     echo '</div>';
     echo '<h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>';
     echo '<div class="text-center">';
-   echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$row["id"].'">Change</button>'; 
+      echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$proid.'" onclick="openModal('.$proid.')">Change</button>'; 
+
     echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP('.$row["id"].')" data-car-id="'.$row["id"].'">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
@@ -451,6 +413,22 @@ echo '</div>';
                       <option>Wagon</option>
                       </select>
                     </div>
+                     <div class="form-group">
+                        <label>Description:</label>
+                      <input type="text" class="form-control" id="descop" name="desc" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="totalprice">Product photo1:</label>
+                        <input type="file" class="form-control" id="photo1" name="photo1" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="totalprice">Product photo2:</label>
+                        <input type="file" class="form-control" id="photo2" name="photo2" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="totalprice">Product photo3:</label>
+                        <input type="file" class="form-control" id="photo3" name="photo3" required>
+                    </div>
                      <div class="modal-footer">
               <button type="submit" class="btn btn-primary" name="control">Add</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -463,84 +441,6 @@ echo '</div>';
 </div>
 
 
-<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="update_prod.php" method="post">
-        <input type="hidden" name="id" value="<?php echo $proid; ?>">
 
-            <div class="form-group">
-                <label for="inputName">Name:</label>
-                <input type="text" class="form-control" id="inputName" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="inputModel">Model:</label>
-                <input type="text" class="form-control" id="inputModel" name="model" required>
-            </div>
-            <div class="form-group">
-                <label for="inputPrice">Price:</label>
-                <input type="text" class="form-control" id="inputPrice" name="price" required>
-            </div>
-            <div class="form-group">
-                <label for="inputPhoto">Photo:</label>
-                <input type="file" class="form-control" id="inputPhoto" name="photo" >
-            </div>
-            <div class="form-group">
-                <label for="inputYear">Year Car:</label>
-                <input type="number" class="form-control" id="inputYear" name="year_car" required>
-            </div>
-            <div class="form-group">
-                <label for="inputTopspeed">Topspeed:</label>
-                <input type="number" class="form-control" id="inputTopspeed" name="topspeed" required>
-            </div>
-            <div class="form-group">
-                <label for="inputHorsepower">Horsepower:</label>
-                <input type="number" class="form-control" id="inputHorsepower" name="horsepower" required>
-            </div>
-            <div class="form-group">
-                <label for="inputAcceleration">Acceleration:</label>
-                <input type="text" class="form-control" id="inputAcceleration" name="acceleration" required>
-            </div>
-            <div class="form-group">
-                <label for="inputFuel">Fuel:</label>
-                <select class="form-select" aria-label="Default select example" id="inputFuel" name="fuel">
-                    <option selected>Open this select menu</option>
-                    <option>Benzine</option>
-                    <option>Diesel</option>
-                    <option>Electric</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="inputTransmission">Transmission:</label>
-                <select class="form-select" aria-label="Default select example" id="inputTransmission" name="transmission">
-                    <option selected>Open this select menu</option>
-                    <option>Manual</option>
-                    <option>Automatic</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="inputCartype">Cartype:</label>
-                <select class="form-select" aria-label="Default select example" id="inputCartype" name="cartype">
-                    <option selected>Open this select menu</option>
-                    <option>SUV</option>
-                    <option>Sedan</option>
-                    <option>Coupé</option>
-                    <option>Cabrio</option>
-                    <option>Wagon</option>
-                </select>
-            </div>
-            
-            
-            <button type="submit" class="btn btn-primary" name="control">Save changes</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 </html>

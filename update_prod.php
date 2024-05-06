@@ -2,7 +2,7 @@
 
 include 'connect.php';
 
-  $id = $_POST['id']; // Assuming you have an input field for ID in your form
+  $id = $_POST['id']; 
     $name = $_POST['name'];
     $model = $_POST['model'];
     $price = $_POST['price'];
@@ -16,7 +16,6 @@ include 'connect.php';
     $desc = $_POST['desc'];
 
 
-    // SQL query to update product details
     $query = "UPDATE tblproducts 
               INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
               SET 
@@ -32,16 +31,14 @@ include 'connect.php';
                 tblspecs.cartype = '$cartype',
                 tblspecs.description = '$desc'
                  
-              WHERE tblproducts.id = $id"; // Modify this query according to your database schema
+              WHERE tblproducts.id = $id"; 
 
-    // Execute the query
     if ($mysqli->query($query) === TRUE) {
         echo "Product updated successfully";
     } else {
         echo "Error updating product: " . $mysqli->error;
     }
 
-    // Close database connection
     $mysqli->close();
 
 

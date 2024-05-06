@@ -269,7 +269,7 @@
       </div>
 <div class="container">
     <h3>Add Product</h3>
-    <form action="update_prod.php" method="post">
+    <form action="T_prod.php" method="post">
         <input type="hidden" name="id" value="">
         <div class="mb-3">
             <label for="name" class="text-dark">Name:</label>
@@ -333,19 +333,19 @@
         </div>
         <div class="mb-3">
             <label for="photo" class="text-dark">Photo:</label>
-            <input type="file" class="form-control" id="photo" name="photo">
+            <input type="file" class="form-control" id="photo" name="photo" required>
         </div>
         <div class="mb-3">
             <label for="photo1" class="text-dark">Product Photo1:</label>
-            <input type="file" class="form-control" id="photo1" name="photo1">
+            <input type="file" class="form-control" id="photo1" name="photo1" required>
         </div>
         <div class="mb-3">
             <label for="photo2" class="text-dark">Product Photo2:</label>
-            <input type="file" class="form-control" id="photo2" name="photo2">
+            <input type="file" class="form-control" id="photo2" name="photo2" required>
         </div>
         <div class="mb-3">
             <label for="photo3" class="text-dark">Product Photo3:</label>
-            <input type="file" class="form-control" id="photo3" name="photo3">
+            <input type="file" class="form-control" id="photo3" name="photo3" required>
         </div>
         <button type="submit" class="btn btn-primary" name="control">Add</button>
     </form>

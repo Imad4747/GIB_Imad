@@ -261,45 +261,79 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
-        
       </div>
-      <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">
-      Add New User</button>
-<?php  
+            <?php 
 include 'connect.php';
-$sql = "SELECT * FROM tblusers WHERE role = 'guest'";
+$sql = "SELECT * FROM tblproducts
+        INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
+        WHERE 1";
 $result = $mysqli->query($sql);
-
 if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
-echo '<div class="container-fluid d-flex flex-wrap justify-content-between">'; 
+function getProductDetails($id, $conn) {
+    $query = "SELECT * FROM tblusers
+              WHERE id = $id";
+    $result = mysqli_query($conn, $query);
 
-while ($row = $result->fetch_assoc()) {
-  
-      echo '<div class="card mb-3" style="width: 250px;">'; 
-   
-    echo '<div class="card-body">';
-    echo '<h5 class="card-title text-center">ID: ' . $row["id"] . '</h5>';
-    echo '<p class="card-text text-center"><strong>First Name:</strong> ' . $row["firstname"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Last Name:</strong> ' . $row["lastname"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Email:</strong> ' . $row["email"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Password:</strong> ' . $row["password"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Created At:</strong> ' . $row["createdAt"] . '</p>';
-    echo '<div class="text-center">';
-    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser(' . $row["id"] . ')">Change</button>';
-    
-    
-    echo '<button class="btn btn-danger" onclick="deleteUser(' . $row["id"] . ')">Delete</button>';
-     
-    echo '</div>';
-    echo '</div>'; 
-    echo '</div>'; 
+    if(mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row;
+    } else {
+        return false;
+    }
 }
-echo '</div>';
 
+if(isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $product = getProductDetails($id, $mysqli);
+
+    if($product) {
+        $firstname = $product['firstname'];
+        $lastname = $product['lastname'];
+        $email = $product['email'];
+        $password = $product['password'];
+        $role = $product['role'];
+        
+    } else {
+        echo "Product not found!";
+    }
+}
 ?>
+     <div class="container">
+    <h3>Change User</h3>
+    <form action="update_cust.php" method="post">
+        <input type="hidden" name="id" value="">
+        <div class="mb-3">
+            <label class="text-dark">Firstname:</label>
+            <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $firstname; ?>" required>
+        </div>
+        <div class="mb-3">
+            <label class="text-dark">Lastname:</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $lastname; ?>" required>
+        </div>
+        <div class="mb-3">
+            <label class="text-dark">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" required>
+        </div>
+        <div class="mb-3">
+            <label class="text-dark">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" required>
+        </div>
+      
+        <div class="mb-3">
+            <label class="text-dark">Role:</label>
+            <select class="form-select" aria-label="Default select example" name="role">
+                <option value="<?php echo $role; ?>" selected>Open this select menu</option>
+                <option value="Admin">Admin</option>
+                <option value="Guest">Guest</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" name="control">Change</button>
+    </form>
+</div>
+
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
@@ -361,19 +395,5 @@ echo '</div>';
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
-  
-  function deleteUser(id_user) {
-    window.location.href = "delete-user.php?iduser=" + id_user;
-  }
-   function formModal() {
-    $(document).ready(function(){
-                    $("#custModal").modal("show");
-                });
-  }
-  function changeUser(id) {
-    window.location.href = "chang_form.php?id=" + id;
-  }
-</script>
 
 </html>

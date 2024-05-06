@@ -277,7 +277,6 @@ if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
-// Function to fetch product details based on ID
 function getProductDetails($id, $conn) {
     $query = "SELECT * FROM tblproducts
               INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
@@ -292,12 +291,10 @@ function getProductDetails($id, $conn) {
     }
 }
 
-// Check if ID is provided via GET parameter
 if(isset($_GET['id'])) {
     $id = $_GET['id'];
     $product = getProductDetails($id, $mysqli);
 
-    // If product details are fetched successfully
     if($product) {
         $name = $product['name'];
         $model = $product['model'];

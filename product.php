@@ -77,8 +77,7 @@ unset($_SESSION['paint_price']);
             <ul class="dropdown-menu dropdown-menu-end text-small">
               <?php  
       if (isset($_SESSION['user_id'])) {
-        echo '<li><a class="dropdown-item" href="#">New project...</a></li>
-    <li><a class="dropdown-item" href="#">Settings</a></li>
+        echo '
     <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="loguit.php">Sign out</a></li>';

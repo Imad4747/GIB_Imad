@@ -34,7 +34,8 @@ include 'connect.php';
               WHERE tblproducts.id = $id"; 
 
     if ($mysqli->query($query) === TRUE) {
-        echo "Product updated successfully";
+        header("Location: A_prod.php");
+        
     } else {
         echo "Error updating product: " . $mysqli->error;
     }

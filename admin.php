@@ -1,4 +1,6 @@
 
+<?php    session_start();
+ ?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head>
@@ -266,13 +268,177 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-<div class="d-flex justify-content-center mb-4">
-        <input type="text" class="form-control mr-2" style="width: 999px;" placeholder="Search..." name="search" id="searchinput">
-    
+   <?php 
+include 'connect.php'; 
+
+    $sql = "SELECT * FROM tblusers WHERE role = 'Admin' AND id = '" . $_SESSION['user_id'] . "'";
+    $result = $mysqli->query($sql);
+     $row = $result->fetch_assoc();
+     echo '<h1 class="h4">Welcome, ' . $row["firstname"] . '</h1>';
+
+?>
+    <div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5">Latest Products</h2>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Model</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $L_prod = "SELECT * FROM tblproducts ORDER BY id DESC LIMIT 3";
+                        $resultP = $mysqli->query($L_prod);
+                        while ($rowP = $resultP->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $rowP['name'] . "</td>";
+                            echo "<td>" . $rowP['model'] . "</td>";
+                            echo "<td>$" . $rowP['price'] . "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5">Latest Customers</h2>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $L_cust = "SELECT * FROM tblusers WHERE role = 'Guest' ORDER BY id DESC LIMIT 3";
+                        $resultC = $mysqli->query($L_cust);
+                        while ($rowC = $resultC->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $rowC['firstname'] . "</td>";
+                            echo "<td>" . $rowC['lastname'] . "</td>";
+                            echo "<td>" . $rowC['email'] . "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="h5">Latest Orders</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer ID</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                    $L_order = "SELECT * FROM tblorder ORDER BY order_id DESC LIMIT 3";
+                    $resultO = $mysqli->query($L_order);
+                    while ($rowO = $resultO->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $rowO['order_id'] . "</td>";
+                        echo "<td>" . $rowO['userid'] . "</td>";
+                        echo "<td>$" . $rowO['totalPrice'] . "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="h5">Latest Reports</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Firstname</th>
+                                <th>Email</th>
+                                <th>Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <?php
+                    $L_con = "SELECT * FROM tblcontact ORDER BY id DESC LIMIT 3";
+                    $resultR = $mysqli->query($L_con);
+                    while ($rowR = $resultR->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $rowR['firstname'] . "</td>";
+                        echo "<td>" . $rowR['email'] . "</td>";
+                        echo "<td>" . $rowR['message'] . "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+require_once 'include.php'; 
+
+\Stripe\Stripe::setApiKey('sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI');
+
+try {
+    $payments = \Stripe\Charge::all(array(
+        "limit" => 100, 
+    ));
+
+    $totalAmount = 0;
+
+    foreach ($payments->autoPagingIterator() as $payment) {
+        $totalAmount += $payment->amount;
+    }
+
+    $totalAmount = $totalAmount / 100;
+} catch (Exception $e) {
+    echo 'Error: ' . $e->getMessage();
+    die();
+}
+?>
+
+<div class="container">
+    <h2 class="h4 mt-4">Total Payments</h2>
+    <p>Total payments received: $<?php echo number_format($totalAmount, 2); ?></p>
+</div>
+
+    
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
       

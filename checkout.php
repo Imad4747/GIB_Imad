@@ -14,6 +14,9 @@ if ($result === FALSE) {
 }
 
 $row = $result->fetch_assoc();
+$selectedPaintColor = $_SESSION['selected_paint_color'];
+$paintPrice = $_SESSION['paint_price'];
+$totalPrice = $row["price"] + $paintPrice;
 
 $stripe_key = "sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI";
 \Stripe\Stripe::setApiKey($stripe_key);
@@ -29,7 +32,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
             "quantity" => 1,
             "price_data" => [
                 "currency" => "usd",
-                "unit_amount" => $row["price"] * 100,
+                "unit_amount" => $totalPrice * 100,
                 "product_data" => [
                     "name" => $row["name"],
                     "description" => $row["model"],
@@ -39,7 +42,10 @@ $checkout_session = \Stripe\Checkout\Session::create([
         ]
     ],
     "metadata" => [
-        "product_id" => $row['id']  
+        "product_id" => $row['id'],
+        "selected_paint_color" => $selectedPaintColor,
+        "paint_price" => $paintPrice,
+        "total_price" => $totalPrice
     ]
 ]);
 

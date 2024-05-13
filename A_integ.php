@@ -22,7 +22,6 @@
 <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
 <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
 <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
 <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
 <meta name="theme-color" content="#712cf9">
@@ -264,33 +263,51 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      
 <?php
-require_once('include.php'); // Include Stripe PHP Library
-
-// Set your Stripe API key
+require_once('include.php'); 
 \Stripe\Stripe::setApiKey('sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI');
 
-// Fetch payment data from Stripe
-$payments = \Stripe\PaymentIntent::all(['limit' => 100]); // Fetch last 100 payments as an example
-
-// Prepare data for chart
-$profitData = [];
-foreach ($payments->data as $payment) {
-    if ($payment->status === 'succeeded') {
-        $date = date('Y-m-d', $payment->created);
-        $profitData[$date] = isset($profitData[$date]) ? $profitData[$date] + $payment->amount / 100 : $payment->amount / 100;
+function getCustomerDetails($customerId) {
+    try {
+        return \Stripe\Customer::retrieve($customerId);
+    } catch (Exception $e) {
+        return null; 
     }
 }
 
-// Convert data to JSON format for JavaScript
-$profitDataJSON = json_encode(array_values($profitData));
+$payments = \Stripe\PaymentIntent::all(['limit' => 100]); 
+
+echo "<div style='font-family: Arial, sans-serif;'>";
+echo "<h2>Payment Details</h2>";
+echo "<table style='border-collapse: collapse; width: 100%;'>";
+echo "<tr style='background-color: #f2f2f2;'><th style='padding: 10px; border: 1px solid #dddddd;'>Customer ID</th><th style='padding: 10px; border: 1px solid #dddddd;'>Customer Name</th><th style='padding: 10px; border: 1px solid #dddddd;'>Email</th><th style='padding: 10px; border: 1px solid #dddddd;'>Payment Method</th><th style='padding: 10px; border: 1px solid #dddddd;'>Amount</th><th style='padding: 10px; border: 1px solid #dddddd;'>Status</th><th style='padding: 10px; border: 1px solid #dddddd;'>Created</th></tr>";
+foreach ($payments->data as $payment) {
+    $customerDetails = getCustomerDetails($payment->customer);
+    $customerId = $payment->customer;
+    $customerName = $customerDetails ? $customerDetails->name : "N/A";
+    $customerEmail = $customerDetails ? $customerDetails->email : "N/A";
+    $paymentMethod = isset($payment->payment_method_types) && !empty($payment->payment_method_types) ? implode(", ", $payment->payment_method_types) : "N/A";
+    echo "<tr><td style='padding: 10px; border: 1px solid #dddddd;'>".$customerId."</td>";
+    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$customerName."</td>";
+    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$customerEmail."</td>";
+    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$paymentMethod."</td>";
+    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$payment->amount / 100 ."</td>";
+    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$payment->status."</td>";
+    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".date('Y-m-d H:i:s', $payment->created)."</td></tr>";
+}
+echo "</table>";
+echo "</div>";
 ?>
 
 
 
-<!-- Canvas for displaying the chart -->
-<canvas id="profitChart" width="400" height="200"></canvas>
+
+
+
+
+
+
+
 
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
@@ -300,7 +317,6 @@ $profitDataJSON = json_encode(array_values($profitData));
   </div>
 </div>
 
-<!-- Include Chart.js library -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

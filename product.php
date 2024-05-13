@@ -1,3 +1,8 @@
+<?php
+session_start(); 
+unset($_SESSION['selected_paint_color']);
+unset($_SESSION['paint_price']);
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +75,7 @@
               <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
             </a>
             <ul class="dropdown-menu dropdown-menu-end text-small">
-              <?php session_start(); 
+              <?php  
       if (isset($_SESSION['user_id'])) {
         echo '<li><a class="dropdown-item" href="#">New project...</a></li>
     <li><a class="dropdown-item" href="#">Settings</a></li>
@@ -201,78 +206,7 @@ while ($row = $result->fetch_assoc()) {
         <div class="container">
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="filteredResultsContainer">
     
-    <!-- ?php
-include 'connect.php';
-
-$sql = "SELECT * FROM tblproducts, tblspecs WHERE id = specID";
-
-$searchInput = isset($_GET['search']) ? $mysqli->real_escape_string($_GET['search']) : '';
-
-
-if (!empty($searchInput)) {
-    $sql .= " AND (name LIKE '%$searchInput%' OR model LIKE '%$searchInput%')";
-}
-
-
-
-$result = $mysqli->query($sql);
-
-
-while ($row = $result->fetch_assoc()) { 
-  if (isset($_POST['control'])) {
-    $_SESSION['car'] = $_POST['name'];
-    header("Location: cars.php");
-
-  }else{
-    echo '<div class="col">
-      <div class="card position-relative">
-    <span class="favorite position-absolute top-0 end-0" style="margin-right: 5px; margin-end: 5px;">&#9733;</span>
-        
-        <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">'.$row["year"].'</h3>
-
-
-        <div class="card-body">
-          <h3 class="card-title text-center" name="name">'.$row["name"].'</h3>
-          
-          <h5 class="card-subtitle text-center mb-2 text-muted">'.$row["model"].'</h5>
-          <div class="card-body text-center">
-    <img src="images/'.$row["photo"].'" class="card-img-top img-fluid" style="width: 180px;" alt="Product Image">
-</div>
-
-<div class="datagroup d-flex justify-content-around align-items-center mt-2">
-    <div class="data text-center">
-        <i class="bx bx-stopwatch" style="font-size: 24px; color: #0043ff;"></i>
-        <br>
-        <span class="spec" style="font-weight: bold;">'.$row["accelaration"].'s</span>
-    </div>
-    <div class="data text-center">
-        <i class="bx bx-line-chart" style="font-size: 24px; color: #39ad5e;"></i>
-        <br>
-        <span class="spec" style="font-weight: bold;">'.$row["topspeed"].' km/h</span>
-    </div>
-    <div class="data text-center">
-        <i class="bx bxs-gas-pump" style="font-size: 24px; color: #dc1e4d;"></i>
-        <br>
-        <span class="spec" style="font-weight: bold;">'.$row["fuel"].'</span>
-    </div>
-</div>
-
-          <h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>
-
-          <div class="text-center">
-            <button class="btn btn-primary">View Details</button>
-          </div>
-        </div>
-      </div>
-    </div>';
-  }
-  
-}
-  ? -->
     
-
-
-
   </div>
 </div>
 

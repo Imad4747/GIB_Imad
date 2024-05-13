@@ -264,17 +264,15 @@
       </div>
             <?php 
 include 'connect.php';
-$sql = "SELECT * FROM tblproducts
-        INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
-        WHERE 1";
+
+$sql = "SELECT * FROM tblusers WHERE 1";
 $result = $mysqli->query($sql);
 if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
-function getProductDetails($id, $conn) {
-    $query = "SELECT * FROM tblusers
-              WHERE id = $id";
+function getUserDetails($id, $conn) {
+    $query = "SELECT * FROM tblusers WHERE id = $id";
     $result = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($result) > 0) {
@@ -287,24 +285,25 @@ function getProductDetails($id, $conn) {
 
 if(isset($_GET['id'])) {
     $id = $_GET['id'];
-    $product = getProductDetails($id, $mysqli);
+    $user = getUserDetails($id, $mysqli);
 
-    if($product) {
-        $firstname = $product['firstname'];
-        $lastname = $product['lastname'];
-        $email = $product['email'];
-        $password = $product['password'];
-        $role = $product['role'];
+    if($user) {
+        $firstname = $user['firstname'];
+        $lastname = $user['lastname'];
+        $email = $user['email'];
+        
+        $password = ""; 
+        $role = $user['role'];
         
     } else {
-        echo "Product not found!";
+        echo "User not found!";
     }
 }
 ?>
-     <div class="container">
+<div class="container">
     <h3>Change User</h3>
     <form action="update_cust.php" method="post">
-        <input type="hidden" name="id" value="">
+        <input type="hidden" name="id" value="<?php echo $id; ?>">
         <div class="mb-3">
             <label class="text-dark">Firstname:</label>
             <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $firstname; ?>" required>
@@ -319,15 +318,14 @@ if(isset($_GET['id'])) {
         </div>
         <div class="mb-3">
             <label class="text-dark">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" required>
+            <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" readonly>
         </div>
       
         <div class="mb-3">
             <label class="text-dark">Role:</label>
             <select class="form-select" aria-label="Default select example" name="role">
-                <option value="<?php echo $role; ?>" selected>Open this select menu</option>
-                <option value="Admin">Admin</option>
-                <option value="Guest">Guest</option>
+                <option value="Admin"<?php if ($role == 'Admin') echo ' selected'; ?>>Admin</option>
+                <option value="Guest"<?php if ($role == 'Guest') echo ' selected'; ?>>Guest</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary" name="control">Change</button>

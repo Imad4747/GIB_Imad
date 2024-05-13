@@ -37,7 +37,9 @@ if (isset($_POST['control'])) {
     $resultaat->execute();
     $resultaat->bind_result($user_id, $db_email, $db_password, $db_role);
     $resultaat->fetch();
-if ($db_role == "admin") {
+if ($db_role == "Admin") {
+     session_start();
+        $_SESSION['user_id'] = $user_id;
     header("Location: admin.php");
 }else{
 

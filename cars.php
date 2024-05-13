@@ -50,7 +50,6 @@
             max-width: 50%;
         }
   </style>
-   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -124,12 +123,14 @@
 }
 include 'connect.php'; 
 $id = $_GET['id'];
+$_SESSION['prijs'] = 0;
 $sql = "SELECT * FROM tblproducts INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID WHERE id = $id";
 $result = $mysqli->query($sql);
 if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
        while ($row = $result->fetch_assoc()) {
+        $_SESSION['prijs'] = $row["price"];
         echo '<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -157,6 +158,7 @@ echo ' <h2>'.$row["name"].' - '.$row["model"].'</h2>
             <div>
                 <h4>Specifications:</h4>
                 <ul>
+                <li><strong>Price:</strong> $'.$row["price"].'</li>
                     <li><strong>Make:</strong> '.$row["year_car"].'</li>
                     <li><strong>Topspeed:</strong> '.$row["topspeed"].'km/h</li>
                     <li><strong>Horsepower:</strong> '.$row["horsepower"].'</li>
@@ -179,8 +181,14 @@ echo ' <h2>'.$row["name"].' - '.$row["model"].'</h2>
               <form method="post">
               <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <button class="btn btn-primary mr-2" type="submit" name="submit"><i class="bi bi-credit-card-fill"></i> Make Payment</button>
-                <button class="btn btn-secondary"><i class="bi bi-gear-fill"></i> Configure Car</button>
+                
                 </form>
+                  <form id="configForm" method="GET" action="config.php">
+        <input type="hidden" name="id" value="<?php echo $id; ?>">
+        <input type="hidden" name="price" value="<?php echo $_SESSION['prijs'] ?>"> <!-- Add this line to pass the product price -->
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-gear-fill"></i> Configure Car</button>
+    </form>
+
             </div>
         </div>
     </div>
@@ -264,6 +272,7 @@ echo ' <h2>'.$row["name"].' - '.$row["model"].'</h2>
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

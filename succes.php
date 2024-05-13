@@ -31,6 +31,9 @@ if ($checkout_session->payment_status === 'paid') {
                   VALUES ('$userid', '{$row["name"]}', '{$row["model"]}', '$total', '$current_date')";
 
     if ($mysqli->query($sql_order)) {
+        unset($_SESSION['selected_paint_color']);
+        unset($_SESSION['paint_price']);
+
         header("Location: W_prod.php");
         exit();
     } else {

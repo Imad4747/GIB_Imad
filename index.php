@@ -118,7 +118,7 @@
             <a class="nav-link" href="product.php">Products</a>
           </li>
          <li class="nav-item">
-            <a class="nav-link" href="#">Contacts</a>
+            <a class="nav-link" href="contact.php">Contacts</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
@@ -159,11 +159,11 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="images/h.jpg" class="bd-placeholder-img" alt="Slide 1" width="100%" class="img-fluid">
+      <img src="images/c1.jpg" class="bd-placeholder-img" alt="Slide 1" width="100%" class="img-fluid">
       <div class="container">
         <div class="carousel-caption text-start">
-          <h1>Discover a new world</h1>
-          <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+          <h1>Experience Luxury, Drive Confidence</h1>
+          <p class="opacity-75">Elevate your driving experience with our luxury collection! Immerse yourself in comfort, style, and cutting-edge technology. Discover the epitome of automotive excellence and drive with confidence. Visit us today!</p>
           <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
         </div>
       </div>
@@ -171,19 +171,19 @@
     <div class="carousel-item">
       <img src="images/n.jpg" class="bd-placeholder-img" alt="Slide 2"  width="100%" height="100%">
       <div class="container">
-        <div class="carousel-caption">
-          <h1>Exclusive for you</h1>
-          <p>Some representative placeholder content for the second slide of the carousel.</p>
+        <div class="carousel-caption text-start">
+          <h1>Top Picks of the Month</h1>
+          <p>Looking for the cream of the crop? Check out our top picks of the month! From stylish sedans to rugged SUVs, we've curated the best selection just for you. Find your next favorite ride today!</p>
           <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
         </div>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/b.jpg" class="bd-placeholder-img" alt="Slide 3"  width="100%" height="100%">
+      <img src="images/ser.jpg" class="bd-placeholder-img" alt="Slide 3"  width="100%" height="100%">
       <div class="container">
-        <div class="carousel-caption text-end">
-          <h1>Customize for your own taste</h1>
-          <p>Some representative placeholder content for the third slide of this carousel.</p>
+        <div class="carousel-caption text-start">
+          <h1>Spring into Savings!</h1>
+          <p>Rev up your spring with unbeatable deals on our latest arrivals! Explore our diverse selection of cars and find the perfect ride for your adventures. Don't miss out - these offers won't last long!</p>
           <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
         </div>
       </div>
@@ -252,11 +252,11 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">First featurette heading. It’ll blow your mind.</h2>
-        <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Luxury Redefined: The Mercedes-Benz E-Class</h2>
+        <p class="lead">Experience automotive excellence with the Mercedes-Benz E-Class. From its elegant design to its sophisticated performance, every aspect of this car exudes luxury and refinement. Step into a world of comfort and innovation with advanced features and cutting-edge technology. Elevate your driving experience and discover the epitome of luxury on every journey. Explore the Mercedes-Benz E-Class today.</p>
       </div>
       <div class="col-md-5">
-        <img src="images/h.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500">
+        <img src="images/ecl.avif" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500">
       </div>
     </div>
 
@@ -264,11 +264,11 @@
 
     <div class="row featurette">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. See for yourself.</h2>
-        <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Unleash Performance: Mercedes Power</h2>
+        <p class="lead">Dive into the realm of unparalleled performance with Mercedes motors. Crafted with precision engineering and cutting-edge technology, our motors deliver a driving experience like no other. Feel the exhilaration of power, the refinement of luxury, and the reliability of German engineering. Explore our lineup today and ignite your passion for driving with Mercedes.</p>
       </div>
       <div class="col-md-5 order-md-1">
-        <img src="images/h.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500">
+        <img src="images/motor.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500">
       </div>
     </div>
 
@@ -276,11 +276,11 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. Checkmate.</h2>
-        <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Acura Safety First: Your Guardian on the Road</h2>
+        <p class="lead">Experience the pinnacle of safety with Acura. Our safety cars are meticulously designed to prioritize your well-being on the road. Equipped with state-of-the-art safety technologies and built with a focus on structural integrity, Acura safety cars provide unmatched protection for you and your passengers. Drive with confidence knowing that Acura is your trusted guardian on the road. Explore our lineup today and discover the peace of mind that comes with Acura safety.</p>
       </div>
       <div class="col-md-5">
-        <img src="images/h.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500">
+        <img src="images/saf.jpg" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500">
         
       </div>
     </div>

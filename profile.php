@@ -58,94 +58,93 @@
   </header>
 
 <div class="container" style="margin-top: 100px;">
-    <h2>Welcome, <?php include 'connect.php'; 
-    $sql = "SELECT firstname FROM tblusers WHERE id=".$_SESSION['user_id']."";
-    $result = $mysqli->query($sql);
-    while ($row = $result->fetch_assoc()) {
-      echo $row["firstname"];
-    }
-
-     ?></h2>
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Personal Information</h5>
-            <p class="card-text">Email: <?php 
-            $sql = "SELECT email FROM tblusers WHERE id=".$_SESSION['user_id']."";  
-            $result = $mysqli->query($sql);
-    while ($row = $result->fetch_assoc()) {
-      echo $row["email"];
-    } ?><br>Firstname: <?php 
-            $sql = "SELECT firstname FROM tblusers WHERE id=".$_SESSION['user_id']."";  
-            $result = $mysqli->query($sql);
-    while ($row = $result->fetch_assoc()) {
-      echo $row["firstname"];
-    } ?><br>Lastname: <?php 
-            $sql = "SELECT lastname FROM tblusers WHERE id=".$_SESSION['user_id']."";  
-            $result = $mysqli->query($sql);
-    while ($row = $result->fetch_assoc()) {
-      echo $row["lastname"];
-    } ?></p>
-            <a href="#" class="btn btn-primary" onclick="formModal()">Edit Profile</a>
-        </div>
+   <?php include 'connect.php'; ?>
+<h2>Welcome, 
+<?php
+    $stmt = $mysqli->prepare("SELECT firstname, email, lastname FROM tblusers WHERE id = ?");
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $stmt->bind_result($firstname, $email, $lastname);
+    $stmt->fetch();
+    echo htmlspecialchars($firstname);
+    $stmt->close();
+?>
+</h2>
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Personal Information</h5>
+        <p class="card-text">
+            Email: <?php echo htmlspecialchars($email); ?><br>
+            Firstname: <?php echo htmlspecialchars($firstname); ?><br>
+            Lastname: <?php echo htmlspecialchars($lastname); ?>
+        </p>
+        <a href="#" class="btn btn-primary" onclick="formModal()">Edit Profile</a>
     </div>
+</div>
 
 
 <h4>Favorites</h4>
 <div class="mb-4">
   <div class="row">
-    <?php
-    $userid = $_SESSION['user_id']; 
+   <?php
+$userid = $_SESSION['user_id'];
 
-    $sql = "SELECT DISTINCT tblproducts.id, tblspecs.specID, tblfav.userid, name, model, price, photo, year_car, accelaration, topspeed, fuel
-FROM tblproducts
-INNER JOIN tblspecs 
-INNER JOIN tblfav 
-ON tblproducts.id = tblspecs.specID 
-WHERE tblfav.userid = $userid AND tblfav.product_id = tblproducts.id ";
+$sql = "SELECT DISTINCT tblproducts.id, tblspecs.specID, tblfav.userid, name, model, price, photo, year_car, accelaration, topspeed, fuel
+        FROM tblproducts
+        INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
+        INNER JOIN tblfav ON tblfav.product_id = tblproducts.id
+        WHERE tblfav.userid = ?";
 
-$result = $mysqli->query($sql);
+$stmt = $mysqli->prepare($sql);
+$stmt->bind_param("i", $userid);
+$stmt->execute();
+$result = $stmt->get_result();
+
 while($row = $result->fetch_assoc()){
-  echo ' 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card position-relative">
+    echo ' 
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card position-relative">
             <form method="post" action="delete-fav.php">
-             <input type="hidden" name="product_id" value="'.$row["id"].'"/>
-                <button type="submit" name="control" class="btn btn-danger position-absolute top-0 end-0" style="margin-right: 5px; margin-top: 1px; cursor: pointer; font-size: 8px">Delete</button></form>
-
-                <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px; font-size: 16px;">'.$row["year_car"].'</h3>
-                <div class="card-body">
-                    <h3 class="card-title text-center">Product '.$row["name"].'</h3>
-                    <h5 class="card-subtitle text-center mb-2 text-muted">' .$row["model"].'</h5>
-                    <div class="card-body text-center">
-                        <img src="images/'.$row['photo'].'" class="card-img-top img-fluid" style="width: 120px;" alt="Product Image">
+                <input type="hidden" name="product_id" value="'.htmlspecialchars($row["id"]).'"/>
+                <button type="submit" name="control" class="btn btn-danger position-absolute top-0 end-0" style="margin-right: 5px; margin-top: 1px; cursor: pointer; font-size: 8px">Delete</button>
+            </form>
+            <h3 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px; font-size: 16px;">'.htmlspecialchars($row["year_car"]).'</h3>
+            <div class="card-body">
+                <h3 class="card-title text-center">Product '.htmlspecialchars($row["name"]).'</h3>
+                <h5 class="card-subtitle text-center mb-2 text-muted">'.htmlspecialchars($row["model"]).'</h5>
+                <div class="card-body text-center">
+                    <img src="images/'.htmlspecialchars($row['photo']).'" class="card-img-top img-fluid" style="width: 120px;" alt="Product Image">
+                </div>
+                <div class="datagroup d-flex justify-content-around align-items-center mt-2">
+                    <div class="data text-center">
+                        <i class="bx bx-stopwatch" style="font-size: 20px; color: #0043ff;"></i>
+                        <br>
+                        <span class="spec" style="font-weight: bold;">'.htmlspecialchars($row["accelaration"]).'s</span>
                     </div>
-                    <div class="datagroup d-flex justify-content-around align-items-center mt-2">
-                        <div class="data text-center">
-                            <i class="bx bx-stopwatch" style="font-size: 20px; color: #0043ff;"></i>
-                            <br>
-                            <span class="spec" style="font-weight: bold;">'.$row["accelaration"].'s</span>
-                        </div>
-                        <div class="data text-center">
-                            <i class="bx bx-line-chart" style="font-size: 20px; color: #39ad5e;"></i>
-                            <br>
-                            <span class="spec" style="font-weight: bold;">' .$row["topspeed"].' km/h</span>
-                        </div>
-                        <div class="data text-center">
-                            <i class="bx bxs-gas-pump" style="font-size: 20px; color: #dc1e4d;"></i>
-                            <br>
-                            <span class="spec" style="font-weight: bold;">'.$row["fuel"].' </span>
-                        </div>
+                    <div class="data text-center">
+                        <i class="bx bx-line-chart" style="font-size: 20px; color: #39ad5e;"></i>
+                        <br>
+                        <span class="spec" style="font-weight: bold;">'.htmlspecialchars($row["topspeed"]).' km/h</span>
                     </div>
-                    <h5 class="card-text text-center mt-3">$ '.$row["price"].' </h5>
-                    <div class="text-center">
-                        <button class="btn btn-primary" data-car-id="'.$row["id"].'; ?>">View Details</button>
+                    <div class="data text-center">
+                        <i class="bx bxs-gas-pump" style="font-size: 20px; color: #dc1e4d;"></i>
+                        <br>
+                        <span class="spec" style="font-weight: bold;">'.htmlspecialchars($row["fuel"]).'</span>
                     </div>
+                </div>
+                <h5 class="card-text text-center mt-3">$ '.htmlspecialchars($row["price"]).'</h5>
+                <div class="text-center">
+                    <button class="btn btn-primary" onclick="openCar('.htmlspecialchars($row["id"]).')">View Details</button>
                 </div>
             </div>
         </div>
+    </div>
     ';
 }
- ?>
+
+$stmt->close();
+?>
+
     </div>
 </div>
 
@@ -157,21 +156,26 @@ while($row = $result->fetch_assoc()){
     <div class="card-body">
         <h5 class="card-title">Orders</h5>
         <ul class="list-group">
-            <?php
-            $sql = "SELECT * FROM tblorder WHERE userid=" . $_SESSION['user_id'];
-            $result = $mysqli->query($sql);
+           <?php
+$stmt = $mysqli->prepare("SELECT * FROM tblorder WHERE userid = ?");
+$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt->execute();
+$result = $stmt->get_result();
 
-            while ($row = $result->fetch_assoc()) {
-                echo '<li class="list-group-item">';
-                echo '<strong>Order #: </strong>' . $row["order_id"];
-                echo ' - <strong>Date: </strong>' . $row["date_order"];
-                echo ' - <strong>Total: $</strong>' . $row["totalPrice"];
-                echo '<br>';
-                echo '<strong>Product: </strong>' . $row["product"];
-                echo ' - <strong>Model: </strong>' . $row["model"];
-                echo '</li>';
-            }
-            ?>
+while ($row = $result->fetch_assoc()) {
+    echo '<li class="list-group-item">';
+    echo '<strong>Order #: </strong>' . htmlspecialchars($row["order_id"]);
+    echo ' - <strong>Date: </strong>' . htmlspecialchars($row["date_order"]);
+    echo ' - <strong>Total: $</strong>' . htmlspecialchars($row["totalPrice"]);
+    echo '<br>';
+    echo '<strong>Product: </strong>' . htmlspecialchars($row["product"]);
+    echo ' - <strong>Model: </strong>' . htmlspecialchars($row["model"]);
+    echo '</li>';
+}
+
+$stmt->close();
+?>
+
         </ul>
     </div>
 </div>
@@ -179,7 +183,7 @@ while($row = $result->fetch_assoc()){
 
 
 
-<footer id="footer" class="text-center p-3 bg-dark text-light" style="width: 100%;">
+<footer id="footer" class="text-center p-3 bg-dark text-light">
      <div class="row">
       <div class="col-6 col-md-2 mb-3">
         <h5>Section</h5>
@@ -248,34 +252,33 @@ while($row = $result->fetch_assoc()){
                 </button>
             </div>
             <div class="modal-body">
-                <form action="update_info.php" method="post">
-                    <?php 
-                        $sql = "SELECT email, firstname, lastname FROM tblusers WHERE id=".$_SESSION['user_id']."";  
-                        $result = $mysqli->query($sql);
-                        while ($row = $result->fetch_assoc()) {
-                            $email = $row["email"];
-                            $firstName = $row["firstname"];
-                            $lastName = $row["lastname"];
-                        } 
-                    ?>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" value="<?php echo $firstName; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo $lastName; ?>" required>
-                    </div>
-                    
-                     <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" name="control">Update Info</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-                </form>
+               <form action="update_info.php" method="post">
+    <?php
+        $stmt = $mysqli->prepare("SELECT email, firstname, lastname FROM tblusers WHERE id = ?");
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $stmt->bind_result($email, $firstName, $lastName);
+        $stmt->fetch();
+        $stmt->close();
+    ?>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" value="<?php echo htmlspecialchars($firstName); ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" value="<?php echo htmlspecialchars($lastName); ?>" required>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" name="control">Update Info</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+</form>
+
             </div>
 
         </div>
@@ -290,6 +293,9 @@ while($row = $result->fetch_assoc()){
     $(document).ready(function(){
                     $("#loginModal").modal("show");
                 });
+  }
+  function openCar(id) {
+      window.location.href = "cars.php?id=" + id;
   }
 </script>
 </body>

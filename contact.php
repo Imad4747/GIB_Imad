@@ -55,29 +55,66 @@
   </header>
   
 
-<?php  
+<?php
 include 'connect.php';
 
-$alertMessage = ""; 
+$alertMessage = "";
 
-if (isset($_POST['control'])) {
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
-    $file = $_POST['variable'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $firstname = $mysqli->real_escape_string($_POST['firstname']);
+    $lastname = $mysqli->real_escape_string($_POST['lastname']);
+    $email = $mysqli->real_escape_string($_POST['email']);
+    $message = $mysqli->real_escape_string($_POST['message']);
 
-   
+    // Handle file upload
+    if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
+        $file = $_FILES['file'];
+        $uploadDirectory = 'uploads/';
+        $filePath = $uploadDirectory . basename($file['name']);
 
-    $sql = "INSERT INTO tblcontact (firstname, lastname, email, message, file) 
-            VALUES ('$firstname', '$lastname', '$email', '$message', '$file')";
-    if ($mysqli->query($sql)) {
-        $alertMessage = '<div class="alert alert-success" role="alert">
-                            Form submitted successfully!
-                        </div>';
+        // Ensure the uploads directory exists
+        if (!file_exists($uploadDirectory)) {
+            mkdir($uploadDirectory, 0777, true);
+        }
+
+        // Move uploaded file to the target directory
+        if (move_uploaded_file($file['tmp_name'], $filePath)) {
+            $sql = "INSERT INTO tblcontact (firstname, lastname, email, message, file) 
+                    VALUES (?, ?, ?, ?, ?)";
+
+            if ($stmt = $mysqli->prepare($sql)) {
+                $stmt->bind_param('sssss', $firstname, $lastname, $email, $message, $filePath);
+                if ($stmt->execute()) {
+                    // Redirect to avoid resubmission
+                    header("Location: " . $_SERVER['REQUEST_URI'] . "?submitted=true");
+                    exit();
+                } else {
+                    $alertMessage = '<div class="alert alert-danger" role="alert">
+                                        Error: ' . $stmt->error . '
+                                    </div>';
+                }
+                $stmt->close();
+            } else {
+                $alertMessage = '<div class="alert alert-danger" role="alert">
+                                    Error: ' . $mysqli->error . '
+                                </div>';
+            }
+        } else {
+            $alertMessage = '<div class="alert alert-danger" role="alert">
+                                Error uploading file.
+                             </div>';
+        }
     } else {
-        echo $mysqli->error;
+        $alertMessage = '<div class="alert alert-danger" role="alert">
+                            Please upload a valid file.
+                         </div>';
     }
+}
+
+if (isset($_GET['submitted']) && $_GET['submitted'] == 'true') {
+    $alertMessage = '<div class="alert alert-success" role="alert">
+                        Form submitted successfully!
+                    </div>';
 }
 
 echo '<div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh;">
@@ -115,10 +152,10 @@ echo '<div class="container-fluid d-flex align-items-center justify-content-cent
                             <br>
                             <div class="form-group">
                                 <label for="file">Upload File:</label>
-                                <input type="file" class="form-control-file" id="file" name="file">
+                                <input type="file" class="form-control-file" id="file" name="file" required>
                             </div>
                             <br>
-                            <input type="submit" name="control">
+                            <input type="submit" name="control" class="btn btn-primary">
                         </form>
                     </div>
                 </div>
@@ -126,6 +163,9 @@ echo '<div class="container-fluid d-flex align-items-center justify-content-cent
         </div>
     </div>';
 ?>
+
+
+
 
 
   

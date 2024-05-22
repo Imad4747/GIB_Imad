@@ -267,39 +267,59 @@
       Add New User</button>
 <?php  
 include 'connect.php';
-$sql = "SELECT * FROM tblusers WHERE role = 'guest'";
-$result = $mysqli->query($sql);
 
-if ($result === false) {
-    die("Error executing query: " . $mysqli->error);
+// Prepare the SQL statement
+$sql = "SELECT id, firstname, lastname, email, password, createdAt FROM tblusers WHERE role = ?";
+$stmt = $mysqli->prepare($sql);
+
+// Check if the preparation was successful
+if ($stmt === false) {
+    die("Error preparing statement: " . $mysqli->error);
+}
+
+// Bind parameters to the prepared statement
+$role = 'guest';
+if (!$stmt->bind_param('s', $role)) {
+    die("Binding parameters failed: " . $stmt->error);
+}
+
+// Execute the prepared statement
+if (!$stmt->execute()) {
+    die("Executing statement failed: " . $stmt->error);
+}
+
+// Bind the result variables
+if (!$stmt->bind_result($id, $firstname, $lastname, $email, $password, $createdAt)) {
+    die("Binding result variables failed: " . $stmt->error);
 }
 
 echo '<div class="container-fluid d-flex flex-wrap justify-content-between">'; 
 
-while ($row = $result->fetch_assoc()) {
-  
-      echo '<div class="card mb-3" style="width: 250px;">'; 
-   
+// Fetch values and display them
+while ($stmt->fetch()) {
+    echo '<div class="card mb-3" style="width: 250px;">'; 
     echo '<div class="card-body">';
-    echo '<h5 class="card-title text-center">ID: ' . $row["id"] . '</h5>';
-    echo '<p class="card-text text-center"><strong>First Name:</strong> ' . $row["firstname"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Last Name:</strong> ' . $row["lastname"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Email:</strong> ' . $row["email"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Password:</strong> ' . $row["password"] . '</p>';
-    echo '<p class="card-text text-center"><strong>Created At:</strong> ' . $row["createdAt"] . '</p>';
+    echo '<h5 class="card-title text-center">ID: ' . htmlspecialchars($id) . '</h5>';
+    echo '<p class="card-text text-center"><strong>First Name:</strong> ' . htmlspecialchars($firstname) . '</p>';
+    echo '<p class="card-text text-center"><strong>Last Name:</strong> ' . htmlspecialchars($lastname) . '</p>';
+    echo '<p class="card-text text-center"><strong>Email:</strong> ' . htmlspecialchars($email) . '</p>';
+    echo '<p class="card-text text-center"><strong>Password:</strong> ' . htmlspecialchars($password) . '</p>';
+    echo '<p class="card-text text-center"><strong>Created At:</strong> ' . htmlspecialchars($createdAt) . '</p>';
     echo '<div class="text-center">';
-    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser(' . $row["id"] . ')">Change</button>';
-    
-    
-    echo '<button class="btn btn-danger" onclick="deleteUser(' . $row["id"] . ')">Delete</button>';
-     
+    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser(' . htmlspecialchars($id) . ')">Change</button>';
+    echo '<button class="btn btn-danger" onclick="deleteUser(' . htmlspecialchars($id) . ')">Delete</button>';
     echo '</div>';
     echo '</div>'; 
     echo '</div>'; 
 }
-echo '</div>';
 
+echo '</div>'; 
+
+// Close the statement
+$stmt->close();
 ?>
+
+
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 

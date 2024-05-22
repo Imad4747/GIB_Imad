@@ -3,56 +3,62 @@
 <?php
 include 'connect.php';
 session_start();
+
+function sanitize_input($input) {
+    return htmlspecialchars(strip_tags(trim($input)));
+}
+
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
-    $selectedBrand = trim($_POST['selectedBrand'] ?? '');
-$selectedType = trim($_POST['selectedType'] ?? '');
-$minPrice = trim($_POST['minPrice'] ?? '');
-$maxPrice = trim($_POST['maxPrice'] ?? '');
-$search = trim($_POST['searchBar'] ?? '');
-$transmission = trim($_POST['transmission'] ?? '');
-$selectedFuelTypes = array_map('trim', $_POST['selectedFuelTypes'] ?? []);
 
-$sql = "SELECT * FROM tblproducts
-        INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
-        WHERE 1";
+    $selectedBrand = sanitize_input($_POST['selectedBrand'] ?? '');
+    $selectedType = sanitize_input($_POST['selectedType'] ?? '');
+    $minPrice = sanitize_input($_POST['minPrice'] ?? '');
+    $maxPrice = sanitize_input($_POST['maxPrice'] ?? '');
+    $search = sanitize_input($_POST['searchBar'] ?? '');
+    $transmission = sanitize_input($_POST['transmission'] ?? '');
+    $selectedFuelTypes = array_map('sanitize_input', $_POST['selectedFuelTypes'] ?? []);
 
-$conditions = [];
+    $sql = "SELECT * FROM tblproducts
+            INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
+            WHERE 1";
 
-if ($selectedBrand) {
-    $conditions[] = "tblproducts.name = '$selectedBrand'";
-}
+    $conditions = [];
 
-if ($selectedType) {
-    $conditions[] = "tblspecs.cartype = '$selectedType'";
-}
+    if ($selectedBrand) {
+        $conditions[] = "tblproducts.name = '$selectedBrand'";
+    }
 
-if ($minPrice !== '' && $maxPrice !== '') {
-    $conditions[] = "tblproducts.price >= $minPrice AND tblproducts.price <= $maxPrice";
-}
-if ($search !== '') {
-    $conditions[] = "tblproducts.name LIKE '%$search%' OR tblproducts.model LIKE '%$search%'";
-}
+    if ($selectedType) {
+        $conditions[] = "tblspecs.cartype = '$selectedType'";
+    }
 
-if ($transmission) {
-    $conditions[] = "tblspecs.transmission = '$transmission'";
-}
+    if ($minPrice !== '' && $maxPrice !== '' && is_numeric($minPrice) && is_numeric($maxPrice)) {
+        $conditions[] = "tblproducts.price >= $minPrice AND tblproducts.price <= $maxPrice";
+    }
+    if ($search !== '') {
+        $conditions[] = "tblproducts.name LIKE '%$search%' OR tblproducts.model LIKE '%$search%'";
+    }
 
-if (!empty($selectedFuelTypes)) {
-    $inClause = "'" . implode("','", $selectedFuelTypes) . "'";
-    $conditions[] = "tblspecs.fuel IN ($inClause)";
-}
+    if ($transmission) {
+        $conditions[] = "tblspecs.transmission = '$transmission'";
+    }
 
-if (!empty($conditions)) {
-    $sql .= " AND " . implode(" AND ", $conditions);
-}
+    if (!empty($selectedFuelTypes)) {
+        $inClause = "'" . implode("','", $selectedFuelTypes) . "'";
+        $conditions[] = "tblspecs.fuel IN ($inClause)";
+    }
 
-$result = $mysqli->query($sql);
-if ($result === false) {
-    die("Error executing query: " . $mysqli->error);
-}
+    if (!empty($conditions)) {
+        $sql .= " AND " . implode(" AND ", $conditions);
+    }
 
+    $result = $mysqli->query($sql);
+    if ($result === false) {
+        die("Error executing query: " . $mysqli->error);
+    }
 while ($row = $result->fetch_assoc()) {
+
     echo '<div class="col">
       <div class="card position-relative">
 <span  class="favorite position-absolute top-0 end-0" style="margin-right: 5px; margin-end: 5px; cursor: pointer;" onclick="addFavorite(' . $row["id"] . ', ' . $userId . ')"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
@@ -194,7 +200,7 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $mysqli->close();
-    
+ 
 }
 
 ?>

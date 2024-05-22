@@ -228,13 +228,13 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="A_rep.php">
                 <svg class="bi"><use xlink:href="#graph-up"/></svg>
                 Reports
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+              <a class="nav-link d-flex align-items-center gap-2" href="A_integ.php">
                 <svg class="bi"><use xlink:href="#puzzle"/></svg>
                 Integrations
               </a>
@@ -269,12 +269,18 @@
         
       </div>
    <?php 
+
 include 'connect.php'; 
 
-    $sql = "SELECT * FROM tblusers WHERE role = 'Admin' AND id = '" . $_SESSION['user_id'] . "'";
-    $result = $mysqli->query($sql);
-     $row = $result->fetch_assoc();
-     echo '<h1 class="h4">Welcome, ' . $row["firstname"] . '</h1>';
+// 1. SQL Injection Prevention
+$sql = "SELECT * FROM tblusers WHERE role = 'Admin' AND id = ?";
+$stmt = $mysqli->prepare($sql);
+$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+echo '<h1 class="h4">Welcome, ' . htmlspecialchars($row["firstname"]) . '</h1>';
 
 ?>
     <div class="row">
@@ -294,16 +300,16 @@ include 'connect.php';
                     </thead>
                     <tbody>
                         <?php
-                        $L_prod = "SELECT * FROM tblproducts ORDER BY id DESC LIMIT 3";
-                        $resultP = $mysqli->query($L_prod);
-                        while ($rowP = $resultP->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $rowP['name'] . "</td>";
-                            echo "<td>" . $rowP['model'] . "</td>";
-                            echo "<td>$" . $rowP['price'] . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
+                       $L_prod = "SELECT name, model, price FROM tblproducts ORDER BY id DESC LIMIT 3";
+$resultP = $mysqli->query($L_prod);
+while ($rowP = $resultP->fetch_assoc()) {
+    echo "<tr>";
+    echo "<td>" . htmlspecialchars($rowP['name']) . "</td>";
+    echo "<td>" . htmlspecialchars($rowP['model']) . "</td>";
+    echo "<td>$" . htmlspecialchars($rowP['price']) . "</td>";
+    echo "</tr>";
+}
+?>
                     </tbody>
                 </table>
             </div>
@@ -326,7 +332,7 @@ include 'connect.php';
                     </thead>
                     <tbody>
                         <?php
-                        $L_cust = "SELECT * FROM tblusers WHERE role = 'Guest' ORDER BY id DESC LIMIT 3";
+                        $L_cust = "SELECT firstname, lastname, email FROM tblusers WHERE role = 'Guest' ORDER BY id DESC LIMIT 3";
                         $resultC = $mysqli->query($L_cust);
                         while ($rowC = $resultC->fetch_assoc()) {
                             echo "<tr>";
@@ -362,7 +368,7 @@ include 'connect.php';
                         </thead>
                         <tbody>
                             <?php
-                    $L_order = "SELECT * FROM tblorder ORDER BY order_id DESC LIMIT 3";
+                    $L_order = "SELECT order_id, userid, totalPrice FROM tblorder ORDER BY order_id DESC LIMIT 3";
                     $resultO = $mysqli->query($L_order);
                     while ($rowO = $resultO->fetch_assoc()) {
                         echo "<tr>";
@@ -394,7 +400,7 @@ include 'connect.php';
                         </thead>
                         <tbody>
                            <?php
-                    $L_con = "SELECT * FROM tblcontact ORDER BY id DESC LIMIT 3";
+                    $L_con = "SELECT firstname, email, message FROM tblcontact ORDER BY id DESC LIMIT 3";
                     $resultR = $mysqli->query($L_con);
                     while ($rowR = $resultR->fetch_assoc()) {
                         echo "<tr>";
@@ -428,7 +434,7 @@ try {
 
     $totalAmount = $totalAmount / 100;
 } catch (Exception $e) {
-    echo 'Error: ' . $e->getMessage();
+    echo 'Error: ' . htmlspecialchars($e->getMessage());
     die();
 }
 ?>

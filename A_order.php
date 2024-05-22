@@ -264,30 +264,35 @@
         
       </div>
       <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">Add New Order</button>
-      <?php  
+     <?php  
 include 'connect.php';
-$sql = "SELECT * FROM tblorder";
-$result = $mysqli->query($sql);
 
-if ($result === false) {
-    die("Error executing query: " . $mysqli->error);
+$sql = "SELECT * FROM tblorder";
+$stmt = $mysqli->prepare($sql);
+
+if ($stmt === false) {
+    die("Error preparing statement: " . $mysqli->error);
 }
+
+$stmt->execute();
+
+$stmt->bind_result($order_id, $userid, $product, $model, $totalPrice, $date_order);
 
 echo '<div class="container">'; 
 
-while ($row = $result->fetch_assoc()) {
+while ($stmt->fetch()) {
     echo '<div class="row mb-3">';
     echo '<div class="col">';
     echo '<div class="card">';
     echo '<div class="card-body">';
-    echo '<h5 class="card-title">Order ID: ' . $row["order_id"] . '</h5>';
-    echo '<p class="card-text"><strong>User ID:</strong> ' . $row["userid"] . '</p>';
-    echo '<p class="card-text"><strong>Product:</strong> ' . $row["product"] . '</p>';
-    echo '<p class="card-text"><strong>Model:</strong> ' . $row["model"] . '</p>';
-    echo '<p class="card-text"><strong>Total Price:</strong> ' . $row["totalPrice"] . '</p>';
-    echo '<p class="card-text"><strong>Date Ordered:</strong> ' . $row["date_order"] . '</p>';
+    echo '<h5 class="card-title">Order ID: ' . $order_id . '</h5>';
+    echo '<p class="card-text"><strong>User ID:</strong> ' . $userid . '</p>';
+    echo '<p class="card-text"><strong>Product:</strong> ' . $product . '</p>';
+    echo '<p class="card-text"><strong>Model:</strong> ' . $model . '</p>';
+    echo '<p class="card-text"><strong>Total Price:</strong> ' . $totalPrice . '</p>';
+    echo '<p class="card-text"><strong>Date Ordered:</strong> ' . $date_order . '</p>';
     echo '<div class="text-center">';
-    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder('.$row["order_id"].')">Delete</button>'; 
+    echo '<button class="btn btn-danger btn-sm" onclick="deleteOrder('.$order_id.')">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
     echo '</div>'; 
@@ -297,6 +302,7 @@ while ($row = $result->fetch_assoc()) {
 
 echo '</div>'; 
 
+$stmt->close();
 ?>
 
 

@@ -1,20 +1,28 @@
 <?php
 include 'connect.php';
 
-$userId = trim($_POST['userId'] ?? '');
-$productId = trim($_POST['productId'] ?? '');
+$userId = isset($_POST['userId']) ? intval($_POST['userId']) : 0; 
+$productId = isset($_POST['productId']) ? intval($_POST['productId']) : 0; 
+if ($userId <= 0 || $productId <= 0) {
+    echo "Invalid input";
+    exit; 
+}
 
-if ($userId && $productId) {
-    $insertQuery = "INSERT INTO tblfav (userid, product_id) VALUES ('$userId', '$productId')";
-    $result = $mysqli->query($insertQuery);
+$insertQuery = "INSERT INTO tblfav (userid, product_id) VALUES (?, ?)";
+$stmt = $mysqli->prepare($insertQuery);
 
-    if ($result === false) {
-        die("Error adding favorite: " . $mysqli->error);
+if ($stmt) {
+    $stmt->bind_param("ii", $userId, $productId);
+
+    if ($stmt->execute()) {
+        echo "Favorite added successfully";
+    } else {
+        echo "Error adding favorite";
     }
 
-    echo "Favorite added successfully";
+    $stmt->close();
 } else {
-    echo "error";
+    echo "Error preparing statement";
 }
 
 $mysqli->close();

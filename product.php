@@ -108,14 +108,21 @@ unset($_SESSION['paint_price']);
             <label for="selectedBrand">Select Brand:</label>
 <select class="form-select" id="selectedBrand" name="selectedBrand">
     <option value=""></option>
-    <?php
-    include "connect.php";
-    $sql = "SELECT * FROM tblbrands";
-    $result = $mysqli->query($sql);
-    while ($row = $result->fetch_assoc()) { 
-        echo '<option value="'.$row["id"].'">'.$row["brands"].'</option>';
-    }
-    ?>
+ <?php 
+include "connect.php";
+
+$stmt = $mysqli->prepare("SELECT id, brands FROM tblbrands");
+$stmt->execute();
+$result = $stmt->get_result();
+
+while ($row = $result->fetch_assoc()) { 
+    echo '<option value="'.htmlspecialchars($row["id"]).'">'.htmlspecialchars($row["brands"]).'</option>';
+}
+
+$stmt->close();
+$mysqli->close();
+?>
+
 </select>
 
 
@@ -125,13 +132,21 @@ unset($_SESSION['paint_price']);
               Car Types
             </h6>
             <div class="btn-group-vertical">
-              <?php include "connect.php";
-                $sql = "SELECT * FROM tblcartype";
-                $result = $mysqli->query($sql);
-                while ($row = $result->fetch_assoc()) { 
-                  echo '<button type="button" class="btn btn-primary">'.$row["model"].'</button>';
-                }
-                ?>
+             <?php 
+include "connect.php";
+
+$stmt = $mysqli->prepare("SELECT model FROM tblcartype");
+$stmt->execute();
+$result = $stmt->get_result();
+
+while ($row = $result->fetch_assoc()) { 
+    echo '<button type="button" class="btn btn-primary">'.htmlspecialchars($row["model"]).'</button>';
+}
+
+$stmt->close();
+$mysqli->close();
+?>
+
             </div>
           </li>
           <li class="nav-item mb-2">
@@ -151,37 +166,52 @@ unset($_SESSION['paint_price']);
             <h6 class="sidebar-heading mb-1 text-light">
               Fuel
             </h6>
-           <?php
+          <?php 
 include "connect.php";
-$sql = "SELECT * FROM tblfuel";
-$result = $mysqli->query($sql);
+
+$stmt = $mysqli->prepare("SELECT id, fuel FROM tblfuel");
+$stmt->execute();
+$result = $stmt->get_result();
+
 while ($row = $result->fetch_assoc()) { 
     echo '<div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" name="fuelCheckbox" id="fuelCheckbox_'.$row["id"].'">
-            <label class="form-check-label text-white">
-                '.$row["fuel"].'
+            <input class="form-check-input" type="checkbox" value="'.htmlspecialchars($row["fuel"]).'" name="fuelCheckbox" id="fuelCheckbox_'.htmlspecialchars($row["id"]).'">
+            <label class="form-check-label text-white" for="fuelCheckbox_'.htmlspecialchars($row["id"]).'">
+                '.htmlspecialchars($row["fuel"]).'
             </label>
           </div>';
 }
+
+$stmt->close();
+$mysqli->close();
 ?>
+
 
           </li>
           <li class="nav-item mb-2">
             <h6 class="sidebar-heading mb-1 text-light">
               Transmission
             </h6>
-            <?php include "connect.php";
-                $sql = "SELECT * FROM tbltransmission";
-                $result = $mysqli->query($sql);
-                while ($row = $result->fetch_assoc()) { 
-                  echo '<div class="form-check">
-              <input class="form-check-input" type="radio" name="radioTransmission" >
-              <label class="form-check-label text-white">
-                '.$row["transmission"].'
-              </label>
-            </div>';
-                }
-                ?>
+          <?php 
+include "connect.php";
+
+$stmt = $mysqli->prepare("SELECT transmission FROM tbltransmission");
+$stmt->execute();
+$result = $stmt->get_result();
+
+while ($row = $result->fetch_assoc()) { 
+  echo '<div class="form-check">
+          <input class="form-check-input" type="radio" name="radioTransmission" value="'.htmlspecialchars($row["transmission"]).'">
+          <label class="form-check-label text-white">
+            '.htmlspecialchars($row["transmission"]).'
+          </label>
+        </div>';
+}
+
+$stmt->close();
+$mysqli->close();
+?>
+
           </li>
         </ul>
       </nav>
@@ -335,19 +365,22 @@ while ($row = $result->fetch_assoc()) {
             window.location.href = 'cars.php?id=' + carId;
         });
           window.addFavorite = function(productId, userId) {
-            $.ajax({
-                url: "insert-fav.php",
-                type: "POST",
-                data: { productId: productId, userId: userId },
-                success: function(response) {
-                    console.log("Favorite added successfully");
-                    $("#star-" + productId).toggleClass("text-warning");
-                },
-                error: function(error) {
-                    console.error("Failed to add favorite: " + error.statusText);
-                }
-            });
-        };
+    var $starIcon = $("#star-" + productId);
+    var isFavorite = $starIcon.hasClass("text-warning");
+
+    $.ajax({
+        url: "insert-fav.php",
+        type: "POST",
+        data: { productId: productId, userId: userId, isFavorite: isFavorite },
+        success: function(response) {
+            console.log("Favorite status updated successfully");
+            $starIcon.toggleClass("text-warning", !isFavorite); 
+        },
+        error: function(error) {
+            console.error("Failed to update favorite status: " + error.statusText);
+        }
+    });
+};
 
         applyFilters();
     });

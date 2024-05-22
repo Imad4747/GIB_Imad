@@ -284,56 +284,71 @@
 
 <?php 
 include 'connect.php';
-$sql = "SELECT * FROM tblproducts
+
+// Prepare the SQL statement
+$sql = "SELECT tblproducts.id, tblproducts.name, tblproducts.model, tblproducts.photo, tblproducts.price, tblproducts.year_car, 
+               tblspecs.accelaration, tblspecs.topspeed, tblspecs.fuel 
+        FROM tblproducts
         INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
         WHERE 1";
-$result = $mysqli->query($sql);
-if ($result === false) {
-    die("Error executing query: " . $mysqli->error);
+$stmt = $mysqli->prepare($sql);
+
+// Check if the preparation was successful
+if ($stmt === false) {
+    die("Error preparing statement: " . $mysqli->error);
 }
-$proid = '';
+
+// Execute the prepared statement
+if (!$stmt->execute()) {
+    die("Executing statement failed: " . $stmt->error);
+}
+
+// Bind the result variables
+$stmt->bind_result($id, $name, $model, $photo, $price, $year_car, $accelaration, $topspeed, $fuel);
 
 echo '<div class="container-fluid d-flex flex-wrap justify-content-between">';
 
-while ($row = $result->fetch_assoc()) {
-  $proid = $row["id"];
- echo '<div class="card mb-3" style="width: 260px;">'; 
-    echo '<h5 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">'.$row["year_car"].'</h5>';
+// Fetch values and display them
+while ($stmt->fetch()) {
+    echo '<div class="card mb-3" style="width: 260px;">'; 
+    echo '<h5 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">' . htmlspecialchars($year_car) . '</h5>';
     echo '<div class="card-body">';
-    echo '<h5 class="card-title text-center">'.$row["name"].'</h5>';
-    echo '<h6 class="card-subtitle text-center mb-2 text-muted">'.$row["model"].'</h6>';
+    echo '<h5 class="card-title text-center">' . htmlspecialchars($name) . '</h5>';
+    echo '<h6 class="card-subtitle text-center mb-2 text-muted">' . htmlspecialchars($model) . '</h6>';
     echo '<div class="card-body text-center">';
-    echo '<img src="images/'.$row["photo"].'" class="card-img-top img-fluid" style="width: 100px;" alt="Product Image">'; 
+    echo '<img src="images/' . htmlspecialchars($photo) . '" class="card-img-top img-fluid" style="width: 100px;" alt="Product Image">'; 
     echo '</div>';
     echo '<div class="datagroup d-flex justify-content-around align-items-center mt-2">';
     echo '<div class="data text-center">';
     echo '<i class="bx bx-stopwatch" style="font-size: 18px; color: #0043ff;"></i>';
     echo '<br>';
-    echo '<span class="spec" style="font-weight: bold;">'.$row["accelaration"].'s</span>';
+    echo '<span class="spec" style="font-weight: bold;">' . htmlspecialchars($accelaration) . 's</span>';
     echo '</div>';
     echo '<div class="data text-center">';
     echo '<i class="bx bx-line-chart" style="font-size: 18px; color: #39ad5e;"></i>';
     echo '<br>';
-    echo '<span class="spec" style="font-weight: bold;">'.$row["topspeed"].' km/h</span>';
+    echo '<span class="spec" style="font-weight: bold;">' . htmlspecialchars($topspeed) . ' km/h</span>';
     echo '</div>';
     echo '<div class="data text-center">';
     echo '<i class="bx bxs-gas-pump" style="font-size: 18px; color: #dc1e4d;"></i>';
     echo '<br>';
-    echo '<span class="spec" style="font-weight: bold;">'.$row["fuel"].'</span>';
+    echo '<span class="spec" style="font-weight: bold;">' . htmlspecialchars($fuel) . '</span>';
     echo '</div>';
     echo '</div>';
-    echo '<h5 class="card-text text-center mt-3">$'.$row["price"].'</h5>';
+    echo '<h5 class="card-text text-center mt-3">$' . htmlspecialchars($price) . '</h5>';
     echo '<div class="text-center">';
-      echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="'.$proid.'" onclick="openModal('.$proid.')">Change</button>'; 
-
-    echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP('.$row["id"].')" data-car-id="'.$row["id"].'">Delete</button>'; 
+    echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="' . htmlspecialchars($id) . '" onclick="openModal(' . htmlspecialchars($id) . ')">Change</button>'; 
+    echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP(' . htmlspecialchars($id) . ')" data-car-id="' . htmlspecialchars($id) . '">Delete</button>'; 
     echo '</div>';
     echo '</div>'; 
     echo '</div>';
 }
 echo '</div>'; 
 
- ?>
+// Close the statement
+$stmt->close();
+?>
+
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
       

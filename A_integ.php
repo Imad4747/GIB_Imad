@@ -263,41 +263,45 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
+
+      
 <?php
 require_once('include.php'); 
 \Stripe\Stripe::setApiKey('sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI');
-
-function getCustomerDetails($customerId) {
-    try {
-        return \Stripe\Customer::retrieve($customerId);
-    } catch (Exception $e) {
-        return null; 
-    }
-}
 
 $payments = \Stripe\PaymentIntent::all(['limit' => 100]); 
 
 echo "<div style='font-family: Arial, sans-serif;'>";
 echo "<h2>Payment Details</h2>";
 echo "<table style='border-collapse: collapse; width: 100%;'>";
-echo "<tr style='background-color: #f2f2f2;'><th style='padding: 10px; border: 1px solid #dddddd;'>Customer ID</th><th style='padding: 10px; border: 1px solid #dddddd;'>Customer Name</th><th style='padding: 10px; border: 1px solid #dddddd;'>Email</th><th style='padding: 10px; border: 1px solid #dddddd;'>Payment Method</th><th style='padding: 10px; border: 1px solid #dddddd;'>Amount</th><th style='padding: 10px; border: 1px solid #dddddd;'>Status</th><th style='padding: 10px; border: 1px solid #dddddd;'>Created</th></tr>";
+echo "<tr style='background-color: #f2f2f2;'>
+        <th style='padding: 10px; border: 1px solid #dddddd;'>Customer ID</th>
+        <th style='padding: 10px; border: 1px solid #dddddd;'>Payment Method</th>
+        <th style='padding: 10px; border: 1px solid #dddddd;'>Amount</th>
+        <th style='padding: 10px; border: 1px solid #dddddd;'>Status</th>
+        <th style='padding: 10px; border: 1px solid #dddddd;'>Created</th>
+      </tr>";
+
 foreach ($payments->data as $payment) {
-    $customerDetails = getCustomerDetails($payment->customer);
-    $customerId = $payment->customer;
-    $customerName = $customerDetails ? $customerDetails->name : "N/A";
-    $customerEmail = $customerDetails ? $customerDetails->email : "N/A";
-    $paymentMethod = isset($payment->payment_method_types) && !empty($payment->payment_method_types) ? implode(", ", $payment->payment_method_types) : "N/A";
-    echo "<tr><td style='padding: 10px; border: 1px solid #dddddd;'>".$customerId."</td>";
-    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$customerName."</td>";
-    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$customerEmail."</td>";
-    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$paymentMethod."</td>";
-    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$payment->amount / 100 ."</td>";
-    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".$payment->status."</td>";
-    echo "<td style='padding: 10px; border: 1px solid #dddddd;'>".date('Y-m-d H:i:s', $payment->created)."</td></tr>";
+    $customerId = htmlspecialchars($payment->customer);
+    $paymentMethod = isset($payment->payment_method_types) && !empty($payment->payment_method_types) ? htmlspecialchars(implode(", ", $payment->payment_method_types)) : "N/A";
+    $amount = htmlspecialchars($payment->amount / 100);
+    $status = htmlspecialchars($payment->status);
+    $created = htmlspecialchars(date('Y-m-d H:i:s', $payment->created));
+
+    echo "<tr>
+            <td style='padding: 10px; border: 1px solid #dddddd;'>{$customerId}</td>
+            <td style='padding: 10px; border: 1px solid #dddddd;'>{$paymentMethod}</td>
+            <td style='padding: 10px; border: 1px solid #dddddd;'>{$amount}</td>
+            <td style='padding: 10px; border: 1px solid #dddddd;'>{$status}</td>
+            <td style='padding: 10px; border: 1px solid #dddddd;'>{$created}</td>
+          </tr>";
 }
+
 echo "</table>";
 echo "</div>";
 ?>
+
 
 
 

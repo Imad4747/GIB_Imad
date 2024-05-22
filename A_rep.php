@@ -264,60 +264,32 @@
         
       </div>
       <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search contacts..." id="searchInput">
-       
-    </div>
-<?php  
+    <input type="text" class="form-control" placeholder="Search contacts..." id="searchInput">
+</div>
+
+
+<?php
 include 'connect.php';
 
-$sql = "SELECT * FROM tblcontact WHERE 1";
+$sql = "SELECT * FROM tblcontact";
 $result = $mysqli->query($sql);
 
 if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
-echo '<div class="container-fluid">';
-echo '<table class="table table-striped">';
-echo '<thead>';
-echo '<tr>';
-echo '<th>ID</th>';
-echo '<th>First Name</th>';
-echo '<th>Last Name</th>';
-echo '<th>Email</th>';
-echo '<th>Message</th>';
-echo '<th>File</th>';
-echo '<th>Date</th>';
-echo '</tr>';
-echo '</thead>';
-echo '<tbody>';
+echo '<div class="container-fluid" id="contactsTable">';
 
-
-while ($row = $result->fetch_assoc()) {
-    $id = $row['id'];
-    $firstname = $row['firstname'];
-    $lastname = $row['lastname'];
-    $email = $row['email'];
-    $message = $row['message'];
-    $file = $row['file'];
-    $date = $row['date'];
-$fileLink = !empty($file) ? '<a href="uploads/' . $file . '" target="_blank">' . $file . '</a>' : '';
-    echo '<tr>';
-    echo "<td>$id</td>";
-    echo "<td>$firstname</td>";
-    echo "<td>$lastname</td>";
-    echo "<td>$email</td>";
-    echo "<td>$message</td>";
-    echo "<td>$fileLink</td>";
-    echo "<td>$date</td>";
-    echo '</tr>';
-}
-
-echo '</tbody>';
-echo '</table>';
 echo '</div>';
 
+if (!empty($alertMessage)) {
+    echo $alertMessage;
+}
+
+$mysqli->close();
 ?>
+
+
 
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
@@ -331,6 +303,34 @@ echo '</div>';
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function applyFilters() {
+            var searchBar = $("#searchInput").val();
+
+            $.ajax({
+                url: "load.php",
+                type: "POST",
+                data: { searchBar: searchBar },
+                success: function(response) {
+                    console.log("AJAX response:", response);
+                    $("#contactsTable").html(response);
+                },
+                error: function(error) {
+                    console.error("AJAX request failed: " + error.statusText);
+                }
+            });
+        }
+
+        $("#searchInput").on('input', function() {
+            applyFilters();
+        });
+
+      
+
+        applyFilters(); 
+    });
+</script>
 
 
 </html>

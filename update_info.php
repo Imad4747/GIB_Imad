@@ -1,21 +1,29 @@
 <?php
 session_start();
 include 'connect.php';
+
 if (isset($_POST['control'])) {
     $email = $_POST["email"];
     $firstName = $_POST["firstName"];
     $lastName = $_POST["lastName"];
     $userId = $_SESSION['user_id'];
 
-    $sql = "UPDATE tblusers SET email='$email', firstname='$firstName', lastname='$lastName' WHERE id=$userId";
+    $stmt = $mysqli->prepare("UPDATE tblusers SET email = ?, firstname = ?, lastname = ? WHERE id = ?");
+    if ($stmt) {
+        $stmt->bind_param("sssi", $email, $firstName, $lastName, $userId);
 
-    if ($mysqli->query($sql)) {
-        header("Location: profile.php"); 
-        exit();
+        if ($stmt->execute()) {
+            header("Location: profile.php");
+            exit();
+        } else {
+            echo "Error updating user information: " . $stmt->error;
+        }
+
+        $stmt->close();
     } else {
-        echo "Error updating user information: " . $mysqli->error;
+        echo "Error preparing the update statement: " . $mysqli->error;
     }
 
-    $mysqli->close(); 
+    $mysqli->close();
 }
 ?>

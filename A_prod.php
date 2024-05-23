@@ -125,10 +125,36 @@
        window.location.href = 'fetch_prod.php?id=' + id;
      }
 
-  f
+  
   function deleteP(id) {
      window.location.href = "D_prod.php?id=" + id;
   }
+  $(document).ready(function() {
+        function searchProd() {
+            var searchProd = $("#searchInputP").val();
+
+            $.ajax({
+                url: "load.php",
+                type: "POST",
+                data: { searchProd: searchProd },
+                success: function(response) {
+                    console.log("AJAX response:", response);
+                    $("#foundProd").html(response);
+                },
+                error: function(error) {
+                    console.error("AJAX request failed: " + error.statusText);
+                }
+            });
+        }
+
+        $("#searchInputP").on('input', function() {
+            searchProd();
+        });
+
+      
+
+        searchProd(); 
+    });
 </script>
     
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -279,7 +305,11 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      
+      <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Search products..." id="searchInputP">
+</div>
+
+  
 <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">Add New Product</button>
 
 <?php 
@@ -305,45 +335,9 @@ if (!$stmt->execute()) {
 
 // Bind the result variables
 $stmt->bind_result($id, $name, $model, $photo, $price, $year_car, $accelaration, $topspeed, $fuel);
-
-echo '<div class="container-fluid d-flex flex-wrap justify-content-between">';
-
-// Fetch values and display them
-while ($stmt->fetch()) {
-    echo '<div class="card mb-3" style="width: 260px;">'; 
-    echo '<h5 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">' . htmlspecialchars($year_car) . '</h5>';
-    echo '<div class="card-body">';
-    echo '<h5 class="card-title text-center">' . htmlspecialchars($name) . '</h5>';
-    echo '<h6 class="card-subtitle text-center mb-2 text-muted">' . htmlspecialchars($model) . '</h6>';
-    echo '<div class="card-body text-center">';
-    echo '<img src="images/' . htmlspecialchars($photo) . '" class="card-img-top img-fluid" style="width: 100px;" alt="Product Image">'; 
-    echo '</div>';
-    echo '<div class="datagroup d-flex justify-content-around align-items-center mt-2">';
-    echo '<div class="data text-center">';
-    echo '<i class="bx bx-stopwatch" style="font-size: 18px; color: #0043ff;"></i>';
-    echo '<br>';
-    echo '<span class="spec" style="font-weight: bold;">' . htmlspecialchars($accelaration) . 's</span>';
-    echo '</div>';
-    echo '<div class="data text-center">';
-    echo '<i class="bx bx-line-chart" style="font-size: 18px; color: #39ad5e;"></i>';
-    echo '<br>';
-    echo '<span class="spec" style="font-weight: bold;">' . htmlspecialchars($topspeed) . ' km/h</span>';
-    echo '</div>';
-    echo '<div class="data text-center">';
-    echo '<i class="bx bxs-gas-pump" style="font-size: 18px; color: #dc1e4d;"></i>';
-    echo '<br>';
-    echo '<span class="spec" style="font-weight: bold;">' . htmlspecialchars($fuel) . '</span>';
-    echo '</div>';
-    echo '</div>';
-    echo '<h5 class="card-text text-center mt-3">$' . htmlspecialchars($price) . '</h5>';
-    echo '<div class="text-center">';
-    echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="' . htmlspecialchars($id) . '" onclick="openModal(' . htmlspecialchars($id) . ')">Change</button>'; 
-    echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP(' . htmlspecialchars($id) . ')" data-car-id="' . htmlspecialchars($id) . '">Delete</button>'; 
-    echo '</div>';
-    echo '</div>'; 
-    echo '</div>';
-}
-echo '</div>'; 
+echo '<div id="foundProd">';
+ 
+echo '</div>';
 
 // Close the statement
 $stmt->close();

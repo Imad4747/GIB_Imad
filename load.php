@@ -55,5 +55,68 @@ echo '</table>';
     }
 
     $mysqli->close();
+} elseif (isset($_POST['searchProd'])) {
+     $searchProd = $mysqli->real_escape_string($_POST['searchProd']);
+
+    $sql = "SELECT * FROM tblproducts INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID WHERE tblproducts.name LIKE '%$searchProd%' AND tblproducts.model LIKE '%$searchProd%'";
+
+    $result = $mysqli->query($sql);
+
+    if ($result === false) {
+        echo "Error executing query: " . $mysqli->error;
+    } else {
+       echo '<div class="container-fluid d-flex flex-wrap justify-content-between">';
+
+// Fetch values and display them
+ while ($row = $result->fetch_assoc()) {
+            $id = ($row['id']);
+            $name = ($row['name']);
+            $model = ($row['model']);
+            $year_car = ($row['year_car']);
+            $photo = ($row['photo']);
+            $accelaration = ($row['accelaration']);
+            $topspeed = ($row['topspeed']);
+            $fuel = ($row['fuel']);
+            $price = ($row['price']);
+
+            echo '<div class="card mb-3" style="width: 260px;">';
+            echo '<h5 class="year position-absolute top-0 start-1" style="margin-left: 5px; margin-start: 5px;">' . $year_car . '</h5>';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title text-center">' . $name . '</h5>';
+            echo '<h6 class="card-subtitle text-center mb-2 text-muted">' . $model . '</h6>';
+            echo '<div class="card-body text-center">';
+            echo '<img src="images/' . $photo . '" class="card-img-top img-fluid" style="width: 100px;" alt="Product Image">';
+            echo '</div>';
+            echo '<div class="datagroup d-flex justify-content-around align-items-center mt-2">';
+            echo '<div class="data text-center">';
+            echo '<i class="bx bx-stopwatch" style="font-size: 18px; color: #0043ff;"></i>';
+            echo '<br>';
+            echo '<span class="spec" style="font-weight: bold;">' . $accelaration . 's</span>';
+            echo '</div>';
+            echo '<div class="data text-center">';
+            echo '<i class="bx bx-line-chart" style="font-size: 18px; color: #39ad5e;"></i>';
+            echo '<br>';
+            echo '<span class="spec" style="font-weight: bold;">' . $topspeed . ' km/h</span>';
+            echo '</div>';
+            echo '<div class="data text-center">';
+            echo '<i class="bx bxs-gas-pump" style="font-size: 18px; color: #dc1e4d;"></i>';
+            echo '<br>';
+            echo '<span class="spec" style="font-weight: bold;">' . $fuel . '</span>';
+            echo '</div>';
+            echo '</div>';
+            echo '<h5 class="card-text text-center mt-3">$' . $price . '</h5>';
+            echo '<div class="text-center">';
+            echo '<button class="btn btn-success change-btn btn-sm me-1" data-car-id="' . $id . '" onclick="openModal(' . $id . ')">Change</button>';
+            echo '<button class="btn btn-danger delete-btn btn-sm" onclick="deleteP(' . $id . ')" data-car-id="' . $id . '">Delete</button>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+
+        echo '</div>';
+
+    }
+
+    $mysqli->close();
 }
 ?>

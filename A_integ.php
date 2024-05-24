@@ -266,10 +266,19 @@
 
       
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once('include.php'); 
 \Stripe\Stripe::setApiKey('sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI');
 
-$payments = \Stripe\PaymentIntent::all(['limit' => 100]); 
+try {
+    $payments = \Stripe\PaymentIntent::all(['limit' => 100]);
+} catch (\Stripe\Exception\ApiErrorException $e) {
+    echo 'Error: ' . $e->getMessage();
+    exit;
+}
 
 echo "<div style='font-family: Arial, sans-serif;'>";
 echo "<h2>Payment Details</h2>";
@@ -292,7 +301,7 @@ foreach ($payments->data as $payment) {
     echo "<tr>
             <td style='padding: 10px; border: 1px solid #dddddd;'>{$customerId}</td>
             <td style='padding: 10px; border: 1px solid #dddddd;'>{$paymentMethod}</td>
-            <td style='padding: 10px; border: 1px solid #dddddd;'>{$amount}</td>
+            <td style='padding: 10px; border: 1px solid #dddddd;'$>{$amount}</td>
             <td style='padding: 10px; border: 1px solid #dddddd;'>{$status}</td>
             <td style='padding: 10px; border: 1px solid #dddddd;'>{$created}</td>
           </tr>";
@@ -301,6 +310,7 @@ foreach ($payments->data as $payment) {
 echo "</table>";
 echo "</div>";
 ?>
+
 
 
 

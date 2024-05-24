@@ -118,5 +118,39 @@ echo '</table>';
     }
 
     $mysqli->close();
+} elseif (isset($_POST['searchU'])){
+     $searchUser = $mysqli->real_escape_string($_POST['searchU']);
+
+    $sql = "SELECT * FROM tblusers WHERE firstname LIKE '%$searchUser%' AND lastname LIKE '%$searchUser%'";
+
+    $result = $mysqli->query($sql);
+
+    if ($result === false) {
+        echo "Error executing query: " . $mysqli->error;
+    } else {
+      echo '<div class="container-fluid d-flex flex-wrap justify-content-between">'; 
+
+while ($row = $result->fetch_assoc()) {
+    echo '<div class="card mb-3" style="width: 250px;">'; 
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title text-center">ID: ' . $row['id'] . '</h5>';
+    echo '<p class="card-text text-center"><strong>First Name:</strong> ' . $row['firstname'] . '</p>';
+    echo '<p class="card-text text-center"><strong>Last Name:</strong> ' . $row['lastname'] . '</p>';
+    echo '<p class="card-text text-center"><strong>Email:</strong> ' . $row['email'] . '</p>';
+    echo '<p class="card-text text-center"><strong>Password:</strong> ' . $row['password'] . '</p>';
+    echo '<p class="card-text text-center"><strong>Created At:</strong> ' . $row['createdAt']. '</p>';
+    echo '<div class="text-center">';
+    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser(' . $row['firstname'] . ')">Change</button>';
+    echo '<button class="btn btn-danger" onclick="deleteUser(' . $row['id'] . ')">Delete</button>';
+    echo '</div>';
+    echo '</div>'; 
+    echo '</div>'; 
+}
+
+echo '</div>'; 
+    }
+
+    $mysqli->close();
+
 }
 ?>

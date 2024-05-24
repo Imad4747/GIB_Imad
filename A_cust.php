@@ -263,61 +263,16 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Search users..." id="searchInputUser">
+</div>
+
       <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">
       Add New User</button>
-<?php  
-include 'connect.php';
 
-// Prepare the SQL statement
-$sql = "SELECT id, firstname, lastname, email, password, createdAt FROM tblusers WHERE role = ?";
-$stmt = $mysqli->prepare($sql);
-
-// Check if the preparation was successful
-if ($stmt === false) {
-    die("Error preparing statement: " . $mysqli->error);
-}
-
-// Bind parameters to the prepared statement
-$role = 'guest';
-if (!$stmt->bind_param('s', $role)) {
-    die("Binding parameters failed: " . $stmt->error);
-}
-
-// Execute the prepared statement
-if (!$stmt->execute()) {
-    die("Executing statement failed: " . $stmt->error);
-}
-
-// Bind the result variables
-if (!$stmt->bind_result($id, $firstname, $lastname, $email, $password, $createdAt)) {
-    die("Binding result variables failed: " . $stmt->error);
-}
-
-echo '<div class="container-fluid d-flex flex-wrap justify-content-between">'; 
-
-// Fetch values and display them
-while ($stmt->fetch()) {
-    echo '<div class="card mb-3" style="width: 250px;">'; 
-    echo '<div class="card-body">';
-    echo '<h5 class="card-title text-center">ID: ' . htmlspecialchars($id) . '</h5>';
-    echo '<p class="card-text text-center"><strong>First Name:</strong> ' . htmlspecialchars($firstname) . '</p>';
-    echo '<p class="card-text text-center"><strong>Last Name:</strong> ' . htmlspecialchars($lastname) . '</p>';
-    echo '<p class="card-text text-center"><strong>Email:</strong> ' . htmlspecialchars($email) . '</p>';
-    echo '<p class="card-text text-center"><strong>Password:</strong> ' . htmlspecialchars($password) . '</p>';
-    echo '<p class="card-text text-center"><strong>Created At:</strong> ' . htmlspecialchars($createdAt) . '</p>';
-    echo '<div class="text-center">';
-    echo '<button id="changeU" class="btn btn-primary me-1" onclick="changeUser(' . htmlspecialchars($id) . ')">Change</button>';
-    echo '<button class="btn btn-danger" onclick="deleteUser(' . htmlspecialchars($id) . ')">Delete</button>';
-    echo '</div>';
-    echo '</div>'; 
-    echo '</div>'; 
-}
-
-echo '</div>'; 
-
-// Close the statement
-$stmt->close();
-?>
+<div id="usersTable">
+  
+</div>
 
 
 
@@ -394,6 +349,32 @@ $stmt->close();
   function changeUser(id) {
     window.location.href = "chang_form.php?id=" + id;
   }
+  $(document).ready(function() {
+        function searchUser() {
+            var searchU = $("#searchInputUser").val();
+
+            $.ajax({
+                url: "load.php",
+                type: "POST",
+                data: { searchU: searchU },
+                success: function(response) {
+                    console.log("AJAX response:", response);
+                    $("#usersTable").html(response);
+                },
+                error: function(error) {
+                    console.error("AJAX request failed: " + error.statusText);
+                }
+            });
+        }
+
+        $("#searchInputUser").on('input', function() {
+            searchUser();
+        });
+
+      
+
+        searchUser(); 
+    });
 </script>
 
 </html>

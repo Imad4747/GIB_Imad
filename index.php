@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head>
@@ -129,11 +130,11 @@
     <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
   </a>
   <ul class="dropdown-menu dropdown-menu-end text-small">
-    <?php session_start();
+    <?php 
      
       if (isset($_SESSION['user_id'])) {
         echo '
-    <li><a class="dropdown-item" href="#">My Profile</a></li>
+    <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="loguit.php">Sign out</a></li>';
       }else{
@@ -204,15 +205,14 @@
 
   <div class="container marketing">
   <div class="container px-4 py-5" id="hanging-icons">
-    <h2 class="pb-2 border-bottom">Hanging icons</h2>
+    <h2 class="pb-2 border-bottom">Features</h2>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
       <div class="col d-flex align-items-start">
         <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-          <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
         </div>
         <div>
-          <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          <h3 class="fs-2">Quality Service</h3>
+          <p>Our dedicated team is committed to providing you with top-notch service. From the moment you start browsing to the day you drive off in your new car, we're here to ensure your experience is smooth and enjoyable.</p>
           <a href="#" class="btn btn-primary">
             Primary button
           </a>
@@ -220,11 +220,10 @@
       </div>
       <div class="col d-flex align-items-start">
         <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-          <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"/></svg>
         </div>
         <div>
-          <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          <h3 class="fs-2">Wide Selection</h3>
+          <p>Explore our vast collection of cars, ranging from the latest models to classic favorites. Whether you're looking for a sleek sports car, a reliable family vehicle, or an eco-friendly hybrid, we have something for everyone.</p>
           <a href="#" class="btn btn-primary">
             Primary button
           </a>
@@ -232,11 +231,10 @@
       </div>
       <div class="col d-flex align-items-start">
         <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
-          <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"/></svg>
         </div>
         <div>
-          <h3 class="fs-2 text-body-emphasis">Featured title</h3>
-          <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+          <h3 class="fs-2">Affordable Prices</h3>
+          <p>We believe that everyone deserves to drive their dream car without breaking the bank. Our competitive pricing and flexible financing options make it easier than ever to own a high-quality vehicle.</p>
           <a href="#" class="btn btn-primary">
             Primary button
           </a>

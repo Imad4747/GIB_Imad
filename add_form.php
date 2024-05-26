@@ -269,7 +269,7 @@
       </div>
 <div class="container">
     <h3>Add Product</h3>
-    <form action="T_prod.php" method="post">
+    <form action="T_prod.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="">
         <div class="mb-3">
             <label for="name" class="text-dark">Name:</label>
@@ -281,7 +281,7 @@
         </div>
         <div class="mb-3">
             <label for="price" class="text-dark">Price:</label>
-            <input type="number" class="form-control" id="price" name="price" required>
+            <input type="number" class="form-control" id="price" name="price" step="any" required>
         </div>
         <div class="mb-3">
             <label for="year_car" class="text-dark">Year Car:</label>
@@ -289,7 +289,7 @@
         </div>
         <div class="mb-3">
             <label for="topspeed" class="text-dark">Top Speed:</label>
-            <input type="number" class="form-control" id="topspeed" name="topspeed" required>
+            <input type="number" class="form-control" id="topspeed" name="topspeed" step="any" required>
         </div>
         <div class="mb-3">
             <label for="horsepower" class="text-dark">Horsepower:</label>
@@ -297,11 +297,11 @@
         </div>
         <div class="mb-3">
             <label for="accel" class="text-dark">Acceleration:</label>
-            <input type="number" class="form-control" id="accel" name="accel" required>
+            <input type="number" class="form-control" id="accel" name="accel" step="any" required>
         </div>
         <div class="mb-3">
             <label for="fuel" class="text-dark">Fuel:</label>
-            <select class="form-select" aria-label="Default select example" name="fuel">
+            <select class="form-select" aria-label="Default select example" name="fuel" required>
                 <option selected>Open this select menu</option>
                 <option value="Benzine">Benzine</option>
                 <option value="Diesel">Diesel</option>
@@ -310,7 +310,7 @@
         </div>
         <div class="mb-3">
             <label for="transmission" class="text-dark">Transmission:</label>
-            <select class="form-select" aria-label="Default select example" name="transmission">
+            <select class="form-select" aria-label="Default select example" name="transmission" required>
                 <option selected>Open this select menu</option>
                 <option value="Manual">Manual</option>
                 <option value="Automatic">Automatic</option>
@@ -318,7 +318,7 @@
         </div>
         <div class="mb-3">
             <label for="cartype" class="text-dark">Car Type:</label>
-            <select class="form-select" aria-label="Default select example" name="cartype">
+            <select class="form-select" aria-label="Default select example" name="cartype" required>
                 <option selected>Open this select menu</option>
                 <option value="SUV">SUV</option>
                 <option value="Sedan">Sedan</option>
@@ -331,21 +331,29 @@
             <label for="desc" class="text-dark">Description:</label>
             <textarea class="form-control" id="desc" name="desc" required></textarea>
         </div>
-        <div class="mb-3">
+      <div class="mb-3">
             <label for="photo" class="text-dark">Photo:</label>
             <input type="file" class="form-control" id="photo" name="photo" required>
         </div>
         <div class="mb-3">
             <label for="photo1" class="text-dark">Product Photo1:</label>
-            <input type="file" class="form-control" id="photo1" name="photo1" required>
+            <input type="file" class="form-control" id="photo1" name="photo1">
         </div>
         <div class="mb-3">
             <label for="photo2" class="text-dark">Product Photo2:</label>
-            <input type="file" class="form-control" id="photo2" name="photo2" required>
+            <input type="file" class="form-control" id="photo2" name="photo2">
         </div>
         <div class="mb-3">
             <label for="photo3" class="text-dark">Product Photo3:</label>
-            <input type="file" class="form-control" id="photo3" name="photo3" required>
+            <input type="file" class="form-control" id="photo3" name="photo3">
+        </div>
+         <div class="mb-3">
+            <label for="model3d" class="text-dark">3D Model Path (within 'public'):</label>
+            <input type="text" class="form-control" id="model3d" name="model3d" placeholder="e.g., g63/scene.gltf">
+        </div>
+        <div class="mb-3">
+            <label for="modelParts" class="text-dark">3D Model Parts:</label>
+            <textarea class="form-control" id="modelParts" name="modelParts" rows="6" placeholder="Enter 3D model parts, one per line" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary" name="control">Add</button>
     </form>

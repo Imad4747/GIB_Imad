@@ -43,11 +43,10 @@
             object-fit: cover;
         }
     </style>
-   
 </head>
 <body>
 <header data-bs-theme="dark">
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom p-3 ">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom p-3">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">
                 <img src="" alt="GIB" width="30" height="24">
@@ -77,8 +76,7 @@
                     <ul class="dropdown-menu dropdown-menu-end text-small">
                         <?php session_start(); 
                         if (isset($_SESSION['user_id'])) {
-                            echo '<li><a class="dropdown-item" href="#">New project...</a></li>
-                                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                            echo '
                                   <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
                                   <li><hr class="dropdown-divider"></li>
                                   <li><a class="dropdown-item" href="loguit.php">Sign out</a></li>';
@@ -103,8 +101,9 @@
                     if (isset($_POST['submit'])) {
                         if (!isset($_SESSION['user_id'])) {
                             echo '<script>
-                                    $(document).ready(function(){
-                                        $("#loginModal").modal("show");
+                                    document.addEventListener("DOMContentLoaded", function(){
+                                        var loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
+                                        loginModal.show();
                                     });
                                   </script>';
                         } else {
@@ -262,10 +261,7 @@ $mysqli->close();
         </div>
     </div>
 </div>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

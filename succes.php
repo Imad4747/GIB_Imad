@@ -3,43 +3,67 @@ include 'include.php';
 include 'connect.php';
 session_start();
 
+if (!isset($_GET['session_id'])) {
+    die("Session ID not provided.");
+}
+
 $session_id = $_GET['session_id'];
 
-$stripe_key = "sk_test_51Oo51PCD8tQEnwYRNwxU5mymd8eFR2YsMLBQQj04ccjhY9chnU03vBd2wHpyQNOiFGKI0go3CwciDJGvUeHM3SxC00Of5n4EnI";
+$stripe_key = getenv('STRIPE_API_KEY');
+if ($stripe_key === false) {
+    die("Stripe API key not set in environment variables.");
+}
+
 \Stripe\Stripe::setApiKey($stripe_key);
 
-$checkout_session = \Stripe\Checkout\Session::retrieve($session_id);
+try {
+    $checkout_session = \Stripe\Checkout\Session::retrieve($session_id);
 
-if ($checkout_session->payment_status === 'paid') {
+    if ($checkout_session->payment_status === 'paid') {
 
-    $userid = $_SESSION['user_id'];
-    $id = $checkout_session->metadata['product_id'];
+        if (!isset($_SESSION['user_id'])) {
+            die("User is not logged in.");
+        }
 
-    $sql = "SELECT * FROM tblproducts WHERE id = $id";
-    $result = $mysqli->query($sql);
+        $userid = $_SESSION['user_id'];
+        $id = $checkout_session->metadata['product_id'];
 
-    if ($result === FALSE) {
-        die("Error executing query: " . $mysqli->error);
-    }
+        $stmt = $mysqli->prepare("SELECT * FROM tblproducts WHERE id = ?");
+        $stmt->bind_param("i", $id);
 
-    $row = $result->fetch_assoc();
+        if (!$stmt->execute()) {
+            die("Error executing query: " . $stmt->error);
+        }
 
-    $total = $checkout_session->amount_total;
-    $current_date = date("Y-m-d H:i:s");
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            die("Product not found.");
+        }
 
-    $sql_order = "INSERT INTO tblorder (userid, product, model, totalPrice, date_order) 
-                  VALUES ('$userid', '{$row["name"]}', '{$row["model"]}', '$total', '$current_date')";
+        $row = $result->fetch_assoc();
+        $stmt->close();
 
-    if ($mysqli->query($sql_order)) {
-        unset($_SESSION['selected_paint_color']);
-        unset($_SESSION['paint_price']);
+        $total = $checkout_session->amount_total / 100; 
+        $current_date = date("Y-m-d H:i:s");
 
-        header("Location: W_prod.php");
-        exit();
+        $stmt_order = $mysqli->prepare("INSERT INTO tblorder (userid, product, model, totalPrice, date_order) VALUES (?, ?, ?, ?, ?)");
+        $stmt_order->bind_param("issss", $userid, $row["name"], $row["model"], $total, $current_date);
+
+        if ($stmt_order->execute()) {
+            unset($_SESSION['selected_paint_color']);
+            unset($_SESSION['paint_price']);
+
+            header("Location: W_prod.php");
+            exit();
+        } else {
+            echo "Error inserting order: " . $stmt_order->error;
+        }
+
+        $stmt_order->close();
     } else {
-        echo "Error inserting order: " . $mysqli->error;
+        echo "Payment failed.";
     }
-} else {
-    echo "Payment failed.";
+} catch (\Stripe\Exception\ApiErrorException $e) {
+    die("Stripe API error: " . $e->getMessage());
 }
 ?>

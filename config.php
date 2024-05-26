@@ -70,41 +70,60 @@
                 <div class="sidebar-sticky">
                     <h2 class="text-white text-center mt-3">Car Paint</h2>
                     <hr style="background-color: rgba(255, 255, 255, 0.1);"> 
-                    <?php 
-                    include 'connect.php';
-                    session_start();
-                    $id = $_GET['id'];
-                    $price = $_SESSION['prijs'];
+                   <?php 
+include 'connect.php';
+session_start();
 
-                   $sqlPath = "SELECT * FROM tblpaths INNER JOIN tblproducts ON tblproducts.id = tblpaths.id WHERE tblpaths.id = '$id'";
+if (!isset($_GET['id']) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
+    die("Invalid product ID.");
+}
 
-                    $result_model = $mysqli->query($sqlPath);
-                    $model_row = $result_model->fetch_assoc();
-                    $model_path = $model_row['path'];
+$id = $_GET['id'];
 
-                    $sqlPart = "SELECT * FROM tblparts INNER JOIN tblproducts ON tblparts.id = tblproducts.id WHERE tblparts.id = '$id'";
+if (!isset($_SESSION['prijs'])) {
+    die("Price not set in session.");
+}
 
-                    $result_parts = $mysqli->query($sqlPart);
-                    $row_parts = $result_parts->fetch_assoc();
-                    $parts_data = json_decode($row_parts['parts'], true);
-                    $parts_json = json_encode($parts_data);
+$price = $_SESSION['prijs'];
 
+$sqlPath = "SELECT * FROM tblpaths INNER JOIN tblproducts ON tblproducts.id = tblpaths.id WHERE tblpaths.id = ?";
+$stmtPath = $mysqli->prepare($sqlPath);
+$stmtPath->bind_param("i", $id);
+$stmtPath->execute();
+$result_model = $stmtPath->get_result();
+$model_row = $result_model->fetch_assoc();
+$model_path = $model_row['Modelpath'];
+$stmtPath->close();
 
-                    $sql = "SELECT * FROM tblcolor";
-                    $result = $mysqli->query($sql);
-                   while ($row = $result->fetch_assoc()) {
-                        echo '<div class="paint-option" data-color="'.$row["hexColor"].'" data-price="'.$row["price"].'">
-                                    <a href="#" class="selected">
-                                        <img src="images/'.$row["sample"].'" alt="Paint Color" class="img-fluid">
-                                        <div>
-                                            <h3 class="text-white">'.$row["color"].'</h3>
-                                            <h4 class="text-muted">$'.$row["price"].'</h4>
-                                        </div>
-                                    </a>
-                                </div>';
-                                            }
+$sqlPart = "SELECT * FROM tblparts INNER JOIN tblproducts ON tblparts.id = tblproducts.id WHERE tblparts.id = ?";
+$stmtPart = $mysqli->prepare($sqlPart);
+$stmtPart->bind_param("i", $id);
+$stmtPart->execute();
+$result_parts = $stmtPart->get_result();
+$row_parts = $result_parts->fetch_assoc();
+$parts_data = json_decode($row_parts['parts'], true);
+$parts_json = json_encode($parts_data);
+$stmtPart->close();
 
-                    ?>
+$sqlColor = "SELECT * FROM tblcolor";
+$stmtColor = $mysqli->prepare($sqlColor);
+$stmtColor->execute();
+$result = $stmtColor->get_result();
+
+while ($row = $result->fetch_assoc()) {
+    echo '<div class="paint-option" data-color="'.$row["hexColor"].'" data-price="'.$row["price"].'">
+            <a href="#" class="selected">
+                <img src="images/'.$row["sample"].'" alt="Paint Color" class="img-fluid">
+                <div>
+                    <h3 class="text-white">'.$row["color"].'</h3>
+                    <h4 class="text-muted">$'.$row["price"].'</h4>
+                </div>
+            </a>
+          </div>';
+}
+$stmtColor->close();
+?>
+
                    
 
 

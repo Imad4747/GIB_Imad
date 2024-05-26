@@ -264,10 +264,13 @@
         
       </div>
       <button type="button" class="btn btn-success btn-lg mb-3" onclick="formModal()">Add New Order</button>
-     <?php  
+    <?php  
 include 'connect.php';
 
-$sql = "SELECT * FROM tblorder";
+$sql = "SELECT tblorder.order_id, tblorder.userid, tblorder.product, tblorder.model, tblorder.totalPrice, tblorder.date_order, 
+               tblusers.firstname, tblusers.lastname, tblusers.email 
+        FROM tblorder 
+        INNER JOIN tblusers ON tblusers.id = tblorder.userid";
 $stmt = $mysqli->prepare($sql);
 
 if ($stmt === false) {
@@ -276,7 +279,7 @@ if ($stmt === false) {
 
 $stmt->execute();
 
-$stmt->bind_result($order_id, $userid, $product, $model, $totalPrice, $date_order);
+$stmt->bind_result($order_id, $userid, $product, $model, $totalPrice, $date_order, $firstname, $lastname, $email);
 
 echo '<div class="container">'; 
 
@@ -287,6 +290,9 @@ while ($stmt->fetch()) {
     echo '<div class="card-body">';
     echo '<h5 class="card-title">Order ID: ' . $order_id . '</h5>';
     echo '<p class="card-text"><strong>User ID:</strong> ' . $userid . '</p>';
+    echo '<p class="card-text"><strong>First Name:</strong> ' . $firstname . '</p>';
+    echo '<p class="card-text"><strong>Last Name:</strong> ' . $lastname . '</p>';
+    echo '<p class="card-text"><strong>Email:</strong> ' . $email . '</p>';
     echo '<p class="card-text"><strong>Product:</strong> ' . $product . '</p>';
     echo '<p class="card-text"><strong>Model:</strong> ' . $model . '</p>';
     echo '<p class="card-text"><strong>Total Price:</strong> ' . $totalPrice . '</p>';
@@ -304,6 +310,7 @@ echo '</div>';
 
 $stmt->close();
 ?>
+
 
 
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>

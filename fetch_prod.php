@@ -267,35 +267,51 @@
         <h1 class="h2">Dashboard</h1>
         
       </div>
-      <?php 
+    <?php 
 include 'connect.php';
+
 $sql = "SELECT * FROM tblproducts
         INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
         WHERE 1";
-$result = $mysqli->query($sql);
+$stmt = $mysqli->prepare($sql);
+if ($stmt === false) {
+    die("Error preparing query: " . $mysqli->error);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
 if ($result === false) {
     die("Error executing query: " . $mysqli->error);
 }
 
 function getProductDetails($id, $conn) {
-    $query = "SELECT * FROM tblproducts
+    $query = "SELECT tblproducts.*, tblspecs.*, tblpaths.Modelpath, tblparts.parts 
+              FROM tblproducts
               INNER JOIN tblspecs ON tblproducts.id = tblspecs.specID
-              WHERE tblproducts.id = $id";
-    $result = mysqli_query($conn, $query);
+              LEFT JOIN tblpaths ON tblproducts.id = tblpaths.id
+              LEFT JOIN tblparts ON tblproducts.id = tblparts.id
+              WHERE tblproducts.id = ?";
+    $stmt = $conn->prepare($query);
+    if ($stmt === false) {
+        die("Error preparing query: " . $conn->error);
+    }
 
-    if(mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        return $row;
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc();
     } else {
         return false;
     }
 }
 
-if(isset($_GET['id'])) {
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $product = getProductDetails($id, $mysqli);
 
-    if($product) {
+    if ($product) {
         $name = $product['name'];
         $model = $product['model'];
         $price = $product['price'];
@@ -307,14 +323,17 @@ if(isset($_GET['id'])) {
         $transmission = $product['transmission'];
         $cartype = $product['cartype'];
         $desc = $product['description'];
+        $modelpath = $product['Modelpath'];
+        $parts = $product['parts'];
     } else {
         echo "Product not found!";
     }
 }
 ?>
+
 <div class="container">
     <h3>Change Product</h3>
-    <form action="update_prod.php" method="post">
+    <form action="update_prod.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $id ?>">
         <div class="mb-3">
             <label for="name">Name:</label>
@@ -326,7 +345,7 @@ if(isset($_GET['id'])) {
         </div>
         <div class="mb-3">
             <label for="price">Price:</label>
-            <input type="number" class="form-control" id="price" name="price" value="<?php echo $price; ?>" required>
+            <input type="number" class="form-control" id="price" name="price" value="<?php echo $price; ?>" step="any" required>
         </div>
         <div class="mb-3">
             <label for="year_car">Year Car:</label>
@@ -342,7 +361,7 @@ if(isset($_GET['id'])) {
         </div>
         <div class="mb-3">
             <label for="accel">Acceleration:</label>
-            <input type="number" class="form-control" id="accel" name="accel" value="<?php echo $accel; ?>" required>
+            <input type="number" class="form-control" id="accel" name="accel" value="<?php echo $accel; ?>" step="any" required>
         </div>
         <div class="mb-3">
             <label for="fuel">Fuel:</label>
@@ -378,23 +397,32 @@ if(isset($_GET['id'])) {
         </div>
         <div class="mb-3">
             <label for="photo">Photo:</label>
-            <input type="file" class="form-control" id="photo" name="photo" >
+            <input type="file" class="form-control" id="photo" name="photo">
         </div>
         <div class="mb-3">
             <label for="photo1">Product Photo1:</label>
-            <input type="file" class="form-control" id="photo1" name="photo1" >
+            <input type="file" class="form-control" id="photo1" name="photo1">
         </div>
         <div class="mb-3">
             <label for="photo2">Product Photo2:</label>
-            <input type="file" class="form-control" id="photo2" name="photo2" >
+            <input type="file" class="form-control" id="photo2" name="photo2">
         </div>
         <div class="mb-3">
             <label for="photo3">Product Photo3:</label>
-            <input type="file" class="form-control" id="photo3" name="photo3" >
+            <input type="file" class="form-control" id="photo3" name="photo3">
+        </div>
+        <div class="mb-3">
+            <label for="modelpath">3D Model Path:</label>
+            <input type="text" class="form-control" id="modelpath" name="modelpath" value="<?php echo $modelpath; ?>" required>
+        </div>
+        <div class="mb-3">
+            <label for="parts">3D Model Parts:</label>
+            <textarea class="form-control" id="parts" name="parts" rows="6" required><?php echo $parts; ?></textarea>
         </div>
         <button type="submit" class="btn btn-primary" name="control">Update</button>
     </form>
 </div>
+
 
 
 

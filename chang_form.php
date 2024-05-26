@@ -262,7 +262,7 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
       </div>
-            <?php 
+  <?php
 include 'connect.php';
 
 $sql = "SELECT * FROM tblusers WHERE 1";
@@ -272,34 +272,36 @@ if ($result === false) {
 }
 
 function getUserDetails($id, $conn) {
-    $query = "SELECT * FROM tblusers WHERE id = $id";
-    $result = mysqli_query($conn, $query);
+    $query = "SELECT * FROM tblusers WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if(mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
         return $row;
     } else {
         return false;
     }
 }
 
-if(isset($_GET['id'])) {
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $user = getUserDetails($id, $mysqli);
 
-    if($user) {
+    if ($user) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
         $email = $user['email'];
-        
         $password = ""; 
         $role = $user['role'];
-        
     } else {
         echo "User not found!";
     }
 }
 ?>
+
 <div class="container">
     <h3>Change User</h3>
     <form action="update_cust.php" method="post">
